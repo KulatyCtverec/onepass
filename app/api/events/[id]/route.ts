@@ -5,7 +5,7 @@ export async function DELETE(
   request: Request,
   context: { params: { id: string } }
 ) {
-  const { id } = await context.params; // await je zde důležitý
+  const { id } = await context.params;
 
   try {
     await prisma.event.delete({

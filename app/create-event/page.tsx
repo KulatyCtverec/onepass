@@ -41,7 +41,6 @@ export default function CreateEventPage() {
     try {
       // Tady můžeš poslat data na backend nebo blockchain pro vytvoření události
       // Příklad: await createEvent(formData);
-
       const res = await fetch("/api/events", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
