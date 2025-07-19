@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+import { NextResponse, NextRequest } from "next/server";
 import { prisma } from "@/lib/prisma";
 
 export async function DELETE(
@@ -11,6 +11,8 @@ export async function DELETE(
     await prisma.event.delete({
       where: { id },
     });
+    console.log("[API] DELETE /api/events/[id] called with id:", id);
+
     return NextResponse.json({ message: "Událost byla smazána." });
   } catch (error) {
     console.error("[API] Error deleting event:", error);
@@ -19,4 +21,19 @@ export async function DELETE(
       { status: 500 }
     );
   }
+}
+
+export async function GET(
+  request: NextRequest,
+  context: { params: { id: string } }
+) {
+  // If you want to support filtering, parse query params from request.url here
+  const params = await context.params;
+  const id = await params.id;
+  const events = await prisma.event.findFirst({
+    where: { id: id },
+  });
+
+  console.log("[API] GET /api/events/[id] called with id:", id);
+  return NextResponse.json(events);
 }

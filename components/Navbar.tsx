@@ -17,7 +17,7 @@ export default function Navbar() {
   return (
     <nav className="w-full bg-gray-900 text-white py-4 shadow-md">
       <div className="max-w-6xl mx-auto px-4 flex items-center justify-between">
-        <h1 className="text-xl font-bold">🎟 NFTicket</h1>
+        <h1 className="text-xl font-bold">🎟 onepas</h1>
         <ul className="flex space-x-6">
           {navLinks.map((link) => (
             <li key={link.href}>

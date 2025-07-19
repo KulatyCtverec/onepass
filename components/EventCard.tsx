@@ -4,10 +4,9 @@ import { useState } from "react";
 
 type EventCardProps = {
   event: Event;
-  onDelete?: (id: string) => void; // Volitelný callback pro refresh po smazání
 };
 
-export default function EventCard({ event, onDelete }: EventCardProps) {
+export default function EventCard({ event }: EventCardProps) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -18,7 +17,6 @@ export default function EventCard({ event, onDelete }: EventCardProps) {
     try {
       const res = await fetch(`/api/events/${event.id}`, { method: "DELETE" });
       if (!res.ok) throw new Error("Chyba při mazání.");
-      if (onDelete) onDelete(event.id);
     } catch (e) {
       console.error(e);
       setError("Smazání selhalo.");
@@ -40,6 +38,12 @@ export default function EventCard({ event, onDelete }: EventCardProps) {
           className="inline-block mt-4 text-sm px-4 py-2 bg-purple-600 hover:bg-purple-700 rounded-xl transition"
         >
           Detail &gt;
+        </Link>
+        <Link
+          href={`/events/${event.id}/tickets`}
+          className="inline-block mt-4 text-sm px-4 py-2 bg-purple-600 hover:bg-purple-700 rounded-xl transition"
+        >
+          Tickets &gt;
         </Link>
         {error && <div className="text-red-500 mt-2">{error}</div>}
       </div>

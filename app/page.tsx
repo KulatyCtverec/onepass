@@ -10,8 +10,8 @@ export default function HomePage() {
           Vstupenky budoucnosti.
         </h1>
         <p className="text-lg md:text-xl text-gray-400 mb-8">
-          Vytvářej, prodávej a spravuj vstupenky jako NFT. Žádné podvody, žádné
-          scalpingy - jen blockchainová jistota.
+          Vytvářej, prodávej a spravuj vstupenky. Žádné podvody, žádné scalpingy
+          - jen blockchainová jistota.
         </p>
 
         <div className="flex flex-col md:flex-row justify-center gap-4">

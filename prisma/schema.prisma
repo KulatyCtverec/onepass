@@ -24,7 +24,7 @@ model Event {
 }
 
 model Ticket {
-  id         String   @id @default(uuid())
+  id         String   @id @default(cuid())
   event      Event    @relation(fields: [eventid], references: [id])
   eventid    String
   user       User     @relation(fields: [userid], references: [id])

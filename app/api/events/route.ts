@@ -1,11 +1,8 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 
-// Log při načtení souboru (server start/reload)
-console.log("[API] /api/events route loaded");
-
 export async function POST(request: Request) {
-  console.log("[API] POST /api/events called");
+  console.log("[API] POST /api/events called with request:", request);
 
   const { name, date, location, description } = await request.json();
 
