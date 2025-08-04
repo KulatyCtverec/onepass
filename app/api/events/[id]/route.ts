@@ -3,7 +3,7 @@ import { prisma } from "@/lib/prisma";
 
 export async function DELETE(
   request: Request,
-  context: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
   const { id } = await context.params;
 
@@ -25,11 +25,10 @@ export async function DELETE(
 
 export async function GET(
   request: NextRequest,
-  context: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
   // If you want to support filtering, parse query params from request.url here
-  const params = await context.params;
-  const id = await params.id;
+  const { id } = await context.params;
   const events = await prisma.event.findFirst({
     where: { id: id },
   });

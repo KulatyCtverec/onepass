@@ -7,6 +7,7 @@ export function useInitialFetch<T>(
   error?: StateWithSetter<string | null>
 ) {
   const [data, setData] = useState<T | null>(null);
+
   useEffect(() => {
     const fetchItems = async () => {
       try {

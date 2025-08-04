@@ -144,7 +144,7 @@ const config = {
     },
     output: {
       value:
-        "C:\\Users\\matej\\Desktop\\Projekty\\onepas\\prisma\\lib\\generated\\prisma\\client",
+        "C:\\Users\\matej\\Desktop\\Projekty\\onepass\\prisma\\lib\\generated\\prisma\\client",
       fromEnvVar: null,
     },
     config: {
@@ -159,7 +159,7 @@ const config = {
     ],
     previewFeatures: [],
     sourceFilePath:
-      "C:\\Users\\matej\\Desktop\\Projekty\\onepas\\prisma\\schema.prisma",
+      "C:\\Users\\matej\\Desktop\\Projekty\\onepass\\prisma\\schema.prisma",
     isCustomOutput: true,
   },
   relativeEnvPaths: {

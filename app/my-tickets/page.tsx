@@ -34,12 +34,6 @@ export default function MyTicketsPage() {
               key={ticket.id}
               className="border border-gray-800 rounded-2xl p-6 bg-gray-900 hover:bg-gray-800 transition"
             >
-              <h2 className="text-2xl font-semibold">{ticket.eventTitle}</h2>
-              <p className="text-gray-400">
-                📍 {ticket.location} | 📅{" "}
-                {new Date(ticket.date).toLocaleDateString("cs-CZ")}
-              </p>
-
               <button
                 onClick={() => router.push(`/events/${ticket.id}`)}
                 className="inline-block mt-4 text-sm px-4 py-2 bg-purple-600 hover:bg-purple-700 rounded-xl transition"

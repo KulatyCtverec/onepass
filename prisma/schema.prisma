@@ -24,14 +24,16 @@ model Event {
 }
 
 model Ticket {
-  id         String   @id @default(cuid())
-  event      Event    @relation(fields: [eventid], references: [id])
-  eventid    String
-  user       User     @relation(fields: [userid], references: [id])
-  userid     String
-  createtime DateTime @default(now())
-  used       Boolean  @default(false) // označení že byl použit
-  accesscode String   @unique // bezpečný token/QR
+  id           String     @id @default(cuid())
+  event        Event      @relation(fields: [eventid], references: [id])
+  eventid      String
+  tickettype   TicketType @relation(fields: [tickettypeid], references: [id])
+  tickettypeid String
+  user         User       @relation(fields: [userid], references: [id])
+  userid       String
+  createtime   DateTime   @default(now())
+  used         Boolean    @default(false) // označení že byl použit
+  accesscode   String     @unique // bezpečný token/QR
 }
 
 model User {
@@ -40,4 +42,15 @@ model User {
   name       String?
   tickets    Ticket[]
   createtime DateTime @default(now())
+}
+
+model TicketType {
+  id      String   @id @default(cuid())
+  name    String // např. VIP, Standard
+  price   Int // cena v haléřích
+  stock   Int // kolik jich je dostupných
+  total   Int // kolik jich je celkove
+  event   Event    @relation(fields: [eventid], references: [id])
+  eventid String
+  tickets Ticket[]
 }

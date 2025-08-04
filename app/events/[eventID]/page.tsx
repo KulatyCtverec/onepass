@@ -2,6 +2,8 @@
 import { use } from "react";
 import type { Event } from "@/lib/generated/prisma/client";
 import { useInitialFetch } from "@/lib/hooks/useInitialFetch";
+import TicketTypes from "@/components/TicketTypes";
+import SeatMap from "@/components/SeatMap";
 
 export default function EventDetailPage({
   params,
@@ -27,6 +29,10 @@ export default function EventDetailPage({
       </p>
 
       <p className="text-gray-300 mb-6">{record.description}</p>
+
+      <div className="flex justify-between mt-20 mb-20">
+        <SeatMap /> <TicketTypes />
+      </div>
 
       <div className="flex justify-center">
         <button className="px-6 py-3 bg-purple-600 hover:bg-purple-700 text-white rounded-2xl text-lg transition">
