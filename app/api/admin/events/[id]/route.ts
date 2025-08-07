@@ -1,0 +1,142 @@
+import { NextRequest, NextResponse } from "next/server";
+import { auth } from "@/auth";
+import { prisma } from "@/lib/prisma";
+
+export async function PUT(
+  request: NextRequest,
+  { params }: { params: { id: string } }
+) {
+  try {
+    const session = await auth();
+
+    if (!session?.user) {
+      return NextResponse.json({ error: "Nepřihlášen" }, { status: 401 });
+    }
+
+    // Zkontrolovat, zda je uživatel admin
+    const user = await prisma.user.findUnique({
+      where: { id: session.user.id },
+      select: { isAdmin: true },
+    });
+
+    if (!user?.isAdmin) {
+      return NextResponse.json(
+        { error: "Nedostatečná oprávnění" },
+        { status: 403 }
+      );
+    }
+
+    // Zkontrolovat, zda událost existuje a patří tomuto adminovi
+    const existingEvent = await prisma.event.findFirst({
+      where: {
+        id: params.id,
+        createdById: session.user.id,
+      },
+    });
+
+    if (!existingEvent) {
+      return NextResponse.json(
+        { error: "Událost nebyla nalezena nebo nemáte oprávnění" },
+        { status: 404 }
+      );
+    }
+
+    const { name, description, date, location } = await request.json();
+
+    // Validace
+    if (!name || !description || !date || !location) {
+      return NextResponse.json(
+        { error: "Všechna pole jsou povinná" },
+        { status: 400 }
+      );
+    }
+
+    // Aktualizace události
+    const event = await prisma.event.update({
+      where: { id: params.id },
+      data: {
+        name,
+        description,
+        date: new Date(date),
+        location,
+      },
+    });
+
+    return NextResponse.json(
+      { message: "Událost byla úspěšně aktualizována", event },
+      { status: 200 }
+    );
+  } catch (error) {
+    console.error("Chyba při aktualizaci události:", error);
+    return NextResponse.json(
+      { error: "Interní chyba serveru" },
+      { status: 500 }
+    );
+  }
+}
+
+export async function DELETE(
+  request: NextRequest,
+  { params }: { params: { id: string } }
+) {
+  try {
+    const session = await auth();
+
+    if (!session?.user) {
+      return NextResponse.json({ error: "Nepřihlášen" }, { status: 401 });
+    }
+
+    // Zkontrolovat, zda je uživatel admin
+    const user = await prisma.user.findUnique({
+      where: { id: session.user.id },
+      select: { isAdmin: true },
+    });
+
+    if (!user?.isAdmin) {
+      return NextResponse.json(
+        { error: "Nedostatečná oprávnění" },
+        { status: 403 }
+      );
+    }
+
+    // Zkontrolovat, zda událost existuje a patří tomuto adminovi
+    const existingEvent = await prisma.event.findFirst({
+      where: {
+        id: params.id,
+        createdById: session.user.id,
+      },
+    });
+
+    if (!existingEvent) {
+      return NextResponse.json(
+        { error: "Událost nebyla nalezena nebo nemáte oprávnění" },
+        { status: 404 }
+      );
+    }
+
+    // Smazat všechny lístky a typy lístků související s událostí
+    await prisma.ticket.deleteMany({
+      where: { eventid: params.id },
+    });
+
+    await prisma.ticketType.deleteMany({
+      where: { eventid: params.id },
+    });
+
+    // Smazat událost
+    await prisma.event.delete({
+      where: { id: params.id },
+    });
+
+    return NextResponse.json(
+      { message: "Událost byla úspěšně smazána" },
+      { status: 200 }
+    );
+  } catch (error) {
+    console.error("Chyba při mazání události:", error);
+    return NextResponse.json(
+      { error: "Interní chyba serveru" },
+      { status: 500 }
+    );
+  }
+}

@@ -2,8 +2,10 @@ import EventsTable from "@/components/EventsTable";
 
 export default function EventsPage() {
   return (
-    <div className="max-w-5xl mx-auto px-4 py-10">
-      <EventsTable caption="Události" />
-    </div>
+    <main className="min-h-screen text-white py-8">
+      <div className="max-w-6xl mx-auto px-4">
+        <EventsTable caption="Dostupné události" />
+      </div>
+    </main>
   );
 }

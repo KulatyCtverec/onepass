@@ -14,6 +14,7 @@ export default function EventsTable(props: { caption: string }) {
     { value: events, setter: setEvents },
     { value: error, setter: setError }
   );
+
   useSSE<Event>(
     "/api/events/stream",
     { value: events, setter: setEvents },
@@ -21,18 +22,31 @@ export default function EventsTable(props: { caption: string }) {
   );
 
   if (error) {
-    return <div className="text-red-500">{error}</div>;
-  }
-  return (
-    <>
-      <div className="max-w-5xl mx-auto px-4 py-10">
-        <h1 className="text-3xl font-bold mb-6">{caption}</h1>
-        <div className="grid gap-6">
-          {events.map((event) => (
-            <EventCard key={event.id} event={event} />
-          ))}
-        </div>
+    return (
+      <div className="text-center py-12">
+        <p className="text-red-400">{error}</p>
       </div>
-    </>
+    );
+  }
+
+  if (events.length === 0) {
+    return (
+      <div className="text-center py-12">
+        <p className="text-secondary-400">Žádné události nebyly nalezeny.</p>
+      </div>
+    );
+  }
+
+  return (
+    <div>
+      <h1 className="text-2xl font-bold mb-4">{caption}</h1>
+      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        {events.map((event) => (
+          <div key={event.id} className="aspect-[4/3]">
+            <EventCard event={event} />
+          </div>
+        ))}
+      </div>
+    </div>
   );
 }

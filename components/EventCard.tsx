@@ -1,3 +1,4 @@
+"use client";
 import Link from "next/link";
 import type { Event } from "@prisma/client";
 import { useState } from "react";
@@ -10,7 +11,9 @@ export default function EventCard({ event }: EventCardProps) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const handleDelete = async () => {
+  const handleDelete = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
     if (!confirm("Opravdu chcete tuto událost smazat?")) return;
     setLoading(true);
     setError(null);
@@ -26,35 +29,29 @@ export default function EventCard({ event }: EventCardProps) {
   };
 
   return (
-    <div className="border border-gray-800 rounded-2xl p-6 bg-gray-900 hover:bg-gray-800 transition flex items-center justify-between">
-      <div>
-        <h2 className="text-2xl font-semibold">{event.name}</h2>
-        <p className="text-gray-400">
-          📍 {event.location} | 📅{" "}
-          {new Date(event.date).toLocaleDateString("cs-CZ")}
-        </p>
-        <Link
-          href={`/events/${event.id}`}
-          className="inline-block mt-4 text-sm px-4 py-2 bg-purple-600 hover:bg-purple-700 rounded-xl transition"
-        >
-          Detail &gt;
-        </Link>
-        <Link
-          href={`/events/${event.id}/tickets`}
-          className="inline-block mt-4 text-sm px-4 py-2 bg-purple-600 hover:bg-purple-700 rounded-xl transition"
-        >
-          Tickets &gt;
-        </Link>
-        {error && <div className="text-red-500 mt-2">{error}</div>}
+    <Link href={`/events/${event.id}`} className="block h-full">
+      <div className="border border-secondary-700 rounded-2xl p-6 bg-black hover:bg-gray-900 transition flex flex-col justify-between h-full cursor-pointer group">
+        <div className="flex-1">
+          <h2 className="text-2xl font-semibold group-hover:text-primary-400 transition-colors mb-4">
+            {event.name}
+          </h2>
+          <p className="text-secondary-400">
+            📍 {event.location} | 📅{" "}
+            {new Date(event.date).toLocaleDateString("cs-CZ")}
+          </p>
+          {error && <div className="text-red-500 mt-2">{error}</div>}
+        </div>
+        <div className="mt-4 flex justify-end">
+          <button
+            onClick={handleDelete}
+            disabled={loading}
+            className="px-4 py-2 bg-red-600 hover:bg-red-700 rounded-xl text-white transition"
+            title="Smazat událost"
+          >
+            {loading ? "Mažu..." : "Smazat"}
+          </button>
+        </div>
       </div>
-      <button
-        onClick={handleDelete}
-        disabled={loading}
-        className="ml-4 px-4 py-2 bg-red-600 hover:bg-red-700 rounded-xl text-white transition"
-        title="Smazat událost"
-      >
-        {loading ? "Mažu..." : "Smazat"}
-      </button>
-    </div>
+    </Link>
   );
 }
