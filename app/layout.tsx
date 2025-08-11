@@ -20,6 +20,28 @@ export const metadata: Metadata = {
   authors: [{ name: "Matěj Janeček", url: "" }],
   keywords: ["events", "tickets"],
   description: "OnePass - a safe place for your events",
+  manifest: "/manifest.json",
+  themeColor: "#000000",
+  colorScheme: "dark",
+  icons: {
+    icon: [
+      {
+        url: "/onepass-logo.svg",
+        type: "image/svg+xml",
+      },
+      {
+        url: "/onepass-logo.svg",
+        type: "image/svg+xml",
+      },
+      {
+        url: "/onepass-logo.svg",
+        sizes: "32x32",
+        type: "image/x-icon",
+      },
+    ],
+    shortcut: "/onepass-logo.svg",
+    apple: "/onepass-logo.svg",
+  },
 };
 
 export default function RootLayout({

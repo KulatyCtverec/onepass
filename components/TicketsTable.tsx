@@ -1,21 +1,39 @@
 "use client";
 import TicketCard from "./TicketCard";
-import type { Ticket } from "@prisma/client";
+import type { Ticket, Event, User, TicketType } from "@/lib/generated/prisma";
 import { useInitialFetch } from "@/lib/hooks/useInitialFetch";
 import { useSSE } from "@/lib/hooks/useSSE";
 import { useState } from "react";
 
 export default function TicketsTable(props: { caption: string }) {
-  const [tickets, setTickets] = useState<Ticket[]>([]);
+  const [tickets, setTickets] = useState<
+    (Ticket & {
+      event: Event;
+      user: User;
+      tickettype: TicketType;
+    })[]
+  >([]);
   const [error, setError] = useState<string | null>(null);
 
-  useInitialFetch<Ticket[]>(
+  useInitialFetch<
+    (Ticket & {
+      event: Event;
+      user: User;
+      tickettype: TicketType;
+    })[]
+  >(
     "/api/tickets",
     { value: tickets, setter: setTickets },
     { value: error, setter: setError }
   );
 
-  useSSE<Ticket>(
+  useSSE<
+    Ticket & {
+      event: Event;
+      user: User;
+      tickettype: TicketType;
+    }
+  >(
     "/api/tickets/stream",
     { value: tickets, setter: setTickets },
     { value: error, setter: setError }

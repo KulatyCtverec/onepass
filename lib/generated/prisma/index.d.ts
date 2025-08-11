@@ -65,7 +65,7 @@ export type TicketType = $Result.DefaultSelection<Prisma.$TicketTypePayload>
  */
 export class PrismaClient<
   ClientOptions extends Prisma.PrismaClientOptions = Prisma.PrismaClientOptions,
-  U = 'log' extends keyof ClientOptions ? ClientOptions['log'] extends Array<Prisma.LogLevel | Prisma.LogDefinition> ? Prisma.GetEvents<ClientOptions['log']> : never : never,
+  const U = 'log' extends keyof ClientOptions ? ClientOptions['log'] extends Array<Prisma.LogLevel | Prisma.LogDefinition> ? Prisma.GetEvents<ClientOptions['log']> : never : never,
   ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs
 > {
   [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['other'] }
@@ -301,8 +301,8 @@ export namespace Prisma {
   export import Exact = $Public.Exact
 
   /**
-   * Prisma Client JS version: 6.8.2
-   * Query Engine version: 2060c79ba17c6bb9f5823312b6f6b7f4a845738e
+   * Prisma Client JS version: 6.13.0
+   * Query Engine version: 361e86d0ea4987e9f53a565309b3eed797a6bcbd
    */
   export type PrismaVersion = {
     client: string
@@ -1273,16 +1273,24 @@ export namespace Prisma {
     /**
      * @example
      * ```
-     * // Defaults to stdout
+     * // Shorthand for `emit: 'stdout'`
      * log: ['query', 'info', 'warn', 'error']
      * 
-     * // Emit as events
+     * // Emit as events only
      * log: [
-     *   { emit: 'stdout', level: 'query' },
-     *   { emit: 'stdout', level: 'info' },
-     *   { emit: 'stdout', level: 'warn' }
-     *   { emit: 'stdout', level: 'error' }
+     *   { emit: 'event', level: 'query' },
+     *   { emit: 'event', level: 'info' },
+     *   { emit: 'event', level: 'warn' }
+     *   { emit: 'event', level: 'error' }
      * ]
+     * 
+     * / Emit as events and log to stdout
+     * og: [
+     *  { emit: 'stdout', level: 'query' },
+     *  { emit: 'stdout', level: 'info' },
+     *  { emit: 'stdout', level: 'warn' }
+     *  { emit: 'stdout', level: 'error' }
+     * 
      * ```
      * Read more in our [docs](https://www.prisma.io/docs/reference/tools-and-interfaces/prisma-client/logging#the-log-option).
      */
@@ -1330,10 +1338,15 @@ export namespace Prisma {
     emit: 'stdout' | 'event'
   }
 
-  export type GetLogType<T extends LogLevel | LogDefinition> = T extends LogDefinition ? T['emit'] extends 'event' ? T['level'] : never : never
-  export type GetEvents<T extends any> = T extends Array<LogLevel | LogDefinition> ?
-    GetLogType<T[0]> | GetLogType<T[1]> | GetLogType<T[2]> | GetLogType<T[3]>
-    : never
+  export type CheckIsLogLevel<T> = T extends LogLevel ? T : never;
+
+  export type GetLogType<T> = CheckIsLogLevel<
+    T extends LogDefinition ? T['level'] : T
+  >;
+
+  export type GetEvents<T extends any[]> = T extends Array<LogLevel | LogDefinition>
+    ? GetLogType<T[number]>
+    : never;
 
   export type QueryEvent = {
     timestamp: Date
@@ -2697,8 +2710,18 @@ export namespace Prisma {
 
   export type AggregateTicket = {
     _count: TicketCountAggregateOutputType | null
+    _avg: TicketAvgAggregateOutputType | null
+    _sum: TicketSumAggregateOutputType | null
     _min: TicketMinAggregateOutputType | null
     _max: TicketMaxAggregateOutputType | null
+  }
+
+  export type TicketAvgAggregateOutputType = {
+    scanCount: number | null
+  }
+
+  export type TicketSumAggregateOutputType = {
+    scanCount: number | null
   }
 
   export type TicketMinAggregateOutputType = {
@@ -2709,6 +2732,9 @@ export namespace Prisma {
     createtime: Date | null
     used: boolean | null
     accesscode: string | null
+    qrGenerated: Date | null
+    lastScanned: Date | null
+    scanCount: number | null
   }
 
   export type TicketMaxAggregateOutputType = {
@@ -2719,6 +2745,9 @@ export namespace Prisma {
     createtime: Date | null
     used: boolean | null
     accesscode: string | null
+    qrGenerated: Date | null
+    lastScanned: Date | null
+    scanCount: number | null
   }
 
   export type TicketCountAggregateOutputType = {
@@ -2729,9 +2758,20 @@ export namespace Prisma {
     createtime: number
     used: number
     accesscode: number
+    qrGenerated: number
+    lastScanned: number
+    scanCount: number
     _all: number
   }
 
+
+  export type TicketAvgAggregateInputType = {
+    scanCount?: true
+  }
+
+  export type TicketSumAggregateInputType = {
+    scanCount?: true
+  }
 
   export type TicketMinAggregateInputType = {
     id?: true
@@ -2741,6 +2781,9 @@ export namespace Prisma {
     createtime?: true
     used?: true
     accesscode?: true
+    qrGenerated?: true
+    lastScanned?: true
+    scanCount?: true
   }
 
   export type TicketMaxAggregateInputType = {
@@ -2751,6 +2794,9 @@ export namespace Prisma {
     createtime?: true
     used?: true
     accesscode?: true
+    qrGenerated?: true
+    lastScanned?: true
+    scanCount?: true
   }
 
   export type TicketCountAggregateInputType = {
@@ -2761,6 +2807,9 @@ export namespace Prisma {
     createtime?: true
     used?: true
     accesscode?: true
+    qrGenerated?: true
+    lastScanned?: true
+    scanCount?: true
     _all?: true
   }
 
@@ -2802,6 +2851,18 @@ export namespace Prisma {
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
+     * Select which fields to average
+    **/
+    _avg?: TicketAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: TicketSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
      * Select which fields to find the minimum value
     **/
     _min?: TicketMinAggregateInputType
@@ -2832,6 +2893,8 @@ export namespace Prisma {
     take?: number
     skip?: number
     _count?: TicketCountAggregateInputType | true
+    _avg?: TicketAvgAggregateInputType
+    _sum?: TicketSumAggregateInputType
     _min?: TicketMinAggregateInputType
     _max?: TicketMaxAggregateInputType
   }
@@ -2844,7 +2907,12 @@ export namespace Prisma {
     createtime: Date
     used: boolean
     accesscode: string
+    qrGenerated: Date
+    lastScanned: Date | null
+    scanCount: number
     _count: TicketCountAggregateOutputType | null
+    _avg: TicketAvgAggregateOutputType | null
+    _sum: TicketSumAggregateOutputType | null
     _min: TicketMinAggregateOutputType | null
     _max: TicketMaxAggregateOutputType | null
   }
@@ -2871,6 +2939,9 @@ export namespace Prisma {
     createtime?: boolean
     used?: boolean
     accesscode?: boolean
+    qrGenerated?: boolean
+    lastScanned?: boolean
+    scanCount?: boolean
     event?: boolean | EventDefaultArgs<ExtArgs>
     tickettype?: boolean | TicketTypeDefaultArgs<ExtArgs>
     user?: boolean | UserDefaultArgs<ExtArgs>
@@ -2884,6 +2955,9 @@ export namespace Prisma {
     createtime?: boolean
     used?: boolean
     accesscode?: boolean
+    qrGenerated?: boolean
+    lastScanned?: boolean
+    scanCount?: boolean
     event?: boolean | EventDefaultArgs<ExtArgs>
     tickettype?: boolean | TicketTypeDefaultArgs<ExtArgs>
     user?: boolean | UserDefaultArgs<ExtArgs>
@@ -2897,6 +2971,9 @@ export namespace Prisma {
     createtime?: boolean
     used?: boolean
     accesscode?: boolean
+    qrGenerated?: boolean
+    lastScanned?: boolean
+    scanCount?: boolean
     event?: boolean | EventDefaultArgs<ExtArgs>
     tickettype?: boolean | TicketTypeDefaultArgs<ExtArgs>
     user?: boolean | UserDefaultArgs<ExtArgs>
@@ -2910,9 +2987,12 @@ export namespace Prisma {
     createtime?: boolean
     used?: boolean
     accesscode?: boolean
+    qrGenerated?: boolean
+    lastScanned?: boolean
+    scanCount?: boolean
   }
 
-  export type TicketOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "eventid" | "tickettypeid" | "userid" | "createtime" | "used" | "accesscode", ExtArgs["result"]["ticket"]>
+  export type TicketOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "eventid" | "tickettypeid" | "userid" | "createtime" | "used" | "accesscode" | "qrGenerated" | "lastScanned" | "scanCount", ExtArgs["result"]["ticket"]>
   export type TicketInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     event?: boolean | EventDefaultArgs<ExtArgs>
     tickettype?: boolean | TicketTypeDefaultArgs<ExtArgs>
@@ -2944,6 +3024,9 @@ export namespace Prisma {
       createtime: Date
       used: boolean
       accesscode: string
+      qrGenerated: Date
+      lastScanned: Date | null
+      scanCount: number
     }, ExtArgs["result"]["ticket"]>
     composites: {}
   }
@@ -3377,6 +3460,9 @@ export namespace Prisma {
     readonly createtime: FieldRef<"Ticket", 'DateTime'>
     readonly used: FieldRef<"Ticket", 'Boolean'>
     readonly accesscode: FieldRef<"Ticket", 'String'>
+    readonly qrGenerated: FieldRef<"Ticket", 'DateTime'>
+    readonly lastScanned: FieldRef<"Ticket", 'DateTime'>
+    readonly scanCount: FieldRef<"Ticket", 'Int'>
   }
     
 
@@ -3809,6 +3895,7 @@ export namespace Prisma {
     image: string | null
     password: string | null
     isAdmin: boolean | null
+    isAuthenticator: boolean | null
     createtime: Date | null
   }
 
@@ -3820,6 +3907,7 @@ export namespace Prisma {
     image: string | null
     password: string | null
     isAdmin: boolean | null
+    isAuthenticator: boolean | null
     createtime: Date | null
   }
 
@@ -3831,6 +3919,7 @@ export namespace Prisma {
     image: number
     password: number
     isAdmin: number
+    isAuthenticator: number
     createtime: number
     _all: number
   }
@@ -3844,6 +3933,7 @@ export namespace Prisma {
     image?: true
     password?: true
     isAdmin?: true
+    isAuthenticator?: true
     createtime?: true
   }
 
@@ -3855,6 +3945,7 @@ export namespace Prisma {
     image?: true
     password?: true
     isAdmin?: true
+    isAuthenticator?: true
     createtime?: true
   }
 
@@ -3866,6 +3957,7 @@ export namespace Prisma {
     image?: true
     password?: true
     isAdmin?: true
+    isAuthenticator?: true
     createtime?: true
     _all?: true
   }
@@ -3950,6 +4042,7 @@ export namespace Prisma {
     image: string | null
     password: string | null
     isAdmin: boolean
+    isAuthenticator: boolean
     createtime: Date
     _count: UserCountAggregateOutputType | null
     _min: UserMinAggregateOutputType | null
@@ -3978,6 +4071,7 @@ export namespace Prisma {
     image?: boolean
     password?: boolean
     isAdmin?: boolean
+    isAuthenticator?: boolean
     createtime?: boolean
     accounts?: boolean | User$accountsArgs<ExtArgs>
     sessions?: boolean | User$sessionsArgs<ExtArgs>
@@ -3994,6 +4088,7 @@ export namespace Prisma {
     image?: boolean
     password?: boolean
     isAdmin?: boolean
+    isAuthenticator?: boolean
     createtime?: boolean
   }, ExtArgs["result"]["user"]>
 
@@ -4005,6 +4100,7 @@ export namespace Prisma {
     image?: boolean
     password?: boolean
     isAdmin?: boolean
+    isAuthenticator?: boolean
     createtime?: boolean
   }, ExtArgs["result"]["user"]>
 
@@ -4016,10 +4112,11 @@ export namespace Prisma {
     image?: boolean
     password?: boolean
     isAdmin?: boolean
+    isAuthenticator?: boolean
     createtime?: boolean
   }
 
-  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "email" | "emailVerified" | "image" | "password" | "isAdmin" | "createtime", ExtArgs["result"]["user"]>
+  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "email" | "emailVerified" | "image" | "password" | "isAdmin" | "isAuthenticator" | "createtime", ExtArgs["result"]["user"]>
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     accounts?: boolean | User$accountsArgs<ExtArgs>
     sessions?: boolean | User$sessionsArgs<ExtArgs>
@@ -4046,6 +4143,7 @@ export namespace Prisma {
       image: string | null
       password: string | null
       isAdmin: boolean
+      isAuthenticator: boolean
       createtime: Date
     }, ExtArgs["result"]["user"]>
     composites: {}
@@ -4481,6 +4579,7 @@ export namespace Prisma {
     readonly image: FieldRef<"User", 'String'>
     readonly password: FieldRef<"User", 'String'>
     readonly isAdmin: FieldRef<"User", 'Boolean'>
+    readonly isAuthenticator: FieldRef<"User", 'Boolean'>
     readonly createtime: FieldRef<"User", 'DateTime'>
   }
     
@@ -9357,7 +9456,10 @@ export namespace Prisma {
     userid: 'userid',
     createtime: 'createtime',
     used: 'used',
-    accesscode: 'accesscode'
+    accesscode: 'accesscode',
+    qrGenerated: 'qrGenerated',
+    lastScanned: 'lastScanned',
+    scanCount: 'scanCount'
   };
 
   export type TicketScalarFieldEnum = (typeof TicketScalarFieldEnum)[keyof typeof TicketScalarFieldEnum]
@@ -9371,6 +9473,7 @@ export namespace Prisma {
     image: 'image',
     password: 'password',
     isAdmin: 'isAdmin',
+    isAuthenticator: 'isAuthenticator',
     createtime: 'createtime'
   };
 
@@ -9598,6 +9701,9 @@ export namespace Prisma {
     createtime?: DateTimeFilter<"Ticket"> | Date | string
     used?: BoolFilter<"Ticket"> | boolean
     accesscode?: StringFilter<"Ticket"> | string
+    qrGenerated?: DateTimeFilter<"Ticket"> | Date | string
+    lastScanned?: DateTimeNullableFilter<"Ticket"> | Date | string | null
+    scanCount?: IntFilter<"Ticket"> | number
     event?: XOR<EventScalarRelationFilter, EventWhereInput>
     tickettype?: XOR<TicketTypeScalarRelationFilter, TicketTypeWhereInput>
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
@@ -9611,6 +9717,9 @@ export namespace Prisma {
     createtime?: SortOrder
     used?: SortOrder
     accesscode?: SortOrder
+    qrGenerated?: SortOrder
+    lastScanned?: SortOrderInput | SortOrder
+    scanCount?: SortOrder
     event?: EventOrderByWithRelationInput
     tickettype?: TicketTypeOrderByWithRelationInput
     user?: UserOrderByWithRelationInput
@@ -9627,6 +9736,9 @@ export namespace Prisma {
     userid?: StringFilter<"Ticket"> | string
     createtime?: DateTimeFilter<"Ticket"> | Date | string
     used?: BoolFilter<"Ticket"> | boolean
+    qrGenerated?: DateTimeFilter<"Ticket"> | Date | string
+    lastScanned?: DateTimeNullableFilter<"Ticket"> | Date | string | null
+    scanCount?: IntFilter<"Ticket"> | number
     event?: XOR<EventScalarRelationFilter, EventWhereInput>
     tickettype?: XOR<TicketTypeScalarRelationFilter, TicketTypeWhereInput>
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
@@ -9640,9 +9752,14 @@ export namespace Prisma {
     createtime?: SortOrder
     used?: SortOrder
     accesscode?: SortOrder
+    qrGenerated?: SortOrder
+    lastScanned?: SortOrderInput | SortOrder
+    scanCount?: SortOrder
     _count?: TicketCountOrderByAggregateInput
+    _avg?: TicketAvgOrderByAggregateInput
     _max?: TicketMaxOrderByAggregateInput
     _min?: TicketMinOrderByAggregateInput
+    _sum?: TicketSumOrderByAggregateInput
   }
 
   export type TicketScalarWhereWithAggregatesInput = {
@@ -9656,6 +9773,9 @@ export namespace Prisma {
     createtime?: DateTimeWithAggregatesFilter<"Ticket"> | Date | string
     used?: BoolWithAggregatesFilter<"Ticket"> | boolean
     accesscode?: StringWithAggregatesFilter<"Ticket"> | string
+    qrGenerated?: DateTimeWithAggregatesFilter<"Ticket"> | Date | string
+    lastScanned?: DateTimeNullableWithAggregatesFilter<"Ticket"> | Date | string | null
+    scanCount?: IntWithAggregatesFilter<"Ticket"> | number
   }
 
   export type UserWhereInput = {
@@ -9669,6 +9789,7 @@ export namespace Prisma {
     image?: StringNullableFilter<"User"> | string | null
     password?: StringNullableFilter<"User"> | string | null
     isAdmin?: BoolFilter<"User"> | boolean
+    isAuthenticator?: BoolFilter<"User"> | boolean
     createtime?: DateTimeFilter<"User"> | Date | string
     accounts?: AccountListRelationFilter
     sessions?: SessionListRelationFilter
@@ -9684,6 +9805,7 @@ export namespace Prisma {
     image?: SortOrderInput | SortOrder
     password?: SortOrderInput | SortOrder
     isAdmin?: SortOrder
+    isAuthenticator?: SortOrder
     createtime?: SortOrder
     accounts?: AccountOrderByRelationAggregateInput
     sessions?: SessionOrderByRelationAggregateInput
@@ -9702,6 +9824,7 @@ export namespace Prisma {
     image?: StringNullableFilter<"User"> | string | null
     password?: StringNullableFilter<"User"> | string | null
     isAdmin?: BoolFilter<"User"> | boolean
+    isAuthenticator?: BoolFilter<"User"> | boolean
     createtime?: DateTimeFilter<"User"> | Date | string
     accounts?: AccountListRelationFilter
     sessions?: SessionListRelationFilter
@@ -9717,6 +9840,7 @@ export namespace Prisma {
     image?: SortOrderInput | SortOrder
     password?: SortOrderInput | SortOrder
     isAdmin?: SortOrder
+    isAuthenticator?: SortOrder
     createtime?: SortOrder
     _count?: UserCountOrderByAggregateInput
     _max?: UserMaxOrderByAggregateInput
@@ -9734,6 +9858,7 @@ export namespace Prisma {
     image?: StringNullableWithAggregatesFilter<"User"> | string | null
     password?: StringNullableWithAggregatesFilter<"User"> | string | null
     isAdmin?: BoolWithAggregatesFilter<"User"> | boolean
+    isAuthenticator?: BoolWithAggregatesFilter<"User"> | boolean
     createtime?: DateTimeWithAggregatesFilter<"User"> | Date | string
   }
 
@@ -10063,6 +10188,9 @@ export namespace Prisma {
     createtime?: Date | string
     used?: boolean
     accesscode: string
+    qrGenerated?: Date | string
+    lastScanned?: Date | string | null
+    scanCount?: number
     event: EventCreateNestedOneWithoutTicketsInput
     tickettype: TicketTypeCreateNestedOneWithoutTicketsInput
     user: UserCreateNestedOneWithoutTicketsInput
@@ -10076,6 +10204,9 @@ export namespace Prisma {
     createtime?: Date | string
     used?: boolean
     accesscode: string
+    qrGenerated?: Date | string
+    lastScanned?: Date | string | null
+    scanCount?: number
   }
 
   export type TicketUpdateInput = {
@@ -10083,6 +10214,9 @@ export namespace Prisma {
     createtime?: DateTimeFieldUpdateOperationsInput | Date | string
     used?: BoolFieldUpdateOperationsInput | boolean
     accesscode?: StringFieldUpdateOperationsInput | string
+    qrGenerated?: DateTimeFieldUpdateOperationsInput | Date | string
+    lastScanned?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    scanCount?: IntFieldUpdateOperationsInput | number
     event?: EventUpdateOneRequiredWithoutTicketsNestedInput
     tickettype?: TicketTypeUpdateOneRequiredWithoutTicketsNestedInput
     user?: UserUpdateOneRequiredWithoutTicketsNestedInput
@@ -10096,6 +10230,9 @@ export namespace Prisma {
     createtime?: DateTimeFieldUpdateOperationsInput | Date | string
     used?: BoolFieldUpdateOperationsInput | boolean
     accesscode?: StringFieldUpdateOperationsInput | string
+    qrGenerated?: DateTimeFieldUpdateOperationsInput | Date | string
+    lastScanned?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    scanCount?: IntFieldUpdateOperationsInput | number
   }
 
   export type TicketCreateManyInput = {
@@ -10106,6 +10243,9 @@ export namespace Prisma {
     createtime?: Date | string
     used?: boolean
     accesscode: string
+    qrGenerated?: Date | string
+    lastScanned?: Date | string | null
+    scanCount?: number
   }
 
   export type TicketUpdateManyMutationInput = {
@@ -10113,6 +10253,9 @@ export namespace Prisma {
     createtime?: DateTimeFieldUpdateOperationsInput | Date | string
     used?: BoolFieldUpdateOperationsInput | boolean
     accesscode?: StringFieldUpdateOperationsInput | string
+    qrGenerated?: DateTimeFieldUpdateOperationsInput | Date | string
+    lastScanned?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    scanCount?: IntFieldUpdateOperationsInput | number
   }
 
   export type TicketUncheckedUpdateManyInput = {
@@ -10123,6 +10266,9 @@ export namespace Prisma {
     createtime?: DateTimeFieldUpdateOperationsInput | Date | string
     used?: BoolFieldUpdateOperationsInput | boolean
     accesscode?: StringFieldUpdateOperationsInput | string
+    qrGenerated?: DateTimeFieldUpdateOperationsInput | Date | string
+    lastScanned?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    scanCount?: IntFieldUpdateOperationsInput | number
   }
 
   export type UserCreateInput = {
@@ -10133,6 +10279,7 @@ export namespace Prisma {
     image?: string | null
     password?: string | null
     isAdmin?: boolean
+    isAuthenticator?: boolean
     createtime?: Date | string
     accounts?: AccountCreateNestedManyWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
@@ -10148,6 +10295,7 @@ export namespace Prisma {
     image?: string | null
     password?: string | null
     isAdmin?: boolean
+    isAuthenticator?: boolean
     createtime?: Date | string
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
@@ -10163,6 +10311,7 @@ export namespace Prisma {
     image?: NullableStringFieldUpdateOperationsInput | string | null
     password?: NullableStringFieldUpdateOperationsInput | string | null
     isAdmin?: BoolFieldUpdateOperationsInput | boolean
+    isAuthenticator?: BoolFieldUpdateOperationsInput | boolean
     createtime?: DateTimeFieldUpdateOperationsInput | Date | string
     accounts?: AccountUpdateManyWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
@@ -10178,6 +10327,7 @@ export namespace Prisma {
     image?: NullableStringFieldUpdateOperationsInput | string | null
     password?: NullableStringFieldUpdateOperationsInput | string | null
     isAdmin?: BoolFieldUpdateOperationsInput | boolean
+    isAuthenticator?: BoolFieldUpdateOperationsInput | boolean
     createtime?: DateTimeFieldUpdateOperationsInput | Date | string
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
@@ -10193,6 +10343,7 @@ export namespace Prisma {
     image?: string | null
     password?: string | null
     isAdmin?: boolean
+    isAuthenticator?: boolean
     createtime?: Date | string
   }
 
@@ -10204,6 +10355,7 @@ export namespace Prisma {
     image?: NullableStringFieldUpdateOperationsInput | string | null
     password?: NullableStringFieldUpdateOperationsInput | string | null
     isAdmin?: BoolFieldUpdateOperationsInput | boolean
+    isAuthenticator?: BoolFieldUpdateOperationsInput | boolean
     createtime?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -10215,6 +10367,7 @@ export namespace Prisma {
     image?: NullableStringFieldUpdateOperationsInput | string | null
     password?: NullableStringFieldUpdateOperationsInput | string | null
     isAdmin?: BoolFieldUpdateOperationsInput | boolean
+    isAuthenticator?: BoolFieldUpdateOperationsInput | boolean
     createtime?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -10631,6 +10784,28 @@ export namespace Prisma {
     not?: NestedBoolFilter<$PrismaModel> | boolean
   }
 
+  export type DateTimeNullableFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
+  }
+
+  export type IntFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntFilter<$PrismaModel> | number
+  }
+
   export type EventScalarRelationFilter = {
     is?: EventWhereInput
     isNot?: EventWhereInput
@@ -10654,6 +10829,13 @@ export namespace Prisma {
     createtime?: SortOrder
     used?: SortOrder
     accesscode?: SortOrder
+    qrGenerated?: SortOrder
+    lastScanned?: SortOrder
+    scanCount?: SortOrder
+  }
+
+  export type TicketAvgOrderByAggregateInput = {
+    scanCount?: SortOrder
   }
 
   export type TicketMaxOrderByAggregateInput = {
@@ -10664,6 +10846,9 @@ export namespace Prisma {
     createtime?: SortOrder
     used?: SortOrder
     accesscode?: SortOrder
+    qrGenerated?: SortOrder
+    lastScanned?: SortOrder
+    scanCount?: SortOrder
   }
 
   export type TicketMinOrderByAggregateInput = {
@@ -10674,6 +10859,13 @@ export namespace Prisma {
     createtime?: SortOrder
     used?: SortOrder
     accesscode?: SortOrder
+    qrGenerated?: SortOrder
+    lastScanned?: SortOrder
+    scanCount?: SortOrder
+  }
+
+  export type TicketSumOrderByAggregateInput = {
+    scanCount?: SortOrder
   }
 
   export type BoolWithAggregatesFilter<$PrismaModel = never> = {
@@ -10684,7 +10876,7 @@ export namespace Prisma {
     _max?: NestedBoolFilter<$PrismaModel>
   }
 
-  export type DateTimeNullableFilter<$PrismaModel = never> = {
+  export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
     in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
     notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
@@ -10692,7 +10884,26 @@ export namespace Prisma {
     lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
+    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedDateTimeNullableFilter<$PrismaModel>
+    _max?: NestedDateTimeNullableFilter<$PrismaModel>
+  }
+
+  export type IntWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedIntFilter<$PrismaModel>
+    _min?: NestedIntFilter<$PrismaModel>
+    _max?: NestedIntFilter<$PrismaModel>
   }
 
   export type AccountListRelationFilter = {
@@ -10733,6 +10944,7 @@ export namespace Prisma {
     image?: SortOrder
     password?: SortOrder
     isAdmin?: SortOrder
+    isAuthenticator?: SortOrder
     createtime?: SortOrder
   }
 
@@ -10744,6 +10956,7 @@ export namespace Prisma {
     image?: SortOrder
     password?: SortOrder
     isAdmin?: SortOrder
+    isAuthenticator?: SortOrder
     createtime?: SortOrder
   }
 
@@ -10755,21 +10968,8 @@ export namespace Prisma {
     image?: SortOrder
     password?: SortOrder
     isAdmin?: SortOrder
+    isAuthenticator?: SortOrder
     createtime?: SortOrder
-  }
-
-  export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedDateTimeNullableFilter<$PrismaModel>
-    _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
   export type IntNullableFilter<$PrismaModel = never> = {
@@ -10901,17 +11101,6 @@ export namespace Prisma {
     expires?: SortOrder
   }
 
-  export type IntFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel>
-    in?: number[] | ListIntFieldRefInput<$PrismaModel>
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntFilter<$PrismaModel> | number
-  }
-
   export type TicketTypeCountOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
@@ -10949,22 +11138,6 @@ export namespace Prisma {
     price?: SortOrder
     stock?: SortOrder
     total?: SortOrder
-  }
-
-  export type IntWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel>
-    in?: number[] | ListIntFieldRefInput<$PrismaModel>
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
-    _count?: NestedIntFilter<$PrismaModel>
-    _avg?: NestedFloatFilter<$PrismaModel>
-    _sum?: NestedIntFilter<$PrismaModel>
-    _min?: NestedIntFilter<$PrismaModel>
-    _max?: NestedIntFilter<$PrismaModel>
   }
 
   export type TicketCreateNestedManyWithoutEventInput = {
@@ -11101,6 +11274,18 @@ export namespace Prisma {
     set?: boolean
   }
 
+  export type NullableDateTimeFieldUpdateOperationsInput = {
+    set?: Date | string | null
+  }
+
+  export type IntFieldUpdateOperationsInput = {
+    set?: number
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
+  }
+
   export type EventUpdateOneRequiredWithoutTicketsNestedInput = {
     create?: XOR<EventCreateWithoutTicketsInput, EventUncheckedCreateWithoutTicketsInput>
     connectOrCreate?: EventCreateOrConnectWithoutTicketsInput
@@ -11179,10 +11364,6 @@ export namespace Prisma {
     connectOrCreate?: EventCreateOrConnectWithoutCreatedByInput | EventCreateOrConnectWithoutCreatedByInput[]
     createMany?: EventCreateManyCreatedByInputEnvelope
     connect?: EventWhereUniqueInput | EventWhereUniqueInput[]
-  }
-
-  export type NullableDateTimeFieldUpdateOperationsInput = {
-    set?: Date | string | null
   }
 
   export type AccountUpdateManyWithoutUserNestedInput = {
@@ -11353,14 +11534,6 @@ export namespace Prisma {
     connect?: TicketWhereUniqueInput | TicketWhereUniqueInput[]
   }
 
-  export type IntFieldUpdateOperationsInput = {
-    set?: number
-    increment?: number
-    decrement?: number
-    multiply?: number
-    divide?: number
-  }
-
   export type EventUpdateOneRequiredWithoutTicketTypesNestedInput = {
     create?: XOR<EventCreateWithoutTicketTypesInput, EventUncheckedCreateWithoutTicketTypesInput>
     connectOrCreate?: EventCreateOrConnectWithoutTicketTypesInput
@@ -11511,14 +11684,6 @@ export namespace Prisma {
     not?: NestedBoolFilter<$PrismaModel> | boolean
   }
 
-  export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedBoolFilter<$PrismaModel>
-    _max?: NestedBoolFilter<$PrismaModel>
-  }
-
   export type NestedDateTimeNullableFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
     in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
@@ -11528,6 +11693,14 @@ export namespace Prisma {
     gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
+  }
+
+  export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
   }
 
   export type NestedDateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -11542,33 +11715,6 @@ export namespace Prisma {
     _count?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedDateTimeNullableFilter<$PrismaModel>
     _max?: NestedDateTimeNullableFilter<$PrismaModel>
-  }
-
-  export type NestedIntNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _avg?: NestedFloatNullableFilter<$PrismaModel>
-    _sum?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedIntNullableFilter<$PrismaModel>
-    _max?: NestedIntNullableFilter<$PrismaModel>
-  }
-
-  export type NestedFloatNullableFilter<$PrismaModel = never> = {
-    equals?: number | FloatFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
-    lt?: number | FloatFieldRefInput<$PrismaModel>
-    lte?: number | FloatFieldRefInput<$PrismaModel>
-    gt?: number | FloatFieldRefInput<$PrismaModel>
-    gte?: number | FloatFieldRefInput<$PrismaModel>
-    not?: NestedFloatNullableFilter<$PrismaModel> | number | null
   }
 
   export type NestedIntWithAggregatesFilter<$PrismaModel = never> = {
@@ -11598,11 +11744,41 @@ export namespace Prisma {
     not?: NestedFloatFilter<$PrismaModel> | number
   }
 
+  export type NestedIntNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedIntNullableFilter<$PrismaModel>
+    _max?: NestedIntNullableFilter<$PrismaModel>
+  }
+
+  export type NestedFloatNullableFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatNullableFilter<$PrismaModel> | number | null
+  }
+
   export type TicketCreateWithoutEventInput = {
     id?: string
     createtime?: Date | string
     used?: boolean
     accesscode: string
+    qrGenerated?: Date | string
+    lastScanned?: Date | string | null
+    scanCount?: number
     tickettype: TicketTypeCreateNestedOneWithoutTicketsInput
     user: UserCreateNestedOneWithoutTicketsInput
   }
@@ -11614,6 +11790,9 @@ export namespace Prisma {
     createtime?: Date | string
     used?: boolean
     accesscode: string
+    qrGenerated?: Date | string
+    lastScanned?: Date | string | null
+    scanCount?: number
   }
 
   export type TicketCreateOrConnectWithoutEventInput = {
@@ -11662,6 +11841,7 @@ export namespace Prisma {
     image?: string | null
     password?: string | null
     isAdmin?: boolean
+    isAuthenticator?: boolean
     createtime?: Date | string
     accounts?: AccountCreateNestedManyWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
@@ -11676,6 +11856,7 @@ export namespace Prisma {
     image?: string | null
     password?: string | null
     isAdmin?: boolean
+    isAuthenticator?: boolean
     createtime?: Date | string
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
@@ -11714,6 +11895,9 @@ export namespace Prisma {
     createtime?: DateTimeFilter<"Ticket"> | Date | string
     used?: BoolFilter<"Ticket"> | boolean
     accesscode?: StringFilter<"Ticket"> | string
+    qrGenerated?: DateTimeFilter<"Ticket"> | Date | string
+    lastScanned?: DateTimeNullableFilter<"Ticket"> | Date | string | null
+    scanCount?: IntFilter<"Ticket"> | number
   }
 
   export type TicketTypeUpsertWithWhereUniqueWithoutEventInput = {
@@ -11763,6 +11947,7 @@ export namespace Prisma {
     image?: NullableStringFieldUpdateOperationsInput | string | null
     password?: NullableStringFieldUpdateOperationsInput | string | null
     isAdmin?: BoolFieldUpdateOperationsInput | boolean
+    isAuthenticator?: BoolFieldUpdateOperationsInput | boolean
     createtime?: DateTimeFieldUpdateOperationsInput | Date | string
     accounts?: AccountUpdateManyWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
@@ -11777,6 +11962,7 @@ export namespace Prisma {
     image?: NullableStringFieldUpdateOperationsInput | string | null
     password?: NullableStringFieldUpdateOperationsInput | string | null
     isAdmin?: BoolFieldUpdateOperationsInput | boolean
+    isAuthenticator?: BoolFieldUpdateOperationsInput | boolean
     createtime?: DateTimeFieldUpdateOperationsInput | Date | string
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
@@ -11839,6 +12025,7 @@ export namespace Prisma {
     image?: string | null
     password?: string | null
     isAdmin?: boolean
+    isAuthenticator?: boolean
     createtime?: Date | string
     accounts?: AccountCreateNestedManyWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
@@ -11853,6 +12040,7 @@ export namespace Prisma {
     image?: string | null
     password?: string | null
     isAdmin?: boolean
+    isAuthenticator?: boolean
     createtime?: Date | string
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
@@ -11943,6 +12131,7 @@ export namespace Prisma {
     image?: NullableStringFieldUpdateOperationsInput | string | null
     password?: NullableStringFieldUpdateOperationsInput | string | null
     isAdmin?: BoolFieldUpdateOperationsInput | boolean
+    isAuthenticator?: BoolFieldUpdateOperationsInput | boolean
     createtime?: DateTimeFieldUpdateOperationsInput | Date | string
     accounts?: AccountUpdateManyWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
@@ -11957,6 +12146,7 @@ export namespace Prisma {
     image?: NullableStringFieldUpdateOperationsInput | string | null
     password?: NullableStringFieldUpdateOperationsInput | string | null
     isAdmin?: BoolFieldUpdateOperationsInput | boolean
+    isAuthenticator?: BoolFieldUpdateOperationsInput | boolean
     createtime?: DateTimeFieldUpdateOperationsInput | Date | string
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
@@ -12028,6 +12218,9 @@ export namespace Prisma {
     createtime?: Date | string
     used?: boolean
     accesscode: string
+    qrGenerated?: Date | string
+    lastScanned?: Date | string | null
+    scanCount?: number
     event: EventCreateNestedOneWithoutTicketsInput
     tickettype: TicketTypeCreateNestedOneWithoutTicketsInput
   }
@@ -12039,6 +12232,9 @@ export namespace Prisma {
     createtime?: Date | string
     used?: boolean
     accesscode: string
+    qrGenerated?: Date | string
+    lastScanned?: Date | string | null
+    scanCount?: number
   }
 
   export type TicketCreateOrConnectWithoutUserInput = {
@@ -12193,6 +12389,7 @@ export namespace Prisma {
     image?: string | null
     password?: string | null
     isAdmin?: boolean
+    isAuthenticator?: boolean
     createtime?: Date | string
     sessions?: SessionCreateNestedManyWithoutUserInput
     tickets?: TicketCreateNestedManyWithoutUserInput
@@ -12207,6 +12404,7 @@ export namespace Prisma {
     image?: string | null
     password?: string | null
     isAdmin?: boolean
+    isAuthenticator?: boolean
     createtime?: Date | string
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     tickets?: TicketUncheckedCreateNestedManyWithoutUserInput
@@ -12237,6 +12435,7 @@ export namespace Prisma {
     image?: NullableStringFieldUpdateOperationsInput | string | null
     password?: NullableStringFieldUpdateOperationsInput | string | null
     isAdmin?: BoolFieldUpdateOperationsInput | boolean
+    isAuthenticator?: BoolFieldUpdateOperationsInput | boolean
     createtime?: DateTimeFieldUpdateOperationsInput | Date | string
     sessions?: SessionUpdateManyWithoutUserNestedInput
     tickets?: TicketUpdateManyWithoutUserNestedInput
@@ -12251,6 +12450,7 @@ export namespace Prisma {
     image?: NullableStringFieldUpdateOperationsInput | string | null
     password?: NullableStringFieldUpdateOperationsInput | string | null
     isAdmin?: BoolFieldUpdateOperationsInput | boolean
+    isAuthenticator?: BoolFieldUpdateOperationsInput | boolean
     createtime?: DateTimeFieldUpdateOperationsInput | Date | string
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     tickets?: TicketUncheckedUpdateManyWithoutUserNestedInput
@@ -12265,6 +12465,7 @@ export namespace Prisma {
     image?: string | null
     password?: string | null
     isAdmin?: boolean
+    isAuthenticator?: boolean
     createtime?: Date | string
     accounts?: AccountCreateNestedManyWithoutUserInput
     tickets?: TicketCreateNestedManyWithoutUserInput
@@ -12279,6 +12480,7 @@ export namespace Prisma {
     image?: string | null
     password?: string | null
     isAdmin?: boolean
+    isAuthenticator?: boolean
     createtime?: Date | string
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     tickets?: TicketUncheckedCreateNestedManyWithoutUserInput
@@ -12309,6 +12511,7 @@ export namespace Prisma {
     image?: NullableStringFieldUpdateOperationsInput | string | null
     password?: NullableStringFieldUpdateOperationsInput | string | null
     isAdmin?: BoolFieldUpdateOperationsInput | boolean
+    isAuthenticator?: BoolFieldUpdateOperationsInput | boolean
     createtime?: DateTimeFieldUpdateOperationsInput | Date | string
     accounts?: AccountUpdateManyWithoutUserNestedInput
     tickets?: TicketUpdateManyWithoutUserNestedInput
@@ -12323,6 +12526,7 @@ export namespace Prisma {
     image?: NullableStringFieldUpdateOperationsInput | string | null
     password?: NullableStringFieldUpdateOperationsInput | string | null
     isAdmin?: BoolFieldUpdateOperationsInput | boolean
+    isAuthenticator?: BoolFieldUpdateOperationsInput | boolean
     createtime?: DateTimeFieldUpdateOperationsInput | Date | string
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     tickets?: TicketUncheckedUpdateManyWithoutUserNestedInput
@@ -12359,6 +12563,9 @@ export namespace Prisma {
     createtime?: Date | string
     used?: boolean
     accesscode: string
+    qrGenerated?: Date | string
+    lastScanned?: Date | string | null
+    scanCount?: number
     event: EventCreateNestedOneWithoutTicketsInput
     user: UserCreateNestedOneWithoutTicketsInput
   }
@@ -12370,6 +12577,9 @@ export namespace Prisma {
     createtime?: Date | string
     used?: boolean
     accesscode: string
+    qrGenerated?: Date | string
+    lastScanned?: Date | string | null
+    scanCount?: number
   }
 
   export type TicketCreateOrConnectWithoutTickettypeInput = {
@@ -12436,6 +12646,9 @@ export namespace Prisma {
     createtime?: Date | string
     used?: boolean
     accesscode: string
+    qrGenerated?: Date | string
+    lastScanned?: Date | string | null
+    scanCount?: number
   }
 
   export type TicketTypeCreateManyEventInput = {
@@ -12451,6 +12664,9 @@ export namespace Prisma {
     createtime?: DateTimeFieldUpdateOperationsInput | Date | string
     used?: BoolFieldUpdateOperationsInput | boolean
     accesscode?: StringFieldUpdateOperationsInput | string
+    qrGenerated?: DateTimeFieldUpdateOperationsInput | Date | string
+    lastScanned?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    scanCount?: IntFieldUpdateOperationsInput | number
     tickettype?: TicketTypeUpdateOneRequiredWithoutTicketsNestedInput
     user?: UserUpdateOneRequiredWithoutTicketsNestedInput
   }
@@ -12462,6 +12678,9 @@ export namespace Prisma {
     createtime?: DateTimeFieldUpdateOperationsInput | Date | string
     used?: BoolFieldUpdateOperationsInput | boolean
     accesscode?: StringFieldUpdateOperationsInput | string
+    qrGenerated?: DateTimeFieldUpdateOperationsInput | Date | string
+    lastScanned?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    scanCount?: IntFieldUpdateOperationsInput | number
   }
 
   export type TicketUncheckedUpdateManyWithoutEventInput = {
@@ -12471,6 +12690,9 @@ export namespace Prisma {
     createtime?: DateTimeFieldUpdateOperationsInput | Date | string
     used?: BoolFieldUpdateOperationsInput | boolean
     accesscode?: StringFieldUpdateOperationsInput | string
+    qrGenerated?: DateTimeFieldUpdateOperationsInput | Date | string
+    lastScanned?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    scanCount?: IntFieldUpdateOperationsInput | number
   }
 
   export type TicketTypeUpdateWithoutEventInput = {
@@ -12526,6 +12748,9 @@ export namespace Prisma {
     createtime?: Date | string
     used?: boolean
     accesscode: string
+    qrGenerated?: Date | string
+    lastScanned?: Date | string | null
+    scanCount?: number
   }
 
   export type EventCreateManyCreatedByInput = {
@@ -12601,6 +12826,9 @@ export namespace Prisma {
     createtime?: DateTimeFieldUpdateOperationsInput | Date | string
     used?: BoolFieldUpdateOperationsInput | boolean
     accesscode?: StringFieldUpdateOperationsInput | string
+    qrGenerated?: DateTimeFieldUpdateOperationsInput | Date | string
+    lastScanned?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    scanCount?: IntFieldUpdateOperationsInput | number
     event?: EventUpdateOneRequiredWithoutTicketsNestedInput
     tickettype?: TicketTypeUpdateOneRequiredWithoutTicketsNestedInput
   }
@@ -12612,6 +12840,9 @@ export namespace Prisma {
     createtime?: DateTimeFieldUpdateOperationsInput | Date | string
     used?: BoolFieldUpdateOperationsInput | boolean
     accesscode?: StringFieldUpdateOperationsInput | string
+    qrGenerated?: DateTimeFieldUpdateOperationsInput | Date | string
+    lastScanned?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    scanCount?: IntFieldUpdateOperationsInput | number
   }
 
   export type TicketUncheckedUpdateManyWithoutUserInput = {
@@ -12621,6 +12852,9 @@ export namespace Prisma {
     createtime?: DateTimeFieldUpdateOperationsInput | Date | string
     used?: BoolFieldUpdateOperationsInput | boolean
     accesscode?: StringFieldUpdateOperationsInput | string
+    qrGenerated?: DateTimeFieldUpdateOperationsInput | Date | string
+    lastScanned?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    scanCount?: IntFieldUpdateOperationsInput | number
   }
 
   export type EventUpdateWithoutCreatedByInput = {
@@ -12658,6 +12892,9 @@ export namespace Prisma {
     createtime?: Date | string
     used?: boolean
     accesscode: string
+    qrGenerated?: Date | string
+    lastScanned?: Date | string | null
+    scanCount?: number
   }
 
   export type TicketUpdateWithoutTickettypeInput = {
@@ -12665,6 +12902,9 @@ export namespace Prisma {
     createtime?: DateTimeFieldUpdateOperationsInput | Date | string
     used?: BoolFieldUpdateOperationsInput | boolean
     accesscode?: StringFieldUpdateOperationsInput | string
+    qrGenerated?: DateTimeFieldUpdateOperationsInput | Date | string
+    lastScanned?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    scanCount?: IntFieldUpdateOperationsInput | number
     event?: EventUpdateOneRequiredWithoutTicketsNestedInput
     user?: UserUpdateOneRequiredWithoutTicketsNestedInput
   }
@@ -12676,6 +12916,9 @@ export namespace Prisma {
     createtime?: DateTimeFieldUpdateOperationsInput | Date | string
     used?: BoolFieldUpdateOperationsInput | boolean
     accesscode?: StringFieldUpdateOperationsInput | string
+    qrGenerated?: DateTimeFieldUpdateOperationsInput | Date | string
+    lastScanned?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    scanCount?: IntFieldUpdateOperationsInput | number
   }
 
   export type TicketUncheckedUpdateManyWithoutTickettypeInput = {
@@ -12685,6 +12928,9 @@ export namespace Prisma {
     createtime?: DateTimeFieldUpdateOperationsInput | Date | string
     used?: BoolFieldUpdateOperationsInput | boolean
     accesscode?: StringFieldUpdateOperationsInput | string
+    qrGenerated?: DateTimeFieldUpdateOperationsInput | Date | string
+    lastScanned?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    scanCount?: IntFieldUpdateOperationsInput | number
   }
 
 

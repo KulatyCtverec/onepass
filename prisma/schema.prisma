@@ -35,23 +35,27 @@ model Ticket {
   user         User       @relation(fields: [userid], references: [id])
   userid       String
   createtime   DateTime   @default(now())
-  used         Boolean    @default(false) // označení že byl použit
-  accesscode   String     @unique // bezpečný token/QR
+  used         Boolean    @default(false)
+  accesscode   String     @unique // QR kód obsahující ticket ID + hash
+  qrGenerated  DateTime   @default(now()) // kdy byl QR vygenerován
+  lastScanned  DateTime? // poslední skenování
+  scanCount    Int        @default(0) // počet skenování
 }
 
 model User {
-  id            String    @id @default(cuid())
-  name          String?
-  email         String    @unique
-  emailVerified DateTime?
-  image         String?
-  password      String? // pro lokální přihlašování
-  isAdmin       Boolean   @default(false) // administrátor
-  accounts      Account[]
-  sessions      Session[]
-  tickets       Ticket[]
-  createdEvents Event[]   @relation("EventCreator")
-  createtime    DateTime  @default(now())
+  id              String    @id @default(cuid())
+  name            String?
+  email           String    @unique
+  emailVerified   DateTime?
+  image           String?
+  password        String? // pro lokální přihlašování
+  isAdmin         Boolean   @default(false) // administrátor
+  isAuthenticator Boolean   @default(false) // ověřovatel QR kódů
+  accounts        Account[]
+  sessions        Session[]
+  tickets         Ticket[]
+  createdEvents   Event[]   @relation("EventCreator")
+  createtime      DateTime  @default(now())
 }
 
 model Account {

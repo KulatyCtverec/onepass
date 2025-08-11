@@ -66,7 +66,7 @@ export default function AdminDashboard({ events }: AdminDashboardProps) {
       </div>
 
       {/* Akce */}
-      <div className="flex gap-4">
+      <div className="flex gap-4 flex-wrap">
         <Dialog open={isCreateEventOpen} onOpenChange={setIsCreateEventOpen}>
           <DialogTrigger asChild>
             <Button className="bg-accent-600 hover:bg-accent-700 text-white">
@@ -98,17 +98,22 @@ export default function AdminDashboard({ events }: AdminDashboardProps) {
           <DialogContent className="bg-black border-accent-600 text-white">
             <DialogHeader>
               <DialogTitle className="text-accent-400">
-                Vytvořit typ lístku
+                Vytvořit nový typ lístku
               </DialogTitle>
             </DialogHeader>
-            {selectedEvent && (
-              <CreateTicketTypeForm
-                eventId={selectedEvent.id}
-                onSuccess={() => setIsCreateTicketTypeOpen(false)}
-              />
-            )}
+            <CreateTicketTypeForm
+              eventId={selectedEvent?.id || ""}
+              onSuccess={() => setIsCreateTicketTypeOpen(false)}
+            />
           </DialogContent>
         </Dialog>
+
+        <Button
+          onClick={() => window.open("/admin/verify-tickets", "_blank")}
+          className="bg-green-600 hover:bg-green-700 text-white"
+        >
+          🔍 Ověřit vstupenky
+        </Button>
       </div>
 
       {/* Seznam událostí */}

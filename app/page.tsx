@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { prisma } from "@/lib/prisma";
 import HomepageEventsTable from "@/components/HomepageEventsTable";
 
@@ -17,11 +18,19 @@ export default async function Home() {
       <div className="max-w-7xl mx-auto">
         {/* Hero Section */}
         <div className="text-center mb-12">
-          <h1 className="text-4xl md:text-6xl font-bold mb-6">🎟 OnePass</h1>
+          <div className="flex items-center justify-center mb-6">
+            <Image
+              src="/onepass-logo.svg"
+              alt="OnePass Logo"
+              width={80}
+              height={64}
+              className="mr-4 filter brightness-0 invert"
+            />
+            <h1 className="text-4xl md:text-6xl font-bold">OnePass</h1>
+          </div>
           <p className="text-lg md:text-xl text-secondary-400 mb-8">
             Nejlepší platforma pro správu a prodej vstupenek na události
           </p>
-
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link
               href="/events"

@@ -1,53 +1,133 @@
-import Link from "next/link";
-import type { Ticket } from "@prisma/client";
+"use client";
 import { useState } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import {
+  Calendar,
+  MapPin,
+  User,
+  Ticket as TicketIcon,
+  QrCode,
+} from "lucide-react";
+import QRCodeDisplay from "./QRCodeDisplay";
+import {
+  Ticket,
+  TicketType,
+  Event,
+  User as UserType,
+} from "@/lib/generated/prisma";
 
-export default function TicketCard({ ticket }: { ticket: Ticket }) {
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+export default function TicketCard({
+  ticket,
+}: {
+  ticket: Ticket & {
+    event: Event;
+    user: UserType;
+    tickettype: TicketType;
+  };
+}) {
+  const [showQR, setShowQR] = useState(false);
 
-  const handleDelete = async (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    if (!confirm("Opravdu chcete tuto událost smazat?")) return;
-    setLoading(true);
-    setError(null);
-    try {
-      const res = await fetch(`/api/tickets/${ticket.id}`, {
-        method: "DELETE",
-      });
-      if (!res.ok) throw new Error("Chyba při mazání.");
-    } catch (e) {
-      console.error(e);
-      setError("Smazání selhalo.");
-    } finally {
-      setLoading(false);
-    }
+  const formatDate = (date: Date) => {
+    return new Date(date).toLocaleDateString("cs-CZ", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    });
   };
 
+  const formatPrice = (price: number) => {
+    return new Intl.NumberFormat("cs-CZ", {
+      style: "currency",
+      currency: "CZK",
+    }).format(price / 100); // price je v haléřích
+  };
+
+  if (!ticket.event || !ticket.user || !ticket.tickettype) {
+    return (
+      <Card className="h-full">
+        <CardContent className="p-4">
+          <p className="text-gray-500">Načítání...</p>
+        </CardContent>
+      </Card>
+    );
+  }
+
   return (
-    <Link href={`/events/${ticket.id}`} className="block h-full">
-      <div className="border border-secondary-700 rounded-2xl p-6 bg-black hover:bg-gray-900 transition flex flex-col justify-between h-full cursor-pointer group">
-        <div className="flex-1">
-          <h2 className="text-2xl font-semibold group-hover:text-primary-400 transition-colors mb-4">
-            {ticket.price}
-          </h2>
-          <p className="text-secondary-400">
-            📍 {} | 📅 {ticket.owner}
-          </p>
-          {error && <div className="text-red-500 mt-2">{error}</div>}
-        </div>
-        <div className="mt-4 flex justify-end">
-          <button
-            onClick={handleDelete}
-            disabled={loading}
-            className="px-4 py-2 bg-red-600 hover:bg-red-700 rounded-xl text-white transition"
-            title="Smazat událost"
+    <Card className="h-full hover:shadow-lg transition-shadow">
+      <CardHeader className="pb-3">
+        <div className="flex items-center justify-between">
+          <CardTitle className="text-lg font-semibold text-gray-900">
+            {ticket.event.name}
+          </CardTitle>
+          <div
+            className={`px-2 py-1 rounded-full text-xs font-medium ${
+              ticket.used
+                ? "bg-red-100 text-red-800"
+                : "bg-green-100 text-green-800"
+            }`}
           >
-            {loading ? "Mažu..." : "Smazat"}
-          </button>
+            {ticket.used ? "Použito" : "Aktivní"}
+          </div>
         </div>
-      </div>
-    </Link>
+      </CardHeader>
+
+      <CardContent className="space-y-4">
+        {/* Informace o události */}
+        <div className="space-y-2">
+          <div className="flex items-center gap-2 text-sm text-gray-600">
+            <Calendar className="w-4 h-4" />
+            <span>{formatDate(ticket.event.date)}</span>
+          </div>
+
+          <div className="flex items-center gap-2 text-sm text-gray-600">
+            <MapPin className="w-4 h-4" />
+            <span>{ticket.event.location}</span>
+          </div>
+
+          <div className="flex items-center gap-2 text-sm text-gray-600">
+            <User className="w-4 h-4" />
+            <span>{ticket.user.name}</span>
+          </div>
+
+          <div className="flex items-center gap-2 text-sm text-gray-600">
+            <TicketIcon className="w-4 h-4" />
+            <span>{ticket.tickettype.name}</span>
+          </div>
+        </div>
+
+        {/* Cena */}
+        <div className="text-center py-3 bg-gray-50 rounded-lg">
+          <p className="text-2xl font-bold text-primary-600">
+            {formatPrice(ticket.tickettype.price)}
+          </p>
+        </div>
+
+        {/* QR kód tlačítko */}
+        <Button
+          onClick={() => setShowQR(!showQR)}
+          variant="outline"
+          className="w-full flex items-center gap-2"
+        >
+          <QrCode className="w-4 h-4" />
+          {showQR ? "Skrýt QR kód" : "Zobrazit QR kód"}
+        </Button>
+
+        {/* QR kód */}
+        {showQR && (
+          <div className="mt-4">
+            <QRCodeDisplay
+              ticketId={ticket.id}
+              eventName={ticket.event.name}
+              userName={ticket.user.name || "Unknown"}
+              eventDate={ticket.event.date}
+              ticketType={ticket.tickettype.name}
+            />
+          </div>
+        )}
+      </CardContent>
+    </Card>
   );
 }
