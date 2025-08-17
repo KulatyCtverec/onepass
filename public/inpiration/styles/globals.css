@@ -1,80 +1,77 @@
-@import "tailwindcss";
-@import "tw-animate-css";
-
 @custom-variant dark (&:is(.dark *));
 
 :root {
   --font-size: 14px;
   /* Hyper-modern dark theme as default */
-  --background: 220 13% 6%;
-  --background-secondary: 220 13% 10%;
-  --background-tertiary: 220 13% 15%;
-  --foreground: 220 13% 91%;
-  --foreground-muted: 220 13% 63%;
-  --card: 220 13% 8%;
-  --card-foreground: 220 13% 91%;
-  --popover: 220 13% 6%;
-  --popover-foreground: 220 13% 91%;
-  --primary: 217 91% 60%;
-  --primary-dark: 217 91% 45%;
-  --primary-foreground: 0 0% 100%;
-  --secondary: 217 91% 60%;
-  --secondary-foreground: 220 13% 91%;
-  --muted: 0 0% 100%;
-  --muted-foreground: 220 13% 63%;
-  --accent: 217 91% 60%;
-  --accent-foreground: 220 13% 91%;
-  --destructive: 0 84% 60%;
-  --destructive-foreground: 0 0% 100%;
-  --border: 217 91% 60%;
-  --input: 0 0% 100%;
-  --input-background: 0 0% 100%;
-  --switch-background: 0 0% 100%;
+  --background: #0a0a0f;
+  --background-secondary: #12121a;
+  --background-tertiary: #1a1a26;
+  --foreground: #e8e8f0;
+  --foreground-muted: #a0a0b0;
+  --card: rgba(20, 20, 35, 0.8);
+  --card-foreground: #e8e8f0;
+  --popover: rgba(15, 15, 25, 0.95);
+  --popover-foreground: #e8e8f0;
+  --primary: #3b82f6;
+  --primary-dark: #1d4ed8;
+  --primary-foreground: #ffffff;
+  --secondary: rgba(59, 130, 246, 0.1);
+  --secondary-foreground: #e8e8f0;
+  --muted: rgba(255, 255, 255, 0.05);
+  --muted-foreground: #a0a0b0;
+  --accent: rgba(59, 130, 246, 0.15);
+  --accent-foreground: #e8e8f0;
+  --destructive: #ef4444;
+  --destructive-foreground: #ffffff;
+  --border: rgba(59, 130, 246, 0.2);
+  --input: rgba(255, 255, 255, 0.05);
+  --input-background: rgba(255, 255, 255, 0.08);
+  --switch-background: rgba(255, 255, 255, 0.2);
   --font-weight-medium: 500;
   --font-weight-normal: 400;
-  --ring: 217 91% 60%;
-  --chart-1: 217 91% 60%;
-  --chart-2: 262 83% 58%;
-  --chart-3: 187 85% 43%;
-  --chart-4: 158 64% 52%;
-  --chart-5: 43 96% 56%;
+  --ring: rgba(59, 130, 246, 0.5);
+  --chart-1: #3b82f6;
+  --chart-2: #8b5cf6;
+  --chart-3: #06b6d4;
+  --chart-4: #10b981;
+  --chart-5: #f59e0b;
   --radius: 1rem;
-  --sidebar: 220 13% 6%;
-  --sidebar-foreground: 220 13% 91%;
-  --sidebar-primary: 217 91% 60%;
-  --sidebar-primary-foreground: 0 0% 100%;
-  --sidebar-accent: 217 91% 60%;
-  --sidebar-accent-foreground: 220 13% 91%;
-  --sidebar-border: 217 91% 60%;
-  --sidebar-ring: 217 91% 60%;
+  --sidebar: rgba(10, 10, 15, 0.95);
+  --sidebar-foreground: #e8e8f0;
+  --sidebar-primary: #3b82f6;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: rgba(59, 130, 246, 0.1);
+  --sidebar-accent-foreground: #e8e8f0;
+  --sidebar-border: rgba(59, 130, 246, 0.2);
+  --sidebar-ring: rgba(59, 130, 246, 0.5);
 }
 
 .light {
-  --background: 0 0% 100%;
-  --background-secondary: 210 40% 98%;
-  --background-tertiary: 210 40% 96%;
-  --foreground: 222 84% 5%;
-  --foreground-muted: 215 16% 47%;
-  --card: 0 0% 100%;
-  --card-foreground: 222 84% 5%;
-  --popover: 0 0% 100%;
-  --popover-foreground: 222 84% 5%;
-  --primary: 217 91% 60%;
-  --primary-dark: 217 91% 45%;
-  --primary-foreground: 0 0% 100%;
-  --secondary: 217 91% 60%;
-  --secondary-foreground: 222 84% 5%;
-  --muted: 210 40% 96%;
-  --muted-foreground: 215 16% 47%;
-  --accent: 210 40% 96%;
-  --accent-foreground: 222 84% 5%;
-  --destructive: 0 84% 60%;
-  --destructive-foreground: 0 0% 100%;
-  --border: 214 32% 91%;
+  --background: #ffffff;
+  --background-secondary: #f8fafc;
+  --background-tertiary: #f1f5f9;
+  --foreground: #0f172a;
+  --foreground-muted: #64748b;
+  --card: #ffffff;
+  --card-foreground: #0f172a;
+  --popover: #ffffff;
+  --popover-foreground: #0f172a;
+  --primary: #3b82f6;
+  --primary-dark: #1d4ed8;
+  --primary-foreground: #ffffff;
+  --secondary: rgba(59, 130, 246, 0.1);
+  --secondary-foreground: #0f172a;
+  --muted: #f1f5f9;
+  --muted-foreground: #64748b;
+  --accent: #f1f5f9;
+  --accent-foreground: #0f172a;
+  --destructive: #ef4444;
+  --destructive-foreground: #ffffff;
+  --border: rgba(0, 0, 0, 0.1);
   --input: transparent;
-  --input-background: 210 40% 98%;
-  --switch-background: 215 16% 56%;
-  --ring: 217 91% 60%;
+  --input-background: #f8fafc;
+  --switch-background: #cbd5e1;
+  --ring: rgba(59, 130, 246, 0.5);
 }
 
 @theme inline {
@@ -129,7 +126,7 @@
 
   body {
     @apply bg-background text-foreground;
-    background: linear-gradient(135deg, hsl(var(--background)) 0%, hsl(var(--background-secondary)) 50%, hsl(var(--background-tertiary)) 100%);
+    background: linear-gradient(135deg, #0a0a0f 0%, #12121a 50%, #1a1a26 100%);
     min-height: 100vh;
   }
 }
@@ -137,49 +134,49 @@
 /* Custom gradient utilities */
 @layer utilities {
   .bg-gradient-primary {
-    background: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--primary-dark)) 100%);
+    background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
   }
   
   .bg-gradient-secondary {
-    background: linear-gradient(135deg, hsl(var(--secondary) / 0.2) 0%, hsl(var(--primary-dark) / 0.2) 100%);
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.2) 0%, rgba(29, 78, 216, 0.2) 100%);
   }
   
   .bg-gradient-card {
-    background: linear-gradient(135deg, hsl(var(--card) / 0.8) 0%, hsl(var(--background-tertiary) / 0.6) 100%);
+    background: linear-gradient(135deg, rgba(20, 20, 35, 0.8) 0%, rgba(30, 30, 45, 0.6) 100%);
     backdrop-filter: blur(10px);
-    border: 1px solid hsl(var(--border) / 0.2);
+    border: 1px solid rgba(59, 130, 246, 0.2);
   }
   
   .bg-gradient-hero {
-    background: linear-gradient(135deg, hsl(var(--background)) 0%, hsl(var(--background-secondary)) 50%, hsl(var(--background-tertiary)) 100%);
+    background: linear-gradient(135deg, #0a0a0f 0%, #1a1a2e 50%, #16213e 100%);
   }
   
   .glass-effect {
-    background: hsl(var(--muted) / 0.05);
+    background: rgba(255, 255, 255, 0.05);
     backdrop-filter: blur(10px);
-    border: 1px solid hsl(var(--muted) / 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.1);
   }
   
   .glass-button {
-    background: hsl(var(--primary) / 0.1);
+    background: rgba(59, 130, 246, 0.1);
     backdrop-filter: blur(10px);
-    border: 1px solid hsl(var(--primary) / 0.3);
+    border: 1px solid rgba(59, 130, 246, 0.3);
     transition: all 0.3s ease;
   }
   
   .glass-button:hover {
-    background: hsl(var(--primary) / 0.2);
-    border-color: hsl(var(--primary) / 0.5);
+    background: rgba(59, 130, 246, 0.2);
+    border-color: rgba(59, 130, 246, 0.5);
     transform: translateY(-1px);
-    box-shadow: 0 10px 25px hsl(var(--primary) / 0.2);
+    box-shadow: 0 10px 25px rgba(59, 130, 246, 0.2);
   }
   
   .neon-glow {
-    box-shadow: 0 0 20px hsl(var(--primary) / 0.3);
+    box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
   }
   
   .neon-text {
-    text-shadow: 0 0 10px hsl(var(--primary) / 0.5);
+    text-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
   }
 }
 
@@ -192,42 +189,42 @@
       font-size: var(--text-2xl);
       font-weight: var(--font-weight-medium);
       line-height: 1.5;
-      color: hsl(var(--foreground));
+      color: var(--foreground);
     }
 
     h2 {
       font-size: var(--text-xl);
       font-weight: var(--font-weight-medium);
       line-height: 1.5;
-      color: hsl(var(--foreground));
+      color: var(--foreground);
     }
 
     h3 {
       font-size: var(--text-lg);
       font-weight: var(--font-weight-medium);
       line-height: 1.5;
-      color: hsl(var(--foreground));
+      color: var(--foreground);
     }
 
     h4 {
       font-size: var(--text-base);
       font-weight: var(--font-weight-medium);
       line-height: 1.5;
-      color: hsl(var(--foreground));
+      color: var(--foreground);
     }
 
     p {
       font-size: var(--text-base);
       font-weight: var(--font-weight-normal);
       line-height: 1.5;
-      color: hsl(var(--foreground-muted));
+      color: var(--foreground-muted);
     }
 
     label {
       font-size: var(--text-base);
       font-weight: var(--font-weight-medium);
       line-height: 1.5;
-      color: hsl(var(--foreground));
+      color: var(--foreground);
     }
 
     button {
@@ -240,7 +237,7 @@
       font-size: var(--text-base);
       font-weight: var(--font-weight-normal);
       line-height: 1.5;
-      color: hsl(var(--foreground));
+      color: var(--foreground);
     }
   }
 }

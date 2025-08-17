@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
@@ -21,8 +21,6 @@ export const metadata: Metadata = {
   keywords: ["events", "tickets"],
   description: "OnePass - a safe place for your events",
   manifest: "/manifest.json",
-  themeColor: "#000000",
-  colorScheme: "dark",
   icons: {
     icon: [
       {
@@ -44,6 +42,11 @@ export const metadata: Metadata = {
   },
 };
 
+export const viewport: Viewport = {
+  themeColor: "#3b82f6",
+  colorScheme: "dark",
+};
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -51,9 +54,9 @@ export default function RootLayout({
 }>) {
   return (
     <SessionProvider>
-      <html lang="cs">
+      <html lang="cs" className="dark">
         <body
-          className={`${geistSans.variable} ${geistMono.variable} antialiased text-white`}
+          className={`${geistSans.variable} ${geistMono.variable} antialiased bg-background text-foreground`}
         >
           <Navbar />
           {children}

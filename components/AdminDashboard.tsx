@@ -31,34 +31,34 @@ export default function AdminDashboard({ events }: AdminDashboardProps) {
     <div className="space-y-8">
       {/* Statistiky */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <Card className="bg-black border-secondary-700">
+        <Card className="glass-effect border-border/30">
           <CardHeader>
-            <CardTitle className="text-accent-400">Celkem událostí</CardTitle>
+            <CardTitle className="text-primary">Celkem událostí</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-3xl font-bold">{events.length}</p>
+            <p className="text-3xl font-bold text-foreground">{events.length}</p>
           </CardContent>
         </Card>
 
-        <Card className="bg-black border-secondary-700">
+        <Card className="glass-effect border-border/30">
           <CardHeader>
-            <CardTitle className="text-accent-400">Celkem lístků</CardTitle>
+            <CardTitle className="text-primary">Celkem lístků</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-3xl font-bold">
+            <p className="text-3xl font-bold text-foreground">
               {events.reduce((sum, event) => sum + event.tickets.length, 0)}
             </p>
           </CardContent>
         </Card>
 
-        <Card className="bg-black border-secondary-700">
+        <Card className="glass-effect border-border/30">
           <CardHeader>
-            <CardTitle className="text-accent-400">
+            <CardTitle className="text-primary">
               Celkem typů lístků
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-3xl font-bold">
+            <p className="text-3xl font-bold text-foreground">
               {events.reduce((sum, event) => sum + event.ticketTypes.length, 0)}
             </p>
           </CardContent>
@@ -69,13 +69,13 @@ export default function AdminDashboard({ events }: AdminDashboardProps) {
       <div className="flex gap-4 flex-wrap">
         <Dialog open={isCreateEventOpen} onOpenChange={setIsCreateEventOpen}>
           <DialogTrigger asChild>
-            <Button className="bg-accent-600 hover:bg-accent-700 text-white">
+            <Button className="bg-gradient-primary text-white hover:scale-105 transition-all duration-300">
               ➕ Vytvořit událost
             </Button>
           </DialogTrigger>
-          <DialogContent className="bg-black border-accent-600 text-white">
+          <DialogContent className="glass-effect border-border/30">
             <DialogHeader>
-              <DialogTitle className="text-accent-400">
+              <DialogTitle className="text-foreground">
                 Vytvořit novou událost
               </DialogTitle>
             </DialogHeader>
@@ -89,15 +89,15 @@ export default function AdminDashboard({ events }: AdminDashboardProps) {
         >
           <DialogTrigger asChild>
             <Button
-              className="bg-primary-600 hover:bg-primary-700 text-white"
+              className="bg-gradient-primary text-white hover:scale-105 transition-all duration-300"
               disabled={!selectedEvent}
             >
               🎫 Vytvořit typ lístku
             </Button>
           </DialogTrigger>
-          <DialogContent className="bg-black border-accent-600 text-white">
+          <DialogContent className="glass-effect border-border/30">
             <DialogHeader>
-              <DialogTitle className="text-accent-400">
+              <DialogTitle className="text-foreground">
                 Vytvořit nový typ lístku
               </DialogTitle>
             </DialogHeader>
@@ -107,59 +107,45 @@ export default function AdminDashboard({ events }: AdminDashboardProps) {
             />
           </DialogContent>
         </Dialog>
-
-        <Button
-          onClick={() => window.open("/admin/verify-tickets", "_blank")}
-          className="bg-green-600 hover:bg-green-700 text-white"
-        >
-          🔍 Ověřit vstupenky
-        </Button>
       </div>
 
       {/* Seznam událostí */}
-      <div className="space-y-4">
-        <h2 className="text-2xl font-bold">Moje události</h2>
+      <div>
+        <h2 className="text-2xl font-bold mb-6 text-foreground">Události</h2>
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {events.map((event) => (
-            <Card key={event.id} className="bg-black border-secondary-700">
-              <CardHeader>
-                <CardTitle className="text-white">{event.name}</CardTitle>
-                <p className="text-secondary-400">{event.location}</p>
-                <p className="text-secondary-400">
-                  {new Date(event.date).toLocaleDateString("cs-CZ")}
-                </p>
+            <Card
+              key={event.id}
+              className="glass-effect border-border/30 hover:border-primary/50 transition-all duration-300 cursor-pointer group hover:scale-105 hover:shadow-xl"
+              onClick={() => setSelectedEvent(event)}
+            >
+              <CardHeader className="pb-4">
+                <div className="flex items-center justify-between mb-2">
+                  <div className="w-3 h-3 bg-primary rounded-full"></div>
+                  <span className="text-xs text-foreground-muted bg-muted/20 px-2 py-1 rounded-full">
+                    {event.ticketTypes.length} typů
+                  </span>
+                </div>
+                <CardTitle className="text-foreground group-hover:text-primary transition-colors">
+                  {event.name}
+                </CardTitle>
               </CardHeader>
-              <CardContent>
-                <div className="space-y-2">
-                  <div className="flex justify-between">
-                    <span className="text-secondary-400">Typy lístků:</span>
-                    <span className="font-semibold">
-                      {event.ticketTypes.length}
-                    </span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-secondary-400">Prodané lístky:</span>
-                    <span className="font-semibold">
+              <CardContent className="space-y-3">
+                <div className="flex items-center space-x-2 text-foreground-muted">
+                  <span className="text-sm">📍 {event.location}</span>
+                </div>
+                <div className="flex items-center space-x-2 text-foreground-muted">
+                  <span className="text-sm">
+                    📅 {new Date(event.date).toLocaleDateString("cs-CZ")}
+                  </span>
+                </div>
+                <div className="pt-3 border-t border-border/20">
+                  <div className="flex justify-between items-center">
+                    <span className="text-xs text-foreground-muted">Lístky:</span>
+                    <span className="text-primary font-semibold">
                       {event.tickets.length}
                     </span>
                   </div>
-                </div>
-
-                <div className="flex gap-2 mt-4">
-                  <Button
-                    size="sm"
-                    variant="outline"
-                    onClick={() => setSelectedEvent(event)}
-                  >
-                    Upravit
-                  </Button>
-                  <Button
-                    size="sm"
-                    variant="outline"
-                    onClick={() => setSelectedEvent(event)}
-                  >
-                    Typy lístků
-                  </Button>
                 </div>
               </CardContent>
             </Card>

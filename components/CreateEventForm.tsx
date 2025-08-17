@@ -20,12 +20,17 @@ export default function CreateEventForm() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-
-    // Simulace vytvoření události
-    setTimeout(() => {
-      setLoading(false);
+    const response = await fetch("/api/events", {
+      method: "POST",
+      body: JSON.stringify(formData),
+    });
+    if (response.ok) {
       router.push("/events");
-    }, 1000);
+    }
+    else {
+      console.error("Failed to create event");
+    }
+    setLoading(false);
   };
 
   const handleChange = (
@@ -38,11 +43,11 @@ export default function CreateEventForm() {
   };
 
   return (
-    <Card className="bg-black border-secondary-700">
-      <CardContent className="p-6">
+    <Card className="glass-effect border-border/30">
+      <CardContent className="p-8">
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="space-y-2">
-            <Label htmlFor="name" className="text-accent-300">
+            <Label htmlFor="name" className="text-foreground">
               Název události
             </Label>
             <Input
@@ -53,12 +58,12 @@ export default function CreateEventForm() {
               onChange={handleChange}
               required
               placeholder="Např. Rockový koncert 2024"
-              className="bg-gray-800 border-accent-600/50 text-white placeholder:text-gray-400 focus:border-accent-500 focus:ring-accent-500"
+              className="bg-input-background border-border/50 text-foreground placeholder:text-muted-foreground focus:border-primary/50 focus:ring-primary/25"
             />
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="description" className="text-accent-300">
+            <Label htmlFor="description" className="text-foreground">
               Popis události
             </Label>
             <textarea
@@ -68,13 +73,13 @@ export default function CreateEventForm() {
               onChange={handleChange}
               required
               rows={4}
-              className="flex min-h-[80px] w-full rounded-md border border-accent-600/50 bg-gray-800 px-3 py-2 text-sm text-white placeholder:text-gray-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-500 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+              className="flex min-h-[80px] w-full rounded-md border border-border/50 bg-input-background px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/25 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
               placeholder="Popište událost..."
             />
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="location" className="text-accent-300">
+            <Label htmlFor="location" className="text-foreground">
               Místo konání
             </Label>
             <Input
@@ -85,12 +90,12 @@ export default function CreateEventForm() {
               onChange={handleChange}
               required
               placeholder="Např. O2 Arena, Praha"
-              className="bg-gray-800 border-accent-600/50 text-white placeholder:text-gray-400 focus:border-accent-500 focus:ring-accent-500"
+              className="bg-input-background border-border/50 text-foreground placeholder:text-muted-foreground focus:border-primary/50 focus:ring-primary/25"
             />
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="date" className="text-accent-300">
+            <Label htmlFor="date" className="text-foreground">
               Datum a čas
             </Label>
             <Input
@@ -100,12 +105,12 @@ export default function CreateEventForm() {
               value={formData.date}
               onChange={handleChange}
               required
-              className="bg-gray-800 border-accent-600/50 text-white placeholder:text-gray-400 focus:border-accent-500 focus:ring-accent-500"
+              className="bg-input-background border-border/50 text-foreground focus:border-primary/50 focus:ring-primary/25"
             />
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="price" className="text-accent-300">
+            <Label htmlFor="price" className="text-foreground">
               Cena vstupenky (Kč)
             </Label>
             <Input
@@ -116,19 +121,29 @@ export default function CreateEventForm() {
               onChange={handleChange}
               required
               min="0"
-              placeholder="1200"
-              className="bg-gray-800 border-accent-600/50 text-white placeholder:text-gray-400 focus:border-accent-500 focus:ring-accent-500"
+              step="0.01"
+              placeholder="0.00"
+              className="bg-input-background border-border/50 text-foreground placeholder:text-muted-foreground focus:border-primary/50 focus:ring-primary/25"
             />
           </div>
 
-          <Button
-            type="submit"
-            disabled={loading}
-            className="w-full !bg-accent-600 hover:!bg-accent-700 text-white h-10 rounded-md px-6 inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50"
-            size="lg"
-          >
-            {loading ? "Vytvářím..." : "Vytvořit událost"}
-          </Button>
+          <div className="flex gap-4 pt-4">
+            <Button
+              type="submit"
+              disabled={loading}
+              className="flex-1 bg-gradient-primary text-white hover:scale-105 transition-all duration-300"
+            >
+              {loading ? "Vytvářím..." : "Vytvořit událost"}
+            </Button>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => router.back()}
+              className="flex-1 glass-button border-primary/30 text-primary hover:border-primary/50"
+            >
+              Zrušit
+            </Button>
+          </div>
         </form>
       </CardContent>
     </Card>

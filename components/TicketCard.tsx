@@ -47,26 +47,26 @@ export default function TicketCard({
 
   if (!ticket.event || !ticket.user || !ticket.tickettype) {
     return (
-      <Card className="h-full">
+      <Card className="h-full glass-effect border-border/30">
         <CardContent className="p-4">
-          <p className="text-gray-500">Načítání...</p>
+          <p className="text-foreground-muted">Načítání...</p>
         </CardContent>
       </Card>
     );
   }
 
   return (
-    <Card className="h-full hover:shadow-lg transition-shadow">
-      <CardHeader className="pb-3">
+    <Card className="h-full glass-effect border-border/30 hover:border-primary/50 transition-all duration-300 hover:scale-105 hover:shadow-xl">
+      <CardHeader className="pb-4">
         <div className="flex items-center justify-between">
-          <CardTitle className="text-lg font-semibold text-gray-900">
+          <CardTitle className="text-lg font-semibold text-foreground">
             {ticket.event.name}
           </CardTitle>
           <div
-            className={`px-2 py-1 rounded-full text-xs font-medium ${
+            className={`px-3 py-1 rounded-full text-xs font-medium ${
               ticket.used
-                ? "bg-red-100 text-red-800"
-                : "bg-green-100 text-green-800"
+                ? "bg-destructive/10 text-destructive border border-destructive/20"
+                : "bg-primary/10 text-primary border border-primary/20"
             }`}
           >
             {ticket.used ? "Použito" : "Aktivní"}
@@ -76,31 +76,31 @@ export default function TicketCard({
 
       <CardContent className="space-y-4">
         {/* Informace o události */}
-        <div className="space-y-2">
-          <div className="flex items-center gap-2 text-sm text-gray-600">
+        <div className="space-y-3">
+          <div className="flex items-center gap-3 text-sm text-foreground-muted">
             <Calendar className="w-4 h-4" />
             <span>{formatDate(ticket.event.date)}</span>
           </div>
 
-          <div className="flex items-center gap-2 text-sm text-gray-600">
+          <div className="flex items-center gap-3 text-sm text-foreground-muted">
             <MapPin className="w-4 h-4" />
             <span>{ticket.event.location}</span>
           </div>
 
-          <div className="flex items-center gap-2 text-sm text-gray-600">
+          <div className="flex items-center gap-3 text-sm text-foreground-muted">
             <User className="w-4 h-4" />
             <span>{ticket.user.name}</span>
           </div>
 
-          <div className="flex items-center gap-2 text-sm text-gray-600">
+          <div className="flex items-center gap-3 text-sm text-foreground-muted">
             <TicketIcon className="w-4 h-4" />
             <span>{ticket.tickettype.name}</span>
           </div>
         </div>
 
         {/* Cena */}
-        <div className="text-center py-3 bg-gray-50 rounded-lg">
-          <p className="text-2xl font-bold text-primary-600">
+        <div className="text-center py-4 bg-gradient-card rounded-lg border border-border/20">
+          <p className="text-2xl font-bold text-primary">
             {formatPrice(ticket.tickettype.price)}
           </p>
         </div>
@@ -109,7 +109,7 @@ export default function TicketCard({
         <Button
           onClick={() => setShowQR(!showQR)}
           variant="outline"
-          className="w-full flex items-center gap-2"
+          className="w-full glass-button border-primary/30 text-primary hover:border-primary/50 hover:scale-105 transition-all duration-300"
         >
           <QrCode className="w-4 h-4" />
           {showQR ? "Skrýt QR kód" : "Zobrazit QR kód"}
@@ -117,7 +117,7 @@ export default function TicketCard({
 
         {/* QR kód */}
         {showQR && (
-          <div className="mt-4">
+          <div className="mt-4 p-4 bg-gradient-card rounded-lg border border-border/20">
             <QRCodeDisplay
               ticketId={ticket.id}
               eventName={ticket.event.name}

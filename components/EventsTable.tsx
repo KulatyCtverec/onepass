@@ -24,7 +24,9 @@ export default function EventsTable(props: { caption: string }) {
   if (error) {
     return (
       <div className="text-center py-12">
-        <p className="text-red-400">{error}</p>
+        <div className="bg-destructive/10 border border-destructive/20 rounded-lg p-4">
+          <p className="text-destructive">{error}</p>
+        </div>
       </div>
     );
   }
@@ -32,14 +34,16 @@ export default function EventsTable(props: { caption: string }) {
   if (events.length === 0) {
     return (
       <div className="text-center py-12">
-        <p className="text-secondary-400">Žádné události nebyly nalezeny.</p>
+        <div className="glass-effect border-border/30 rounded-lg p-8">
+          <p className="text-foreground-muted text-lg">Žádné události nebyly nalezeny.</p>
+        </div>
       </div>
     );
   }
 
   return (
     <div>
-      <h1 className="text-2xl font-bold mb-4">{caption}</h1>
+      <h1 className="text-3xl font-bold mb-8 text-foreground">{caption}</h1>
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {events.map((event) => (
           <div key={event.id} className="aspect-[4/3]">
