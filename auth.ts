@@ -63,7 +63,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       console.log("🔐 SignIn callback triggered:", {
         provider: account?.provider,
         email: profile?.email,
-        userId: user.id
+        userId: user.id,
       });
 
       // Pro Google OAuth - načíst nebo vytvořit user s custom poli
@@ -78,7 +78,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             found: !!dbUser,
             userId: dbUser?.id,
             isAdmin: dbUser?.isAdmin,
-            isAuthenticator: dbUser?.isAuthenticator
+            isAuthenticator: dbUser?.isAuthenticator,
           });
 
           if (!dbUser) {
@@ -116,9 +116,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           console.log("🎯 User object updated with DB data:", {
             id: user.id,
             isAdmin: user.isAdmin,
-            isAuthenticator: user.isAuthenticator
+            isAuthenticator: user.isAuthenticator,
           });
-
         } catch (error) {
           console.error("❌ Error in signIn callback:", error);
           return false;
