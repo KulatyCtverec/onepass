@@ -1,10 +1,11 @@
-import { useState } from 'react';
-import { ArrowLeft, Calendar, MapPin, Clock, Users, Share2, Heart, Ticket, Star, TrendingUp } from 'lucide-react';
+import { useState, useEffect, useRef } from 'react';
+import { ArrowLeft, Calendar, MapPin, Clock, Users, Share2, Heart, Ticket, Star, TrendingUp, Plus, Minus } from 'lucide-react';
 import { Button } from './ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
 import { Badge } from './ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
 import { Separator } from './ui/separator';
+import { Input } from './ui/input';
 import { ImageWithFallback } from './figma/ImageWithFallback';
 
 interface EventDetailProps {
@@ -15,6 +16,36 @@ interface EventDetailProps {
 export function EventDetail({ eventId, onBack }: EventDetailProps) {
   const [selectedTicketType, setSelectedTicketType] = useState('');
   const [quantity, setQuantity] = useState(1);
+  const [highlightSelectTickets, setHighlightSelectTickets] = useState(false);
+  const selectTicketsRef = useRef<HTMLDivElement>(null);
+
+  // Scroll to top when component mounts
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    
+    // Check if we came from a Buy Now button
+    const cameFromBuyNow = sessionStorage.getItem('buyNowClicked');
+    if (cameFromBuyNow === 'true') {
+      setHighlightSelectTickets(true);
+      sessionStorage.removeItem('buyNowClicked');
+      
+      // Remove highlight after 3 seconds
+      setTimeout(() => {
+        setHighlightSelectTickets(false);
+      }, 3000);
+    }
+  }, []);
+
+  const handleBackToEvents = () => {
+    onBack();
+    // Scroll to events section after a brief delay to allow for navigation
+    setTimeout(() => {
+      const eventsSection = document.querySelector('[ref="eventsRef"]');
+      if (eventsSection) {
+        eventsSection.scrollIntoView({ behavior: 'smooth' });
+      }
+    }, 100);
+  };
 
   // Mock event data
   const event = {
@@ -50,6 +81,18 @@ export function EventDetail({ eventId, onBack }: EventDetailProps) {
 
   const selectedTicket = event.ticketTypes.find(t => t.id === selectedTicketType);
   const totalPrice = selectedTicket ? selectedTicket.price * quantity : 0;
+  const maxQuantity = selectedTicket ? Math.min(selectedTicket.available, 6) : 1;
+
+  const handleQuantityChange = (newQuantity: number) => {
+    if (newQuantity >= 1 && newQuantity <= maxQuantity) {
+      setQuantity(newQuantity);
+    }
+  };
+
+  const handleQuantityInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = parseInt(e.target.value.replace(/[^0-9]/g, '')) || 1;
+    handleQuantityChange(value);
+  };
 
   return (
     <div className="min-h-screen">
@@ -58,8 +101,8 @@ export function EventDetail({ eventId, onBack }: EventDetailProps) {
         <div className="container mx-auto px-6 py-4">
           <Button 
             variant="ghost" 
-            onClick={onBack} 
-            className="glass-button border-border/30 hover:border-blue-400/50"
+            onClick={handleBackToEvents} 
+            className="glass-button border-border/30 hover:border-primary/50"
           >
             <ArrowLeft className="h-4 w-4 mr-2" />
             Back to Events
@@ -93,24 +136,24 @@ export function EventDetail({ eventId, onBack }: EventDetailProps) {
             </div>
 
             {/* Event Info */}
-            <Card className="bg-gradient-card border-border/20">
+            <Card className="enhanced-card">
               <CardHeader>
                 <div className="flex justify-between items-start">
                   <div className="space-y-4">
                     <div className="flex items-center gap-3">
                       <div className="flex items-center gap-1">
-                        <Star className="h-4 w-4 text-yellow-400 fill-current" />
+                        <Star className="h-4 w-4 text-chart-5 fill-current" />
                         <span className="text-sm font-medium text-foreground">{event.rating}</span>
                         <span className="text-sm text-foreground-muted">({event.reviews} reviews)</span>
                       </div>
                     </div>
-                    <CardTitle className="text-3xl md:text-4xl bg-gradient-to-r from-white to-blue-200 bg-clip-text text-transparent">
+                    <CardTitle className="text-3xl md:text-4xl text-foreground">
                       {event.title}
                     </CardTitle>
                     <p className="text-foreground-muted text-lg">Organized by {event.organizer}</p>
                   </div>
                   <div className="flex gap-3">
-                    <Button variant="outline" size="sm" className="glass-effect border-border/30 hover:border-blue-400/50">
+                    <Button variant="outline" size="sm" className="glass-effect border-border/30 hover:border-primary/50">
                       <Share2 className="h-4 w-4" />
                     </Button>
                     <Button variant="outline" size="sm" className="glass-effect border-border/30 hover:border-red-400/50 hover:text-red-400">
@@ -213,7 +256,12 @@ export function EventDetail({ eventId, onBack }: EventDetailProps) {
 
           {/* Ticket Purchase */}
           <div className="lg:col-span-1">
-            <Card className="sticky top-24 bg-gradient-card border-border/20">
+            <Card 
+              ref={selectTicketsRef}
+              className={`sticky top-24 enhanced-card transition-all duration-500 ${
+                highlightSelectTickets ? 'select-tickets-highlight' : ''
+              }`}
+            >
               <CardHeader>
                 <CardTitle className="flex items-center text-xl">
                   <div className="p-2 rounded-lg bg-gradient-primary mr-3">
@@ -233,14 +281,17 @@ export function EventDetail({ eventId, onBack }: EventDetailProps) {
                         key={ticket.id}
                         className={`p-4 rounded-lg cursor-pointer transition-all duration-300 border ${
                           selectedTicketType === ticket.id
-                            ? 'glass-button border-blue-400/50 neon-glow'
+                            ? 'glass-button border-primary/50 neon-glow'
                             : 'glass-effect border-border/30 hover:border-border/50'
                         }`}
-                        onClick={() => setSelectedTicketType(ticket.id)}
+                        onClick={() => {
+                          setSelectedTicketType(ticket.id);
+                          setQuantity(1); // Reset quantity when changing ticket type
+                        }}
                       >
                         <div className="flex justify-between items-start mb-2">
                           <h4 className="font-medium text-foreground">{ticket.name}</h4>
-                          <span className="text-lg font-bold text-blue-400">${ticket.price}</span>
+                          <span className="text-lg font-bold text-chart-4">${ticket.price}</span>
                         </div>
                         <p className="text-xs text-foreground-muted mb-2">
                           {ticket.available} tickets available
@@ -248,7 +299,7 @@ export function EventDetail({ eventId, onBack }: EventDetailProps) {
                         <ul className="text-xs text-foreground-muted space-y-1">
                           {ticket.perks.map((perk, index) => (
                             <li key={index} className="flex items-center">
-                              <div className="h-1 w-1 bg-blue-400 rounded-full mr-2" />
+                              <div className="h-1 w-1 bg-primary rounded-full mr-2" />
                               {perk}
                             </li>
                           ))}
@@ -262,18 +313,37 @@ export function EventDetail({ eventId, onBack }: EventDetailProps) {
                 {selectedTicketType && (
                   <div>
                     <label className="text-sm font-medium mb-3 block text-foreground">Quantity</label>
-                    <Select value={quantity.toString()} onValueChange={(value) => setQuantity(parseInt(value))}>
-                      <SelectTrigger className="glass-effect border-border/30 focus:border-blue-400/50">
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent className="glass-effect border-border/30">
-                        {[1, 2, 3, 4, 5, 6].map((num) => (
-                          <SelectItem key={num} value={num.toString()}>
-                            {num} ticket{num > 1 ? 's' : ''}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
+                    <div className="quantity-selector">
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        onClick={() => handleQuantityChange(quantity - 1)}
+                        disabled={quantity <= 1}
+                        className="glass-effect border-border/30 hover:border-primary/50"
+                      >
+                        <Minus className="h-4 w-4" />
+                      </Button>
+                      <Input
+                        type="text"
+                        value={quantity}
+                        onChange={handleQuantityInputChange}
+                        className="quantity-input glass-effect border-border/30 focus:border-primary/50"
+                      />
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        onClick={() => handleQuantityChange(quantity + 1)}
+                        disabled={quantity >= maxQuantity}
+                        className="glass-effect border-border/30 hover:border-primary/50"
+                      >
+                        <Plus className="h-4 w-4" />
+                      </Button>
+                    </div>
+                    <p className="text-xs text-foreground-muted mt-1">
+                      Maximum {maxQuantity} tickets per order
+                    </p>
                   </div>
                 )}
 
@@ -291,7 +361,7 @@ export function EventDetail({ eventId, onBack }: EventDetailProps) {
                     <Separator className="bg-border/30" />
                     <div className="flex justify-between font-medium text-lg">
                       <span className="text-foreground">Total</span>
-                      <span className="text-blue-400">${totalPrice + Math.round(totalPrice * 0.1)}</span>
+                      <span className="text-chart-4">${totalPrice + Math.round(totalPrice * 0.1)}</span>
                     </div>
                   </div>
                 )}

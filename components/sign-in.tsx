@@ -25,10 +25,7 @@ export default function SignIn() {
   useEffect(() => {
     if (session?.user) {
       // Zkontrolovat, zda je uživatel admin
-      fetch("/api/auth/check-admin")
-        .then((res) => res.json())
-        .then((data) => setIsAdmin(data.isAdmin))
-        .catch(() => setIsAdmin(false));
+      setIsAdmin(session.user.isAdmin || false);
     }
   }, [session]);
 
@@ -39,14 +36,19 @@ export default function SignIn() {
           <Button
             variant="ghost"
             size="sm"
-            className="w-10 h-10 rounded-full bg-accent-600 hover:bg-accent-700 text-white font-bold"
+            className="w-10 h-10 rounded-full glass-effect border-border/30 hover:border-primary/50 transition-all duration-300"
           >
-            {session.user?.name?.[0]?.toUpperCase() ||
-              session.user?.email?.[0]?.toUpperCase() ||
-              "U"}
+            <span className="text-sm font-medium text-primary">
+              {session.user?.name?.[0]?.toUpperCase() ||
+                session.user?.email?.[0]?.toUpperCase() ||
+                "U"}
+            </span>
           </Button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent className="bg-black border-secondary-700 text-white">
+        <DropdownMenuContent
+          className="glass-effect border-border/30"
+          align="end"
+        >
           <DropdownMenuItem asChild>
             <Link href="/profile" className="cursor-pointer">
               👤 Profil
@@ -87,18 +89,18 @@ export default function SignIn() {
       <DialogTrigger asChild>
         <Button
           size="sm"
-          className="hover:bg-primary-600 transition-colors text-white"
+          className="glass-button hover:glass-button text-white transition-all duration-300"
         >
           Přihlásit se
         </Button>
       </DialogTrigger>
-      <DialogContent className="bg-black border-accent-600 text-white shadow-2xl">
-        <DialogHeader className="border-b border-accent-600/30 pb-4">
-          <DialogTitle className="text-accent-400 text-xl font-bold">
-            Přihlásit se do OnePass
+      <DialogContent className="glass-effect border-border/30 shadow-2xl max-w-md p-0">
+        <DialogHeader className="border-b border-border/30 pb-4 px-8 pt-8">
+          <DialogTitle className="text-foreground text-xl font-bold text-center">
+            Vítejte v OnePass
           </DialogTitle>
         </DialogHeader>
-        <div className="w-full max-w-sm md:max-w-3xl">
+        <div className="px-8 pb-8">
           <LoginForm />
         </div>
       </DialogContent>

@@ -15,15 +15,29 @@ datasource db {
 }
 
 model Event {
-  id          String       @id @default(cuid())
-  name        String
-  description String
-  date        DateTime
-  location    String
-  tickets     Ticket[]
-  ticketTypes TicketType[]
-  createdBy   User?        @relation("EventCreator", fields: [createdById], references: [id])
-  createdById String?
+  id              String       @id @default(cuid())
+  name            String
+  description     String
+  date            DateTime
+  location        String
+  image           String? // cesta k obrázku události (lokálně: /uploads/filename.ext, produkce: Vercel Blob URL)
+  category        String? // kategorie události (music, sports, theater, etc.)
+  venue           String? // název místa konání
+  capacity        Int? // kapacita místa
+  address         String? // plná adresa
+  startTime       String? // čas začátku (HH:mm)
+  endTime         String? // čas konce (HH:mm)
+  salesStart      DateTime? // kdy začne prodej vstupenek
+  salesEnd        DateTime? // kdy skončí prodej vstupenek
+  allowResale     Boolean      @default(false) // povolit přeprodej
+  requireApproval Boolean      @default(false) // vyžadovat schválení
+  sendEmails      Boolean      @default(true) // posílat potvrzovací emaily
+  tickets         Ticket[]
+  ticketTypes     TicketType[]
+  createdBy       User?        @relation("EventCreator", fields: [createdById], references: [id])
+  createdById     String?
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime?
 }
 
 model Ticket {

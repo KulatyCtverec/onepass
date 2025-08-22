@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import {
@@ -7,9 +7,9 @@ import {
   MapPin,
   User,
   Ticket as TicketIcon,
-  QrCode,
+  Copy,
+  Download,
 } from "lucide-react";
-import QRCodeDisplay from "./QRCodeDisplay";
 import {
   Ticket,
   TicketType,
@@ -26,7 +26,38 @@ export default function TicketCard({
     tickettype: TicketType;
   };
 }) {
-  const [showQR, setShowQR] = useState(false);
+  const [qrData, setQrData] = useState<string>("");
+
+  // Automaticky načteme QR kód z ticket.accesscode (generovaný triggerem)
+  useEffect(() => {
+    setQrData(ticket.accesscode || "");
+  }, [ticket.accesscode]);
+
+  const copyToClipboard = async () => {
+    if (qrData) {
+      try {
+        await navigator.clipboard.writeText(qrData);
+        // Můžeme přidat toast notifikaci
+        console.log("QR kód zkopírován do schránky");
+      } catch (error) {
+        console.error("Failed to copy:", error);
+      }
+    }
+  };
+
+  const downloadQR = () => {
+    if (qrData) {
+      const blob = new Blob([qrData], { type: "text/plain" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `ticket-${ticket.id}.txt`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }
+  };
 
   const formatDate = (date: Date) => {
     return new Date(date).toLocaleDateString("cs-CZ", {
@@ -105,28 +136,50 @@ export default function TicketCard({
           </p>
         </div>
 
-        {/* QR kód tlačítko */}
-        <Button
-          onClick={() => setShowQR(!showQR)}
-          variant="outline"
-          className="w-full glass-button border-primary/30 text-primary hover:border-primary/50 hover:scale-105 transition-all duration-300"
-        >
-          <QrCode className="w-4 h-4" />
-          {showQR ? "Skrýt QR kód" : "Zobrazit QR kód"}
-        </Button>
-
-        {/* QR kód */}
-        {showQR && (
-          <div className="mt-4 p-4 bg-gradient-card rounded-lg border border-border/20">
-            <QRCodeDisplay
-              ticketId={ticket.id}
-              eventName={ticket.event.name}
-              userName={ticket.user.name || "Unknown"}
-              eventDate={ticket.event.date}
-              ticketType={ticket.tickettype.name}
-            />
+        {/* QR kód - automaticky generovaný triggerem */}
+        <div className="mt-4 p-4 bg-gradient-card rounded-lg border border-border/20">
+          <div className="text-center mb-3">
+            <h4 className="text-sm font-semibold text-foreground mb-2">QR Kód pro vstup</h4>
+            {qrData ? (
+              <div className="bg-white p-3 rounded-lg border border-border/20">
+                <code className="text-xs break-all font-mono text-gray-800 font-bold">
+                  {qrData}
+                </code>
+              </div>
+            ) : (
+              <div className="bg-gray-100 p-3 rounded-lg border-2 border-dashed border-gray-300">
+                <p className="text-gray-500 text-sm">
+                  QR kód se generuje automaticky...
+                </p>
+              </div>
+            )}
           </div>
-        )}
+
+          {/* Tlačítka pro kopírování a stažení */}
+          {qrData && (
+            <div className="flex gap-2 justify-center">
+              <Button
+                onClick={copyToClipboard}
+                variant="outline"
+                size="sm"
+                className="flex items-center gap-2 text-xs glass-button"
+              >
+                <Copy className="w-3 h-3" />
+                Kopírovat
+              </Button>
+
+              <Button
+                onClick={downloadQR}
+                variant="outline"
+                size="sm"
+                className="flex items-center gap-2 text-xs glass-button"
+              >
+                <Download className="w-3 h-3" />
+                Stáhnout
+              </Button>
+            </div>
+          )}
+        </div>
       </CardContent>
     </Card>
   );

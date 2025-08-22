@@ -4,12 +4,18 @@ import { Homepage } from './components/Homepage';
 import { EventDetail } from './components/EventDetail';
 import { UserDashboard } from './components/UserDashboard';
 import { CreateEvent } from './components/CreateEvent';
+import { ResalePage } from './components/ResalePage';
 
 export default function App() {
   const [currentView, setCurrentView] = useState('home');
   const [selectedEventId, setSelectedEventId] = useState<string | null>(null);
 
   const handleViewChange = (view: string, eventId?: string) => {
+    // Mark if coming from Buy Now button
+    if (view === 'event' && eventId) {
+      sessionStorage.setItem('buyNowClicked', 'true');
+    }
+    
     setCurrentView(view);
     if (eventId) {
       setSelectedEventId(eventId);
@@ -37,7 +43,14 @@ export default function App() {
       case 'create':
         return <CreateEvent />;
       case 'resale':
-        return <Homepage onViewChange={handleViewChange} />;
+        return <ResalePage onViewChange={handleViewChange} />;
+      case 'favorites':
+        return <div className="min-h-screen flex items-center justify-center">
+          <div className="text-center">
+            <h1 className="text-4xl font-bold text-foreground mb-4">Favorite Events</h1>
+            <p className="text-foreground-muted text-lg">Your liked events will appear here</p>
+          </div>
+        </div>;
       default:
         return <Homepage onViewChange={handleViewChange} />;
     }
@@ -45,13 +58,13 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Animated background patterns */}
+      {/* Animated background patterns - NO GREEN */}
       <div className="fixed inset-0 -z-10">
         <div className="absolute inset-0 bg-gradient-hero" />
         <div className="absolute inset-0 opacity-20">
-          <div className="absolute top-0 -left-4 w-72 h-72 bg-blue-500 rounded-full mix-blend-multiply filter blur-xl animate-pulse" />
-          <div className="absolute top-0 -right-4 w-72 h-72 bg-purple-500 rounded-full mix-blend-multiply filter blur-xl animate-pulse animation-delay-2000" />
-          <div className="absolute -bottom-8 left-20 w-72 h-72 bg-blue-600 rounded-full mix-blend-multiply filter blur-xl animate-pulse animation-delay-4000" />
+          <div className="absolute top-0 -left-4 w-72 h-72 bg-primary rounded-full mix-blend-multiply filter blur-xl animate-pulse" />
+          <div className="absolute top-0 -right-4 w-72 h-72 bg-chart-2 rounded-full mix-blend-multiply filter blur-xl animate-pulse animation-delay-2000" />
+          <div className="absolute -bottom-8 left-20 w-72 h-72 bg-primary rounded-full mix-blend-multiply filter blur-xl animate-pulse animation-delay-4000" />
         </div>
       </div>
       

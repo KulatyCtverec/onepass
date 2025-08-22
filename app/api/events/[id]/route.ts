@@ -1,38 +1,236 @@
-import { NextResponse, NextRequest } from "next/server";
-import { prisma } from "@/lib/prisma";
+import { NextRequest, NextResponse } from "next/server";
+import { auth } from "@/auth";
+import { PrismaClient } from "@/lib/generated/prisma/client";
+import { writeFile, mkdir } from "fs/promises";
+import { join } from "path";
 
-export async function DELETE(
-  request: Request,
-  context: { params: Promise<{ id: string }> }
+const prisma = new PrismaClient();
+
+export async function GET(
+  request: NextRequest,
+  { params }: { params: { id: string } }
 ) {
-  const { id } = await context.params;
-
   try {
-    await prisma.event.delete({
-      where: { id },
+    await params;
+    const { id } = await params;
+    const event = await prisma.event.findUnique({
+      where: { id: id },
+      include: {
+        ticketTypes: true,
+      },
     });
-    console.log("[API] DELETE /api/events/[id] called with id:", id);
 
-    return NextResponse.json({ message: "Událost byla smazána." });
+    if (!event) {
+      return NextResponse.json(
+        { error: "Událost nebyla nalezena" },
+        { status: 404 }
+      );
+    }
+
+    return NextResponse.json(event);
   } catch (error) {
-    console.error("[API] Error deleting event:", error);
+    console.error("Chyba při načítání události:", error);
     return NextResponse.json(
-      { message: "Chyba při mazání události." },
+      { error: "Interní chyba serveru" },
       { status: 500 }
     );
   }
 }
 
-export async function GET(
+export async function PUT(
   request: NextRequest,
-  context: { params: Promise<{ id: string }> }
+  { params }: { params: { id: string } }
 ) {
-  // If you want to support filtering, parse query params from request.url here
-  const { id } = await context.params;
-  const events = await prisma.event.findFirst({
-    where: { id: id },
-  });
+  await params;
+  const { id } = await params;
+  try {
+    const session = await auth();
 
-  console.log("[API] GET /api/events/[id] called with id:", id);
-  return NextResponse.json(events);
+    if (!session?.user) {
+      return NextResponse.json(
+        { error: "Nepřihlášený uživatel" },
+        { status: 401 }
+      );
+    }
+
+    if (!session.user.isAdmin) {
+      return NextResponse.json(
+        { error: "Nedostatečná oprávnění" },
+        { status: 403 }
+      );
+    }
+
+    // Kontrola, zda je uživatel tvůrcem události
+    const existingEvent = await prisma.event.findUnique({
+      where: { id: id },
+    });
+
+    if (!existingEvent) {
+      return NextResponse.json(
+        { error: "Událost nebyla nalezena" },
+        { status: 404 }
+      );
+    }
+
+    if (existingEvent.createdById !== session.user.id) {
+      return NextResponse.json(
+        { error: "Nemáte oprávnění upravovat tuto událost" },
+        { status: 403 }
+      );
+    }
+
+    const formData = await request.formData();
+
+    // Získat všechna pole z formData
+    const name = formData.get("name") as string;
+    const description = formData.get("description") as string;
+    const location = formData.get("location") as string;
+    const date = formData.get("date") as string;
+    const category = formData.get("category") as string;
+    const venue = formData.get("venue") as string;
+    const capacity = formData.get("capacity") as string;
+    const address = formData.get("address") as string;
+    const startTime = formData.get("startTime") as string;
+    const endTime = formData.get("endTime") as string;
+    const salesStart = formData.get("salesStart") as string;
+    const salesEnd = formData.get("salesEnd") as string;
+    const allowResale = formData.get("allowResale") === "true";
+    const requireApproval = formData.get("requireApproval") === "true";
+    const sendEmails = formData.get("sendEmails") === "true";
+    const ticketTypesJson = formData.get("ticketTypes") as string;
+    const imageFile = formData.get("image") as File | null;
+
+    // Parsovat ticket types
+    const ticketTypes = JSON.parse(ticketTypesJson);
+
+    // Zpracovat obrázek, pokud byl nahrán nový
+    let imagePath = existingEvent.image;
+    if (imageFile) {
+      const bytes = await imageFile.arrayBuffer();
+      const buffer = Buffer.from(bytes);
+
+      // Vytvořit složku uploads, pokud neexistuje
+      const uploadsDir = join(process.cwd(), "public", "uploads");
+      await mkdir(uploadsDir, { recursive: true });
+
+      // Generovat unikátní název souboru
+      const timestamp = Date.now();
+      const originalName = imageFile.name;
+      const extension = originalName.split(".").pop();
+      const fileName = `event_${params.id}_${timestamp}.${extension}`;
+      const filePath = join(uploadsDir, fileName);
+
+      // Uložit soubor
+      await writeFile(filePath, buffer);
+      imagePath = `/uploads/${fileName}`;
+    }
+
+    // Aktualizovat událost
+    const updatedEvent = await prisma.event.update({
+      where: { id: id },
+      data: {
+        name,
+        description,
+        location,
+        date: new Date(date),
+        category,
+        venue,
+        capacity: capacity ? parseInt(capacity) : null,
+        address,
+        startTime,
+        endTime,
+        salesStart: salesStart ? new Date(salesStart) : null,
+        salesEnd: salesEnd ? new Date(salesEnd) : null,
+        allowResale,
+        requireApproval,
+        sendEmails,
+        image: imagePath,
+        updatedAt: new Date(),
+      },
+    });
+
+    // Aktualizovat ticket types
+    // Nejdříve smazat všechny existující
+    await prisma.ticketType.deleteMany({
+      where: { eventid: id },
+    });
+
+    // Vytvořit nové
+    for (const ticketType of ticketTypes) {
+      await prisma.ticketType.create({
+        data: {
+          name: ticketType.name,
+          price: parseInt(ticketType.price) * 100, // Převést na centy
+          stock: parseInt(ticketType.quantity),
+          total: parseInt(ticketType.quantity),
+          eventid: id,
+        },
+      });
+    }
+
+    return NextResponse.json(updatedEvent);
+  } catch (error) {
+    console.error("Chyba při úpravě události:", error);
+    return NextResponse.json(
+      { error: "Interní chyba serveru" },
+      { status: 500 }
+    );
+  }
+}
+
+export async function DELETE(
+  request: NextRequest,
+  { params }: { params: { id: string } }
+) {
+  await params;
+  const { id } = await params;
+  try {
+    const session = await auth();
+
+    if (!session?.user) {
+      return NextResponse.json(
+        { error: "Nepřihlášený uživatel" },
+        { status: 401 }
+      );
+    }
+
+    if (!session.user.isAdmin) {
+      return NextResponse.json(
+        { error: "Nedostatečná oprávnění" },
+        { status: 403 }
+      );
+    }
+
+    // Kontrola, zda je uživatel tvůrcem události
+    const existingEvent = await prisma.event.findUnique({
+      where: { id: id },
+    });
+
+    if (!existingEvent) {
+      return NextResponse.json(
+        { error: "Událost nebyla nalezena" },
+        { status: 404 }
+      );
+    }
+
+    if (existingEvent.createdById !== session.user.id) {
+      return NextResponse.json(
+        { error: "Nemáte oprávnění smazat tuto událost" },
+        { status: 403 }
+      );
+    }
+
+    // Smazat událost (cascade smaže i ticket types)
+    await prisma.event.delete({
+      where: { id: id },
+    });
+
+    return NextResponse.json({ message: "Událost byla úspěšně smazána" });
+  } catch (error) {
+    console.error("Chyba při mazání události:", error);
+    return NextResponse.json(
+      { error: "Interní chyba serveru" },
+      { status: 500 }
+    );
+  }
 }
