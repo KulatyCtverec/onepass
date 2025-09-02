@@ -4,7 +4,6 @@ import {
   ArrowLeft,
   Calendar,
   MapPin,
-  Clock,
   Users,
   Share2,
   Heart,
@@ -18,16 +17,18 @@ import TicketTypes from "@/components/TicketTypes";
 import SeatMap from "@/components/SeatMap";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-
+import { TicketType } from "@/lib/generated/prisma/client";
 import Link from "next/link";
-
+interface EventWithTypes extends Event {
+  ticketTypes: TicketType[];
+}
 export default function EventDetail({
-  eventID,
+  params,
 }: {
-  eventID: Promise<{ eventID: string }>;
+  params: Promise<{ slug: string }>;
 }) {
-  const { eventID: id } = use(eventID);
-  const record = useInitialFetch<Event>(`/api/events/${id}`);
+  const { slug } = use(params);
+  const record = useInitialFetch<EventWithTypes>(`/api/events/${slug}`);
 
   if (!record) {
     return (
@@ -258,17 +259,11 @@ export default function EventDetail({
           {/* Ticket Purchase */}
           <div className="lg:col-span-1">
             <Card className="sticky top-24 bg-gradient-card border-border/20">
-              <CardHeader>
-                <CardTitle className="flex items-center text-xl">
-                  <div className="p-2 rounded-lg bg-gradient-primary mr-3">
-                    <Ticket className="h-5 w-5 text-white" />
-                  </div>
-                  Typy vstupenek
-                </CardTitle>
-              </CardHeader>
-
               <CardContent>
-                <TicketTypes />
+                <TicketTypes
+                  ticketTypes={record.ticketTypes}
+                  eventName={record.name}
+                />
               </CardContent>
             </Card>
           </div>

@@ -214,10 +214,15 @@ export default function HomepageEventsTable() {
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
           {displayedEvents.map((event) => (
             <div
-              key={event.id}
+              key={event.slug || event.id}
               className="relative group cursor-pointer transition-all duration-300 hover:scale-105 hover:shadow-xl overflow-hidden hover:z-10 transform-gpu rounded-lg"
               style={{ transformOrigin: "center center" }}
-              onClick={() => (window.location.href = `/events/${event.id}`)}
+              onClick={() => {
+                const eventUrl = event.slug
+                  ? `/events/${event.slug}`
+                  : `/events/${event.id}`;
+                window.location.href = eventUrl;
+              }}
             >
               {/* Event Image - dynamically sized to fit card */}
               <div className="relative w-full h-72 overflow-hidden rounded-lg">

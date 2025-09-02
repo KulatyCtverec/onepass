@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { writeFile, mkdir } from "fs/promises";
 import { join } from "path";
+import { generateEventSlug, checkEventNameExists } from "@/lib/utils";
 
 export async function POST(request: Request) {
   console.log("[API] POST /api/events called with request:", request);
@@ -28,6 +29,36 @@ export async function POST(request: Request) {
     // Extract ticket types
     const ticketTypesJson = formData.get("ticketTypes") as string;
     const ticketTypes = JSON.parse(ticketTypesJson);
+
+    // Validate required fields
+    if (!name || !description || !date || !venue || !capacity || !address) {
+      console.warn("[API] POST /api/events - missing required fields");
+      return NextResponse.json(
+        { message: "Všechna povinná pole musí být vyplněná." },
+        { status: 400 }
+      );
+    }
+
+    // Parse date and validate
+    const eventDate = new Date(date);
+    if (isNaN(eventDate.getTime())) {
+      return NextResponse.json(
+        { message: "Neplatné datum události." },
+        { status: 400 }
+      );
+    }
+
+    // Check if event with same name already exists on the same day
+    const eventExists = await checkEventNameExists(name, eventDate);
+    if (eventExists) {
+      return NextResponse.json(
+        { message: "Event se stejným názvem už v daný den existuje." },
+        { status: 400 }
+      );
+    }
+
+    // Generate unique slug
+    const slug = generateEventSlug(name, eventDate);
 
     // TODO: PŘED NASÁZENÍM DO PRODUKCE - migrovat na Vercel Blob Storage
     // Aktuálně ukládáme lokálně do public/uploads/ pro development
@@ -78,21 +109,13 @@ export async function POST(request: Request) {
       }
     }
 
-    // Validate required fields
-    if (!name || !description || !date || !venue || !capacity || !address) {
-      console.warn("[API] POST /api/events - missing required fields");
-      return NextResponse.json(
-        { message: "Všechna povinná pole musí být vyplněná." },
-        { status: 400 }
-      );
-    }
-
-    // Create event with image path (not binary data)
+    // Create event with slug and image path
     const event = await prisma.event.create({
       data: {
         name,
+        slug,
         description,
-        date: new Date(date),
+        date: eventDate,
         location: `${venue}, ${address}`, // Combine venue and address for backward compatibility
         image: imagePath, // Store file path, not binary data
         category,
@@ -124,9 +147,18 @@ export async function POST(request: Request) {
       }
     }
 
-    console.log("[API] Event created successfully:", { name, date, venue });
+    console.log("[API] Event created successfully:", {
+      name,
+      date,
+      venue,
+      slug,
+    });
     return NextResponse.json(
-      { message: "Událost vytvořena úspěšně.", eventId: event.id },
+      {
+        message: "Událost vytvořena úspěšně.",
+        eventId: event.id,
+        slug: event.slug,
+      },
       { status: 201 }
     );
   } catch (error) {

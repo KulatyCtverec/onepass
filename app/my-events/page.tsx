@@ -60,7 +60,7 @@ export default function MyEventsPage() {
     }
   };
 
-  const deleteEvent = async (eventId: string) => {
+  const deleteEvent = async (eventSlug: string) => {
     if (
       !confirm("Opravdu chcete smazat tuto událost? Tato akce je nevratná.")
     ) {
@@ -68,7 +68,7 @@ export default function MyEventsPage() {
     }
 
     try {
-      const response = await fetch(`/api/events/${eventId}`, {
+      const response = await fetch(`/api/events/${eventSlug}`, {
         method: "DELETE",
       });
 
@@ -76,8 +76,10 @@ export default function MyEventsPage() {
         throw new Error("Nepodařilo se smazat událost");
       }
 
-      // Odebrat událost ze seznamu
-      setEvents(events.filter((event) => event.id !== eventId));
+      // Odebrat událost ze seznamu - najdi podle slug
+      setEvents(
+        events.filter((event) => (event.slug || event.id) !== eventSlug)
+      );
     } catch (err) {
       alert(err instanceof Error ? err.message : "Nastala chyba při mazání");
     }
@@ -196,7 +198,7 @@ export default function MyEventsPage() {
               {/* Action Buttons */}
               <div className="flex space-x-2 pt-4">
                 <Button asChild size="sm" className="flex-1 glass-button">
-                  <Link href={`/events/${event.id}`}>
+                  <Link href={`/events/${event.slug || event.id}`}>
                     <Eye className="w-4 h-4 mr-2" />
                     Zobrazit
                   </Link>
@@ -207,7 +209,7 @@ export default function MyEventsPage() {
                   variant="outline"
                   className="flex-1 glass-button border-primary/30 text-primary hover:border-primary/50"
                 >
-                  <Link href={`/edit-event/${event.id}`}>
+                  <Link href={`/edit-event/${event.slug || event.id}`}>
                     <Edit className="w-4 h-4 mr-2" />
                     Upravit
                   </Link>
@@ -216,7 +218,7 @@ export default function MyEventsPage() {
                   size="sm"
                   variant="outline"
                   className="glass-button border-destructive/30 text-destructive hover:border-destructive/50"
-                  onClick={() => deleteEvent(event.id)}
+                  onClick={() => deleteEvent(event.slug || event.id)}
                 >
                   <Trash2 className="w-4 h-4 mr-2" />
                   Smazat

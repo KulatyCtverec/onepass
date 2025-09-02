@@ -153,12 +153,12 @@ export default function EditEventForm({ event }: EditEventFormProps) {
       // Přidat ticket types
       formDataToSend.append("ticketTypes", JSON.stringify(ticketTypes));
 
-      // Přidat obrázek, pokud byl vybrán nový
+      // Přidat obrázek, pokud byl vybrán nový;
       if (imageFile) {
         formDataToSend.append("image", imageFile);
       }
 
-      const response = await fetch(`/api/events/${event.id}`, {
+      const response = await fetch(`/api/events/${event.slug || event.id}`, {
         method: "PUT",
         body: formDataToSend,
       });
@@ -168,8 +168,10 @@ export default function EditEventForm({ event }: EditEventFormProps) {
         throw new Error(errorData.error || "Nepodařilo se upravit událost");
       }
 
-      // Přesměrovat na detail události
-      router.push(`/events/${event.id}`);
+      const updatedEvent = await response.json();
+
+      // Přesměrovat na detail události - použij nový slug pokud se změnil
+      router.push(`/events/${updatedEvent.slug || event.slug || event.id}`);
     } catch (error) {
       console.error("Chyba při úpravě události:", error);
       alert(

@@ -14,7 +14,7 @@ export default function EditEventPage() {
   const { data: session, status } = useSession();
   const router = useRouter();
   const params = useParams();
-  const eventId = params.id as string;
+  const eventSlug = params.slug as string;
 
   const [event, setEvent] = useState<
     (Event & { ticketTypes: TicketType[] }) | null
@@ -36,12 +36,12 @@ export default function EditEventPage() {
     }
 
     fetchEvent();
-  }, [session, status, router, eventId]);
+  }, [session, status, router, eventSlug]);
 
   const fetchEvent = async () => {
     try {
       setLoading(true);
-      const response = await fetch(`/api/events/${eventId}`);
+      const response = await fetch(`/api/events/${eventSlug}`);
 
       if (!response.ok) {
         throw new Error("Nepodařilo se načíst událost");

@@ -77,7 +77,7 @@ export async function PUT(
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: { slug: string } }
 ) {
   try {
     const session = await auth();
@@ -102,7 +102,7 @@ export async function DELETE(
     // Zkontrolovat, zda událost existuje a patří tomuto adminovi
     const existingEvent = await prisma.event.findFirst({
       where: {
-        id: params.id,
+        slug: params.slug,
         createdById: session.user.id,
       },
     });
@@ -115,17 +115,18 @@ export async function DELETE(
     }
 
     // Smazat všechny lístky a typy lístků související s událostí
+
     await prisma.ticket.deleteMany({
-      where: { eventid: params.id },
+      where: { eventid: existingEvent.id },
     });
 
     await prisma.ticketType.deleteMany({
-      where: { eventid: params.id },
+      where: { eventid: existingEvent.id },
     });
 
     // Smazat událost
     await prisma.event.delete({
-      where: { id: params.id },
+      where: { id: existingEvent.id },
     });
 
     return NextResponse.json(

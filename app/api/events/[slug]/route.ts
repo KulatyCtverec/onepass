@@ -3,18 +3,19 @@ import { auth } from "@/auth";
 import { PrismaClient } from "@/lib/generated/prisma/client";
 import { writeFile, mkdir } from "fs/promises";
 import { join } from "path";
+import { generateEventSlug, checkEventNameExists } from "@/lib/utils";
 
 const prisma = new PrismaClient();
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: { slug: string } }
 ) {
   try {
     await params;
-    const { id } = await params;
+    const { slug } = await params;
     const event = await prisma.event.findUnique({
-      where: { id: id },
+      where: { slug: slug },
       include: {
         ticketTypes: true,
       },
@@ -39,10 +40,10 @@ export async function GET(
 
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: { slug: string } }
 ) {
   await params;
-  const { id } = await params;
+  const { slug } = await params;
   try {
     const session = await auth();
 
@@ -62,7 +63,7 @@ export async function PUT(
 
     // Kontrola, zda je uživatel tvůrcem události
     const existingEvent = await prisma.event.findUnique({
-      where: { id: id },
+      where: { slug: slug },
     });
 
     if (!existingEvent) {
@@ -103,6 +104,37 @@ export async function PUT(
     // Parsovat ticket types
     const ticketTypes = JSON.parse(ticketTypesJson);
 
+    // Parse date and validate
+    const eventDate = new Date(date);
+    if (isNaN(eventDate.getTime())) {
+      return NextResponse.json(
+        { message: "Neplatné datum události." },
+        { status: 400 }
+      );
+    }
+
+    // Check if event with same name already exists on the same day (excluding current event)
+    const eventExists = await checkEventNameExists(
+      name,
+      eventDate,
+      existingEvent.id
+    );
+    if (eventExists) {
+      return NextResponse.json(
+        { message: "Event se stejným názvem už v daný den existuje." },
+        { status: 400 }
+      );
+    }
+
+    // Generate new slug if name or date changed
+    let newSlug = existingEvent.slug;
+    if (
+      name !== existingEvent.name ||
+      eventDate.getTime() !== existingEvent.date.getTime()
+    ) {
+      newSlug = generateEventSlug(name, eventDate);
+    }
+
     // Zpracovat obrázek, pokud byl nahrán nový
     let imagePath = existingEvent.image;
     if (imageFile) {
@@ -117,7 +149,7 @@ export async function PUT(
       const timestamp = Date.now();
       const originalName = imageFile.name;
       const extension = originalName.split(".").pop();
-      const fileName = `event_${params.id}_${timestamp}.${extension}`;
+      const fileName = `event_${existingEvent.id}_${timestamp}.${extension}`;
       const filePath = join(uploadsDir, fileName);
 
       // Uložit soubor
@@ -127,12 +159,13 @@ export async function PUT(
 
     // Aktualizovat událost
     const updatedEvent = await prisma.event.update({
-      where: { id: id },
+      where: { slug: slug },
       data: {
         name,
+        slug: newSlug,
         description,
         location,
-        date: new Date(date),
+        date: eventDate,
         category,
         venue,
         capacity: capacity ? parseInt(capacity) : null,
@@ -152,7 +185,7 @@ export async function PUT(
     // Aktualizovat ticket types
     // Nejdříve smazat všechny existující
     await prisma.ticketType.deleteMany({
-      where: { eventid: id },
+      where: { eventid: existingEvent.id },
     });
 
     // Vytvořit nové
@@ -163,7 +196,7 @@ export async function PUT(
           price: parseInt(ticketType.price) * 100, // Převést na centy
           stock: parseInt(ticketType.quantity),
           total: parseInt(ticketType.quantity),
-          eventid: id,
+          eventid: existingEvent.id,
         },
       });
     }
@@ -180,10 +213,10 @@ export async function PUT(
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: { slug: string } }
 ) {
   await params;
-  const { id } = await params;
+  const { slug } = await params;
   try {
     const session = await auth();
 
@@ -203,7 +236,7 @@ export async function DELETE(
 
     // Kontrola, zda je uživatel tvůrcem události
     const existingEvent = await prisma.event.findUnique({
-      where: { id: id },
+      where: { slug: slug },
     });
 
     if (!existingEvent) {
@@ -222,7 +255,7 @@ export async function DELETE(
 
     // Smazat událost (cascade smaže i ticket types)
     await prisma.event.delete({
-      where: { id: id },
+      where: { slug: slug },
     });
 
     return NextResponse.json({ message: "Událost byla úspěšně smazána" });
