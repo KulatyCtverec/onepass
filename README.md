@@ -22,18 +22,21 @@ Aplikace používá moderní design systém inspirovaný hyper-moderním dark th
 ## 🚀 Funkce
 
 ### Pro uživatele
+
 - Procházení událostí
 - Nákup vstupenek
 - Správa vlastních vstupenek
 - QR kódy pro vstup
 
 ### Pro organizátory
+
 - Vytváření událostí
 - Správa typů vstupenek
 - Monitoring prodeje
 - Admin dashboard
 
 ### Pro ověřovatele
+
 - Ověřování vstupenek pomocí QR kódů
 - Mobilní rozhraní pro terénní použití
 
@@ -50,6 +53,7 @@ Aplikace používá moderní design systém inspirovaný hyper-moderním dark th
 ## 📱 Komponenty
 
 ### Hlavní komponenty
+
 - `Navbar` - Navigační lišta s glass efektem
 - `EventCard` - Karty událostí s moderním designem
 - `TicketCard` - Karty vstupenek s QR kódy
@@ -57,6 +61,7 @@ Aplikace používá moderní design systém inspirovaný hyper-moderním dark th
 - `CreateEventForm` - Formulář pro vytváření událostí
 
 ### UI komponenty
+
 - Všechny shadcn/ui komponenty stylované podle design systému
 - Glass efekty a gradient pozadí
 - Responsivní grid layout
@@ -65,28 +70,33 @@ Aplikace používá moderní design systém inspirovaný hyper-moderním dark th
 ## 🎯 Instalace
 
 1. **Klonování repozitáře**
+
 ```bash
 git clone https://github.com/yourusername/onepass.git
 cd onepass
 ```
 
 2. **Instalace závislostí**
+
 ```bash
 npm install
 ```
 
 3. **Nastavení prostředí**
+
 ```bash
 cp .env.example .env.local
-# Upravte DATABASE_URL a další proměnné
+# Upravte DATABASE_PRISMA_DATABASE_URL a další proměnné
 ```
 
 4. **Spuštění databáze**
+
 ```bash
 npx prisma db push
 ```
 
 5. **Spuštění vývojového serveru**
+
 ```bash
 npm run dev
 ```
@@ -94,16 +104,19 @@ npm run dev
 ## 🔧 Konfigurace
 
 ### Databáze
+
 - PostgreSQL databáze
 - Prisma schema s automatickými migracemi
 - Seed data pro testování
 
 ### Autentifikace
+
 - Google OAuth
 - Credentials autentifikace
 - Role-based access control (Admin, Authenticator)
 
 ### Design
+
 - Dark mode jako výchozí
 - Responsivní breakpointy
 - Custom CSS proměnné pro konzistentní design

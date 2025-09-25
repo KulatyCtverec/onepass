@@ -37,10 +37,13 @@ export async function POST(request: NextRequest) {
     const event = await prisma.event.create({
       data: {
         name,
+        slug: `${name.toLowerCase().replace(/\s+/g, "-")}-${
+          new Date(date).toISOString().split("T")[0]
+        }`,
         description,
         date: new Date(date),
         location,
-        createdById: session.user.id,
+        createdById: session.user.id!,
       },
     });
 

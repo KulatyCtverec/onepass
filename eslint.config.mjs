@@ -11,8 +11,17 @@ const compat = new FlatCompat({
 
 const eslintConfig = [
   ...compat.extends("next/core-web-vitals", "next/typescript"),
-  /* ...compat.config({
-    extends: ["next"],
+  {
+    ignores: [
+      "lib/generated/**",
+      "lib/generated/prisma/**",
+      ".next/**",
+      "out/**",
+      "dist/**",
+      "build/**",
+    ],
+  },
+  {
     rules: {
       "react/no-unescaped-entities": "off",
       "@next/next/no-page-custom-font": "off",
@@ -26,7 +35,7 @@ const eslintConfig = [
       "@typescript-eslint/no-unnecessary-type-constraint": "off",
       "@typescript-eslint/no-wrapper-object-types": "off",
     },
-  }), */
+  },
 ];
 
 export default eslintConfig;

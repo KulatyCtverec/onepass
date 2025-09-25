@@ -5,13 +5,13 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
+  url      = env("POSTGRES_URL")
 }
 
 model Event {
   id              String       @id @default(cuid())
   name            String
-  slug            String       @unique // unikátní slug pro URL (volitelné pro existující data)
+  slug            String       @unique // unikátní slug pro URL
   description     String
   date            DateTime
   location        String
@@ -22,6 +22,7 @@ model Event {
   category        String?
   createdAt       DateTime     @default(now())
   endTime         String?
+  image           String?
   requireApproval Boolean      @default(false)
   salesEnd        DateTime?
   salesStart      DateTime?
@@ -29,7 +30,6 @@ model Event {
   startTime       String?
   updatedAt       DateTime?
   venue           String?
-  image           String?
   createdBy       User?        @relation("EventCreator", fields: [createdById], references: [id])
   tickets         Ticket[]
   ticketTypes     TicketType[]
@@ -40,13 +40,13 @@ model Event {
 model Ticket {
   id           String     @id @default(cuid())
   eventid      String
-  tickettypeid String
   userid       String
   createtime   DateTime   @default(now())
   used         Boolean    @default(false)
   accesscode   String     @unique
-  qrGenerated  DateTime   @default(now())
+  tickettypeid String
   lastScanned  DateTime?
+  qrGenerated  DateTime   @default(now())
   scanCount    Int        @default(0)
   event        Event      @relation(fields: [eventid], references: [id])
   tickettype   TicketType @relation(fields: [tickettypeid], references: [id])
@@ -55,14 +55,14 @@ model Ticket {
 
 model User {
   id              String    @id @default(cuid())
-  name            String?
   email           String    @unique
+  name            String?
+  createtime      DateTime  @default(now())
   emailVerified   DateTime?
   image           String?
   password        String?
   isAdmin         Boolean   @default(false)
   isAuthenticator Boolean   @default(false)
-  createtime      DateTime  @default(now())
   accounts        Account[]
   createdEvents   Event[]   @relation("EventCreator")
   sessions        Session[]

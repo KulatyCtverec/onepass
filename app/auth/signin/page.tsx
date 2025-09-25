@@ -6,8 +6,9 @@ import { Button } from "@/components/ui/button";
 import { AlertCircle, Mail, Lock } from "lucide-react";
 import Link from "next/link";
 import LoginForm from "@/components/login-form";
+import { Suspense } from "react";
 
-export default function SignInPage() {
+function SignInContent() {
   const searchParams = useSearchParams();
   const error = searchParams.get("error");
 
@@ -76,5 +77,13 @@ export default function SignInPage() {
         )}
       </div>
     </div>
+  );
+}
+
+export default function SignInPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <SignInContent />
+    </Suspense>
   );
 }

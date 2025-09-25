@@ -9,10 +9,9 @@ const prisma = new PrismaClient();
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { slug: string } }
+  { params }: { params: Promise<{ slug: string }> }
 ) {
   try {
-    await params;
     const { slug } = await params;
     const event = await prisma.event.findUnique({
       where: { slug: slug },
@@ -40,9 +39,8 @@ export async function GET(
 
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { slug: string } }
+  { params }: { params: Promise<{ slug: string }> }
 ) {
-  await params;
   const { slug } = await params;
   try {
     const session = await auth();
@@ -213,9 +211,8 @@ export async function PUT(
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { slug: string } }
+  { params }: { params: Promise<{ slug: string }> }
 ) {
-  await params;
   const { slug } = await params;
   try {
     const session = await auth();

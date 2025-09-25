@@ -4,7 +4,7 @@ import { prisma } from "@/lib/prisma";
 
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ slug: string }> }
 ) {
   try {
     const session = await auth();
@@ -27,9 +27,10 @@ export async function PUT(
     }
 
     // Zkontrolovat, zda událost existuje a patří tomuto adminovi
+    const { slug } = await params;
     const existingEvent = await prisma.event.findFirst({
       where: {
-        id: params.id,
+        slug: slug,
         createdById: session.user.id,
       },
     });
@@ -53,7 +54,7 @@ export async function PUT(
 
     // Aktualizace události
     const event = await prisma.event.update({
-      where: { id: params.id },
+      where: { id: existingEvent.id },
       data: {
         name,
         description,
@@ -77,7 +78,7 @@ export async function PUT(
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { slug: string } }
+  { params }: { params: Promise<{ slug: string }> }
 ) {
   try {
     const session = await auth();
@@ -100,9 +101,10 @@ export async function DELETE(
     }
 
     // Zkontrolovat, zda událost existuje a patří tomuto adminovi
+    const { slug } = await params;
     const existingEvent = await prisma.event.findFirst({
       where: {
-        slug: params.slug,
+        slug: slug,
         createdById: session.user.id,
       },
     });

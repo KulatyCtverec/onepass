@@ -1,6 +1,6 @@
 "use client";
 import EventCard from "./EventCard";
-import type { Event } from "@prisma/client";
+import type { Event } from "@/lib/generated/prisma/client";
 import { useInitialFetch } from "@/lib/hooks/useInitialFetch";
 import { useSSE } from "@/lib/hooks/useSSE";
 import { useState } from "react";
@@ -35,7 +35,9 @@ export default function EventsTable(props: { caption: string }) {
     return (
       <div className="text-center py-12">
         <div className="glass-effect border-border/30 rounded-lg p-8">
-          <p className="text-foreground-muted text-lg">Žádné události nebyly nalezeny.</p>
+          <p className="text-foreground-muted text-lg">
+            Žádné události nebyly nalezeny.
+          </p>
         </div>
       </div>
     );

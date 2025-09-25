@@ -1590,6 +1590,7 @@ export namespace Prisma {
     category: string | null
     createdAt: Date | null
     endTime: string | null
+    image: string | null
     requireApproval: boolean | null
     salesEnd: Date | null
     salesStart: Date | null
@@ -1597,7 +1598,6 @@ export namespace Prisma {
     startTime: string | null
     updatedAt: Date | null
     venue: string | null
-    image: string | null
   }
 
   export type EventMaxAggregateOutputType = {
@@ -1614,6 +1614,7 @@ export namespace Prisma {
     category: string | null
     createdAt: Date | null
     endTime: string | null
+    image: string | null
     requireApproval: boolean | null
     salesEnd: Date | null
     salesStart: Date | null
@@ -1621,7 +1622,6 @@ export namespace Prisma {
     startTime: string | null
     updatedAt: Date | null
     venue: string | null
-    image: string | null
   }
 
   export type EventCountAggregateOutputType = {
@@ -1638,6 +1638,7 @@ export namespace Prisma {
     category: number
     createdAt: number
     endTime: number
+    image: number
     requireApproval: number
     salesEnd: number
     salesStart: number
@@ -1645,7 +1646,6 @@ export namespace Prisma {
     startTime: number
     updatedAt: number
     venue: number
-    image: number
     _all: number
   }
 
@@ -1672,6 +1672,7 @@ export namespace Prisma {
     category?: true
     createdAt?: true
     endTime?: true
+    image?: true
     requireApproval?: true
     salesEnd?: true
     salesStart?: true
@@ -1679,7 +1680,6 @@ export namespace Prisma {
     startTime?: true
     updatedAt?: true
     venue?: true
-    image?: true
   }
 
   export type EventMaxAggregateInputType = {
@@ -1696,6 +1696,7 @@ export namespace Prisma {
     category?: true
     createdAt?: true
     endTime?: true
+    image?: true
     requireApproval?: true
     salesEnd?: true
     salesStart?: true
@@ -1703,7 +1704,6 @@ export namespace Prisma {
     startTime?: true
     updatedAt?: true
     venue?: true
-    image?: true
   }
 
   export type EventCountAggregateInputType = {
@@ -1720,6 +1720,7 @@ export namespace Prisma {
     category?: true
     createdAt?: true
     endTime?: true
+    image?: true
     requireApproval?: true
     salesEnd?: true
     salesStart?: true
@@ -1727,7 +1728,6 @@ export namespace Prisma {
     startTime?: true
     updatedAt?: true
     venue?: true
-    image?: true
     _all?: true
   }
 
@@ -1820,7 +1820,7 @@ export namespace Prisma {
   export type EventGroupByOutputType = {
     id: string
     name: string
-    slug: string | null
+    slug: string
     description: string
     date: Date
     location: string
@@ -1831,6 +1831,7 @@ export namespace Prisma {
     category: string | null
     createdAt: Date
     endTime: string | null
+    image: string | null
     requireApproval: boolean
     salesEnd: Date | null
     salesStart: Date | null
@@ -1838,7 +1839,6 @@ export namespace Prisma {
     startTime: string | null
     updatedAt: Date | null
     venue: string | null
-    image: string | null
     _count: EventCountAggregateOutputType | null
     _avg: EventAvgAggregateOutputType | null
     _sum: EventSumAggregateOutputType | null
@@ -1874,6 +1874,7 @@ export namespace Prisma {
     category?: boolean
     createdAt?: boolean
     endTime?: boolean
+    image?: boolean
     requireApproval?: boolean
     salesEnd?: boolean
     salesStart?: boolean
@@ -1881,7 +1882,6 @@ export namespace Prisma {
     startTime?: boolean
     updatedAt?: boolean
     venue?: boolean
-    image?: boolean
     createdBy?: boolean | Event$createdByArgs<ExtArgs>
     tickets?: boolean | Event$ticketsArgs<ExtArgs>
     ticketTypes?: boolean | Event$ticketTypesArgs<ExtArgs>
@@ -1902,6 +1902,7 @@ export namespace Prisma {
     category?: boolean
     createdAt?: boolean
     endTime?: boolean
+    image?: boolean
     requireApproval?: boolean
     salesEnd?: boolean
     salesStart?: boolean
@@ -1909,7 +1910,6 @@ export namespace Prisma {
     startTime?: boolean
     updatedAt?: boolean
     venue?: boolean
-    image?: boolean
     createdBy?: boolean | Event$createdByArgs<ExtArgs>
   }, ExtArgs["result"]["event"]>
 
@@ -1927,6 +1927,7 @@ export namespace Prisma {
     category?: boolean
     createdAt?: boolean
     endTime?: boolean
+    image?: boolean
     requireApproval?: boolean
     salesEnd?: boolean
     salesStart?: boolean
@@ -1934,7 +1935,6 @@ export namespace Prisma {
     startTime?: boolean
     updatedAt?: boolean
     venue?: boolean
-    image?: boolean
     createdBy?: boolean | Event$createdByArgs<ExtArgs>
   }, ExtArgs["result"]["event"]>
 
@@ -1952,6 +1952,7 @@ export namespace Prisma {
     category?: boolean
     createdAt?: boolean
     endTime?: boolean
+    image?: boolean
     requireApproval?: boolean
     salesEnd?: boolean
     salesStart?: boolean
@@ -1959,10 +1960,9 @@ export namespace Prisma {
     startTime?: boolean
     updatedAt?: boolean
     venue?: boolean
-    image?: boolean
   }
 
-  export type EventOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "slug" | "description" | "date" | "location" | "createdById" | "address" | "allowResale" | "capacity" | "category" | "createdAt" | "endTime" | "requireApproval" | "salesEnd" | "salesStart" | "sendEmails" | "startTime" | "updatedAt" | "venue" | "image", ExtArgs["result"]["event"]>
+  export type EventOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "slug" | "description" | "date" | "location" | "createdById" | "address" | "allowResale" | "capacity" | "category" | "createdAt" | "endTime" | "image" | "requireApproval" | "salesEnd" | "salesStart" | "sendEmails" | "startTime" | "updatedAt" | "venue", ExtArgs["result"]["event"]>
   export type EventInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     createdBy?: boolean | Event$createdByArgs<ExtArgs>
     tickets?: boolean | Event$ticketsArgs<ExtArgs>
@@ -1986,7 +1986,7 @@ export namespace Prisma {
     scalars: $Extensions.GetPayloadResult<{
       id: string
       name: string
-      slug: string | null
+      slug: string
       description: string
       date: Date
       location: string
@@ -1997,6 +1997,7 @@ export namespace Prisma {
       category: string | null
       createdAt: Date
       endTime: string | null
+      image: string | null
       requireApproval: boolean
       salesEnd: Date | null
       salesStart: Date | null
@@ -2004,7 +2005,6 @@ export namespace Prisma {
       startTime: string | null
       updatedAt: Date | null
       venue: string | null
-      image: string | null
     }, ExtArgs["result"]["event"]>
     composites: {}
   }
@@ -2444,6 +2444,7 @@ export namespace Prisma {
     readonly category: FieldRef<"Event", 'String'>
     readonly createdAt: FieldRef<"Event", 'DateTime'>
     readonly endTime: FieldRef<"Event", 'String'>
+    readonly image: FieldRef<"Event", 'String'>
     readonly requireApproval: FieldRef<"Event", 'Boolean'>
     readonly salesEnd: FieldRef<"Event", 'DateTime'>
     readonly salesStart: FieldRef<"Event", 'DateTime'>
@@ -2451,7 +2452,6 @@ export namespace Prisma {
     readonly startTime: FieldRef<"Event", 'String'>
     readonly updatedAt: FieldRef<"Event", 'DateTime'>
     readonly venue: FieldRef<"Event", 'String'>
-    readonly image: FieldRef<"Event", 'String'>
   }
     
 
@@ -2956,39 +2956,39 @@ export namespace Prisma {
   export type TicketMinAggregateOutputType = {
     id: string | null
     eventid: string | null
-    tickettypeid: string | null
     userid: string | null
     createtime: Date | null
     used: boolean | null
     accesscode: string | null
-    qrGenerated: Date | null
+    tickettypeid: string | null
     lastScanned: Date | null
+    qrGenerated: Date | null
     scanCount: number | null
   }
 
   export type TicketMaxAggregateOutputType = {
     id: string | null
     eventid: string | null
-    tickettypeid: string | null
     userid: string | null
     createtime: Date | null
     used: boolean | null
     accesscode: string | null
-    qrGenerated: Date | null
+    tickettypeid: string | null
     lastScanned: Date | null
+    qrGenerated: Date | null
     scanCount: number | null
   }
 
   export type TicketCountAggregateOutputType = {
     id: number
     eventid: number
-    tickettypeid: number
     userid: number
     createtime: number
     used: number
     accesscode: number
-    qrGenerated: number
+    tickettypeid: number
     lastScanned: number
+    qrGenerated: number
     scanCount: number
     _all: number
   }
@@ -3005,39 +3005,39 @@ export namespace Prisma {
   export type TicketMinAggregateInputType = {
     id?: true
     eventid?: true
-    tickettypeid?: true
     userid?: true
     createtime?: true
     used?: true
     accesscode?: true
-    qrGenerated?: true
+    tickettypeid?: true
     lastScanned?: true
+    qrGenerated?: true
     scanCount?: true
   }
 
   export type TicketMaxAggregateInputType = {
     id?: true
     eventid?: true
-    tickettypeid?: true
     userid?: true
     createtime?: true
     used?: true
     accesscode?: true
-    qrGenerated?: true
+    tickettypeid?: true
     lastScanned?: true
+    qrGenerated?: true
     scanCount?: true
   }
 
   export type TicketCountAggregateInputType = {
     id?: true
     eventid?: true
-    tickettypeid?: true
     userid?: true
     createtime?: true
     used?: true
     accesscode?: true
-    qrGenerated?: true
+    tickettypeid?: true
     lastScanned?: true
+    qrGenerated?: true
     scanCount?: true
     _all?: true
   }
@@ -3131,13 +3131,13 @@ export namespace Prisma {
   export type TicketGroupByOutputType = {
     id: string
     eventid: string
-    tickettypeid: string
     userid: string
     createtime: Date
     used: boolean
     accesscode: string
-    qrGenerated: Date
+    tickettypeid: string
     lastScanned: Date | null
+    qrGenerated: Date
     scanCount: number
     _count: TicketCountAggregateOutputType | null
     _avg: TicketAvgAggregateOutputType | null
@@ -3163,13 +3163,13 @@ export namespace Prisma {
   export type TicketSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     eventid?: boolean
-    tickettypeid?: boolean
     userid?: boolean
     createtime?: boolean
     used?: boolean
     accesscode?: boolean
-    qrGenerated?: boolean
+    tickettypeid?: boolean
     lastScanned?: boolean
+    qrGenerated?: boolean
     scanCount?: boolean
     event?: boolean | EventDefaultArgs<ExtArgs>
     tickettype?: boolean | TicketTypeDefaultArgs<ExtArgs>
@@ -3179,13 +3179,13 @@ export namespace Prisma {
   export type TicketSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     eventid?: boolean
-    tickettypeid?: boolean
     userid?: boolean
     createtime?: boolean
     used?: boolean
     accesscode?: boolean
-    qrGenerated?: boolean
+    tickettypeid?: boolean
     lastScanned?: boolean
+    qrGenerated?: boolean
     scanCount?: boolean
     event?: boolean | EventDefaultArgs<ExtArgs>
     tickettype?: boolean | TicketTypeDefaultArgs<ExtArgs>
@@ -3195,13 +3195,13 @@ export namespace Prisma {
   export type TicketSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     eventid?: boolean
-    tickettypeid?: boolean
     userid?: boolean
     createtime?: boolean
     used?: boolean
     accesscode?: boolean
-    qrGenerated?: boolean
+    tickettypeid?: boolean
     lastScanned?: boolean
+    qrGenerated?: boolean
     scanCount?: boolean
     event?: boolean | EventDefaultArgs<ExtArgs>
     tickettype?: boolean | TicketTypeDefaultArgs<ExtArgs>
@@ -3211,17 +3211,17 @@ export namespace Prisma {
   export type TicketSelectScalar = {
     id?: boolean
     eventid?: boolean
-    tickettypeid?: boolean
     userid?: boolean
     createtime?: boolean
     used?: boolean
     accesscode?: boolean
-    qrGenerated?: boolean
+    tickettypeid?: boolean
     lastScanned?: boolean
+    qrGenerated?: boolean
     scanCount?: boolean
   }
 
-  export type TicketOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "eventid" | "tickettypeid" | "userid" | "createtime" | "used" | "accesscode" | "qrGenerated" | "lastScanned" | "scanCount", ExtArgs["result"]["ticket"]>
+  export type TicketOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "eventid" | "userid" | "createtime" | "used" | "accesscode" | "tickettypeid" | "lastScanned" | "qrGenerated" | "scanCount", ExtArgs["result"]["ticket"]>
   export type TicketInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     event?: boolean | EventDefaultArgs<ExtArgs>
     tickettype?: boolean | TicketTypeDefaultArgs<ExtArgs>
@@ -3248,13 +3248,13 @@ export namespace Prisma {
     scalars: $Extensions.GetPayloadResult<{
       id: string
       eventid: string
-      tickettypeid: string
       userid: string
       createtime: Date
       used: boolean
       accesscode: string
-      qrGenerated: Date
+      tickettypeid: string
       lastScanned: Date | null
+      qrGenerated: Date
       scanCount: number
     }, ExtArgs["result"]["ticket"]>
     composites: {}
@@ -3684,13 +3684,13 @@ export namespace Prisma {
   interface TicketFieldRefs {
     readonly id: FieldRef<"Ticket", 'String'>
     readonly eventid: FieldRef<"Ticket", 'String'>
-    readonly tickettypeid: FieldRef<"Ticket", 'String'>
     readonly userid: FieldRef<"Ticket", 'String'>
     readonly createtime: FieldRef<"Ticket", 'DateTime'>
     readonly used: FieldRef<"Ticket", 'Boolean'>
     readonly accesscode: FieldRef<"Ticket", 'String'>
-    readonly qrGenerated: FieldRef<"Ticket", 'DateTime'>
+    readonly tickettypeid: FieldRef<"Ticket", 'String'>
     readonly lastScanned: FieldRef<"Ticket", 'DateTime'>
+    readonly qrGenerated: FieldRef<"Ticket", 'DateTime'>
     readonly scanCount: FieldRef<"Ticket", 'Int'>
   }
     
@@ -4118,76 +4118,76 @@ export namespace Prisma {
 
   export type UserMinAggregateOutputType = {
     id: string | null
-    name: string | null
     email: string | null
+    name: string | null
+    createtime: Date | null
     emailVerified: Date | null
     image: string | null
     password: string | null
     isAdmin: boolean | null
     isAuthenticator: boolean | null
-    createtime: Date | null
   }
 
   export type UserMaxAggregateOutputType = {
     id: string | null
-    name: string | null
     email: string | null
+    name: string | null
+    createtime: Date | null
     emailVerified: Date | null
     image: string | null
     password: string | null
     isAdmin: boolean | null
     isAuthenticator: boolean | null
-    createtime: Date | null
   }
 
   export type UserCountAggregateOutputType = {
     id: number
-    name: number
     email: number
+    name: number
+    createtime: number
     emailVerified: number
     image: number
     password: number
     isAdmin: number
     isAuthenticator: number
-    createtime: number
     _all: number
   }
 
 
   export type UserMinAggregateInputType = {
     id?: true
-    name?: true
     email?: true
+    name?: true
+    createtime?: true
     emailVerified?: true
     image?: true
     password?: true
     isAdmin?: true
     isAuthenticator?: true
-    createtime?: true
   }
 
   export type UserMaxAggregateInputType = {
     id?: true
-    name?: true
     email?: true
+    name?: true
+    createtime?: true
     emailVerified?: true
     image?: true
     password?: true
     isAdmin?: true
     isAuthenticator?: true
-    createtime?: true
   }
 
   export type UserCountAggregateInputType = {
     id?: true
-    name?: true
     email?: true
+    name?: true
+    createtime?: true
     emailVerified?: true
     image?: true
     password?: true
     isAdmin?: true
     isAuthenticator?: true
-    createtime?: true
     _all?: true
   }
 
@@ -4265,14 +4265,14 @@ export namespace Prisma {
 
   export type UserGroupByOutputType = {
     id: string
-    name: string | null
     email: string
+    name: string | null
+    createtime: Date
     emailVerified: Date | null
     image: string | null
     password: string | null
     isAdmin: boolean
     isAuthenticator: boolean
-    createtime: Date
     _count: UserCountAggregateOutputType | null
     _min: UserMinAggregateOutputType | null
     _max: UserMaxAggregateOutputType | null
@@ -4294,14 +4294,14 @@ export namespace Prisma {
 
   export type UserSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    name?: boolean
     email?: boolean
+    name?: boolean
+    createtime?: boolean
     emailVerified?: boolean
     image?: boolean
     password?: boolean
     isAdmin?: boolean
     isAuthenticator?: boolean
-    createtime?: boolean
     accounts?: boolean | User$accountsArgs<ExtArgs>
     createdEvents?: boolean | User$createdEventsArgs<ExtArgs>
     sessions?: boolean | User$sessionsArgs<ExtArgs>
@@ -4311,41 +4311,41 @@ export namespace Prisma {
 
   export type UserSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    name?: boolean
     email?: boolean
+    name?: boolean
+    createtime?: boolean
     emailVerified?: boolean
     image?: boolean
     password?: boolean
     isAdmin?: boolean
     isAuthenticator?: boolean
-    createtime?: boolean
   }, ExtArgs["result"]["user"]>
 
   export type UserSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    name?: boolean
     email?: boolean
+    name?: boolean
+    createtime?: boolean
     emailVerified?: boolean
     image?: boolean
     password?: boolean
     isAdmin?: boolean
     isAuthenticator?: boolean
-    createtime?: boolean
   }, ExtArgs["result"]["user"]>
 
   export type UserSelectScalar = {
     id?: boolean
-    name?: boolean
     email?: boolean
+    name?: boolean
+    createtime?: boolean
     emailVerified?: boolean
     image?: boolean
     password?: boolean
     isAdmin?: boolean
     isAuthenticator?: boolean
-    createtime?: boolean
   }
 
-  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "email" | "emailVerified" | "image" | "password" | "isAdmin" | "isAuthenticator" | "createtime", ExtArgs["result"]["user"]>
+  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "email" | "name" | "createtime" | "emailVerified" | "image" | "password" | "isAdmin" | "isAuthenticator", ExtArgs["result"]["user"]>
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     accounts?: boolean | User$accountsArgs<ExtArgs>
     createdEvents?: boolean | User$createdEventsArgs<ExtArgs>
@@ -4366,14 +4366,14 @@ export namespace Prisma {
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
-      name: string | null
       email: string
+      name: string | null
+      createtime: Date
       emailVerified: Date | null
       image: string | null
       password: string | null
       isAdmin: boolean
       isAuthenticator: boolean
-      createtime: Date
     }, ExtArgs["result"]["user"]>
     composites: {}
   }
@@ -4802,14 +4802,14 @@ export namespace Prisma {
    */
   interface UserFieldRefs {
     readonly id: FieldRef<"User", 'String'>
-    readonly name: FieldRef<"User", 'String'>
     readonly email: FieldRef<"User", 'String'>
+    readonly name: FieldRef<"User", 'String'>
+    readonly createtime: FieldRef<"User", 'DateTime'>
     readonly emailVerified: FieldRef<"User", 'DateTime'>
     readonly image: FieldRef<"User", 'String'>
     readonly password: FieldRef<"User", 'String'>
     readonly isAdmin: FieldRef<"User", 'Boolean'>
     readonly isAuthenticator: FieldRef<"User", 'Boolean'>
-    readonly createtime: FieldRef<"User", 'DateTime'>
   }
     
 
@@ -9680,14 +9680,14 @@ export namespace Prisma {
     category: 'category',
     createdAt: 'createdAt',
     endTime: 'endTime',
+    image: 'image',
     requireApproval: 'requireApproval',
     salesEnd: 'salesEnd',
     salesStart: 'salesStart',
     sendEmails: 'sendEmails',
     startTime: 'startTime',
     updatedAt: 'updatedAt',
-    venue: 'venue',
-    image: 'image'
+    venue: 'venue'
   };
 
   export type EventScalarFieldEnum = (typeof EventScalarFieldEnum)[keyof typeof EventScalarFieldEnum]
@@ -9696,13 +9696,13 @@ export namespace Prisma {
   export const TicketScalarFieldEnum: {
     id: 'id',
     eventid: 'eventid',
-    tickettypeid: 'tickettypeid',
     userid: 'userid',
     createtime: 'createtime',
     used: 'used',
     accesscode: 'accesscode',
-    qrGenerated: 'qrGenerated',
+    tickettypeid: 'tickettypeid',
     lastScanned: 'lastScanned',
+    qrGenerated: 'qrGenerated',
     scanCount: 'scanCount'
   };
 
@@ -9711,14 +9711,14 @@ export namespace Prisma {
 
   export const UserScalarFieldEnum: {
     id: 'id',
-    name: 'name',
     email: 'email',
+    name: 'name',
+    createtime: 'createtime',
     emailVerified: 'emailVerified',
     image: 'image',
     password: 'password',
     isAdmin: 'isAdmin',
-    isAuthenticator: 'isAuthenticator',
-    createtime: 'createtime'
+    isAuthenticator: 'isAuthenticator'
   };
 
   export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
@@ -9874,7 +9874,7 @@ export namespace Prisma {
     NOT?: EventWhereInput | EventWhereInput[]
     id?: StringFilter<"Event"> | string
     name?: StringFilter<"Event"> | string
-    slug?: StringNullableFilter<"Event"> | string | null
+    slug?: StringFilter<"Event"> | string
     description?: StringFilter<"Event"> | string
     date?: DateTimeFilter<"Event"> | Date | string
     location?: StringFilter<"Event"> | string
@@ -9885,6 +9885,7 @@ export namespace Prisma {
     category?: StringNullableFilter<"Event"> | string | null
     createdAt?: DateTimeFilter<"Event"> | Date | string
     endTime?: StringNullableFilter<"Event"> | string | null
+    image?: StringNullableFilter<"Event"> | string | null
     requireApproval?: BoolFilter<"Event"> | boolean
     salesEnd?: DateTimeNullableFilter<"Event"> | Date | string | null
     salesStart?: DateTimeNullableFilter<"Event"> | Date | string | null
@@ -9892,7 +9893,6 @@ export namespace Prisma {
     startTime?: StringNullableFilter<"Event"> | string | null
     updatedAt?: DateTimeNullableFilter<"Event"> | Date | string | null
     venue?: StringNullableFilter<"Event"> | string | null
-    image?: StringNullableFilter<"Event"> | string | null
     createdBy?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
     tickets?: TicketListRelationFilter
     ticketTypes?: TicketTypeListRelationFilter
@@ -9901,7 +9901,7 @@ export namespace Prisma {
   export type EventOrderByWithRelationInput = {
     id?: SortOrder
     name?: SortOrder
-    slug?: SortOrderInput | SortOrder
+    slug?: SortOrder
     description?: SortOrder
     date?: SortOrder
     location?: SortOrder
@@ -9912,6 +9912,7 @@ export namespace Prisma {
     category?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     endTime?: SortOrderInput | SortOrder
+    image?: SortOrderInput | SortOrder
     requireApproval?: SortOrder
     salesEnd?: SortOrderInput | SortOrder
     salesStart?: SortOrderInput | SortOrder
@@ -9919,7 +9920,6 @@ export namespace Prisma {
     startTime?: SortOrderInput | SortOrder
     updatedAt?: SortOrderInput | SortOrder
     venue?: SortOrderInput | SortOrder
-    image?: SortOrderInput | SortOrder
     createdBy?: UserOrderByWithRelationInput
     tickets?: TicketOrderByRelationAggregateInput
     ticketTypes?: TicketTypeOrderByRelationAggregateInput
@@ -9943,6 +9943,7 @@ export namespace Prisma {
     category?: StringNullableFilter<"Event"> | string | null
     createdAt?: DateTimeFilter<"Event"> | Date | string
     endTime?: StringNullableFilter<"Event"> | string | null
+    image?: StringNullableFilter<"Event"> | string | null
     requireApproval?: BoolFilter<"Event"> | boolean
     salesEnd?: DateTimeNullableFilter<"Event"> | Date | string | null
     salesStart?: DateTimeNullableFilter<"Event"> | Date | string | null
@@ -9950,7 +9951,6 @@ export namespace Prisma {
     startTime?: StringNullableFilter<"Event"> | string | null
     updatedAt?: DateTimeNullableFilter<"Event"> | Date | string | null
     venue?: StringNullableFilter<"Event"> | string | null
-    image?: StringNullableFilter<"Event"> | string | null
     createdBy?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
     tickets?: TicketListRelationFilter
     ticketTypes?: TicketTypeListRelationFilter
@@ -9959,7 +9959,7 @@ export namespace Prisma {
   export type EventOrderByWithAggregationInput = {
     id?: SortOrder
     name?: SortOrder
-    slug?: SortOrderInput | SortOrder
+    slug?: SortOrder
     description?: SortOrder
     date?: SortOrder
     location?: SortOrder
@@ -9970,6 +9970,7 @@ export namespace Prisma {
     category?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     endTime?: SortOrderInput | SortOrder
+    image?: SortOrderInput | SortOrder
     requireApproval?: SortOrder
     salesEnd?: SortOrderInput | SortOrder
     salesStart?: SortOrderInput | SortOrder
@@ -9977,7 +9978,6 @@ export namespace Prisma {
     startTime?: SortOrderInput | SortOrder
     updatedAt?: SortOrderInput | SortOrder
     venue?: SortOrderInput | SortOrder
-    image?: SortOrderInput | SortOrder
     _count?: EventCountOrderByAggregateInput
     _avg?: EventAvgOrderByAggregateInput
     _max?: EventMaxOrderByAggregateInput
@@ -9991,7 +9991,7 @@ export namespace Prisma {
     NOT?: EventScalarWhereWithAggregatesInput | EventScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"Event"> | string
     name?: StringWithAggregatesFilter<"Event"> | string
-    slug?: StringNullableWithAggregatesFilter<"Event"> | string | null
+    slug?: StringWithAggregatesFilter<"Event"> | string
     description?: StringWithAggregatesFilter<"Event"> | string
     date?: DateTimeWithAggregatesFilter<"Event"> | Date | string
     location?: StringWithAggregatesFilter<"Event"> | string
@@ -10002,6 +10002,7 @@ export namespace Prisma {
     category?: StringNullableWithAggregatesFilter<"Event"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Event"> | Date | string
     endTime?: StringNullableWithAggregatesFilter<"Event"> | string | null
+    image?: StringNullableWithAggregatesFilter<"Event"> | string | null
     requireApproval?: BoolWithAggregatesFilter<"Event"> | boolean
     salesEnd?: DateTimeNullableWithAggregatesFilter<"Event"> | Date | string | null
     salesStart?: DateTimeNullableWithAggregatesFilter<"Event"> | Date | string | null
@@ -10009,7 +10010,6 @@ export namespace Prisma {
     startTime?: StringNullableWithAggregatesFilter<"Event"> | string | null
     updatedAt?: DateTimeNullableWithAggregatesFilter<"Event"> | Date | string | null
     venue?: StringNullableWithAggregatesFilter<"Event"> | string | null
-    image?: StringNullableWithAggregatesFilter<"Event"> | string | null
   }
 
   export type TicketWhereInput = {
@@ -10018,13 +10018,13 @@ export namespace Prisma {
     NOT?: TicketWhereInput | TicketWhereInput[]
     id?: StringFilter<"Ticket"> | string
     eventid?: StringFilter<"Ticket"> | string
-    tickettypeid?: StringFilter<"Ticket"> | string
     userid?: StringFilter<"Ticket"> | string
     createtime?: DateTimeFilter<"Ticket"> | Date | string
     used?: BoolFilter<"Ticket"> | boolean
     accesscode?: StringFilter<"Ticket"> | string
-    qrGenerated?: DateTimeFilter<"Ticket"> | Date | string
+    tickettypeid?: StringFilter<"Ticket"> | string
     lastScanned?: DateTimeNullableFilter<"Ticket"> | Date | string | null
+    qrGenerated?: DateTimeFilter<"Ticket"> | Date | string
     scanCount?: IntFilter<"Ticket"> | number
     event?: XOR<EventScalarRelationFilter, EventWhereInput>
     tickettype?: XOR<TicketTypeScalarRelationFilter, TicketTypeWhereInput>
@@ -10034,13 +10034,13 @@ export namespace Prisma {
   export type TicketOrderByWithRelationInput = {
     id?: SortOrder
     eventid?: SortOrder
-    tickettypeid?: SortOrder
     userid?: SortOrder
     createtime?: SortOrder
     used?: SortOrder
     accesscode?: SortOrder
-    qrGenerated?: SortOrder
+    tickettypeid?: SortOrder
     lastScanned?: SortOrderInput | SortOrder
+    qrGenerated?: SortOrder
     scanCount?: SortOrder
     event?: EventOrderByWithRelationInput
     tickettype?: TicketTypeOrderByWithRelationInput
@@ -10054,12 +10054,12 @@ export namespace Prisma {
     OR?: TicketWhereInput[]
     NOT?: TicketWhereInput | TicketWhereInput[]
     eventid?: StringFilter<"Ticket"> | string
-    tickettypeid?: StringFilter<"Ticket"> | string
     userid?: StringFilter<"Ticket"> | string
     createtime?: DateTimeFilter<"Ticket"> | Date | string
     used?: BoolFilter<"Ticket"> | boolean
-    qrGenerated?: DateTimeFilter<"Ticket"> | Date | string
+    tickettypeid?: StringFilter<"Ticket"> | string
     lastScanned?: DateTimeNullableFilter<"Ticket"> | Date | string | null
+    qrGenerated?: DateTimeFilter<"Ticket"> | Date | string
     scanCount?: IntFilter<"Ticket"> | number
     event?: XOR<EventScalarRelationFilter, EventWhereInput>
     tickettype?: XOR<TicketTypeScalarRelationFilter, TicketTypeWhereInput>
@@ -10069,13 +10069,13 @@ export namespace Prisma {
   export type TicketOrderByWithAggregationInput = {
     id?: SortOrder
     eventid?: SortOrder
-    tickettypeid?: SortOrder
     userid?: SortOrder
     createtime?: SortOrder
     used?: SortOrder
     accesscode?: SortOrder
-    qrGenerated?: SortOrder
+    tickettypeid?: SortOrder
     lastScanned?: SortOrderInput | SortOrder
+    qrGenerated?: SortOrder
     scanCount?: SortOrder
     _count?: TicketCountOrderByAggregateInput
     _avg?: TicketAvgOrderByAggregateInput
@@ -10090,13 +10090,13 @@ export namespace Prisma {
     NOT?: TicketScalarWhereWithAggregatesInput | TicketScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"Ticket"> | string
     eventid?: StringWithAggregatesFilter<"Ticket"> | string
-    tickettypeid?: StringWithAggregatesFilter<"Ticket"> | string
     userid?: StringWithAggregatesFilter<"Ticket"> | string
     createtime?: DateTimeWithAggregatesFilter<"Ticket"> | Date | string
     used?: BoolWithAggregatesFilter<"Ticket"> | boolean
     accesscode?: StringWithAggregatesFilter<"Ticket"> | string
-    qrGenerated?: DateTimeWithAggregatesFilter<"Ticket"> | Date | string
+    tickettypeid?: StringWithAggregatesFilter<"Ticket"> | string
     lastScanned?: DateTimeNullableWithAggregatesFilter<"Ticket"> | Date | string | null
+    qrGenerated?: DateTimeWithAggregatesFilter<"Ticket"> | Date | string
     scanCount?: IntWithAggregatesFilter<"Ticket"> | number
   }
 
@@ -10105,14 +10105,14 @@ export namespace Prisma {
     OR?: UserWhereInput[]
     NOT?: UserWhereInput | UserWhereInput[]
     id?: StringFilter<"User"> | string
-    name?: StringNullableFilter<"User"> | string | null
     email?: StringFilter<"User"> | string
+    name?: StringNullableFilter<"User"> | string | null
+    createtime?: DateTimeFilter<"User"> | Date | string
     emailVerified?: DateTimeNullableFilter<"User"> | Date | string | null
     image?: StringNullableFilter<"User"> | string | null
     password?: StringNullableFilter<"User"> | string | null
     isAdmin?: BoolFilter<"User"> | boolean
     isAuthenticator?: BoolFilter<"User"> | boolean
-    createtime?: DateTimeFilter<"User"> | Date | string
     accounts?: AccountListRelationFilter
     createdEvents?: EventListRelationFilter
     sessions?: SessionListRelationFilter
@@ -10121,14 +10121,14 @@ export namespace Prisma {
 
   export type UserOrderByWithRelationInput = {
     id?: SortOrder
-    name?: SortOrderInput | SortOrder
     email?: SortOrder
+    name?: SortOrderInput | SortOrder
+    createtime?: SortOrder
     emailVerified?: SortOrderInput | SortOrder
     image?: SortOrderInput | SortOrder
     password?: SortOrderInput | SortOrder
     isAdmin?: SortOrder
     isAuthenticator?: SortOrder
-    createtime?: SortOrder
     accounts?: AccountOrderByRelationAggregateInput
     createdEvents?: EventOrderByRelationAggregateInput
     sessions?: SessionOrderByRelationAggregateInput
@@ -10142,12 +10142,12 @@ export namespace Prisma {
     OR?: UserWhereInput[]
     NOT?: UserWhereInput | UserWhereInput[]
     name?: StringNullableFilter<"User"> | string | null
+    createtime?: DateTimeFilter<"User"> | Date | string
     emailVerified?: DateTimeNullableFilter<"User"> | Date | string | null
     image?: StringNullableFilter<"User"> | string | null
     password?: StringNullableFilter<"User"> | string | null
     isAdmin?: BoolFilter<"User"> | boolean
     isAuthenticator?: BoolFilter<"User"> | boolean
-    createtime?: DateTimeFilter<"User"> | Date | string
     accounts?: AccountListRelationFilter
     createdEvents?: EventListRelationFilter
     sessions?: SessionListRelationFilter
@@ -10156,14 +10156,14 @@ export namespace Prisma {
 
   export type UserOrderByWithAggregationInput = {
     id?: SortOrder
-    name?: SortOrderInput | SortOrder
     email?: SortOrder
+    name?: SortOrderInput | SortOrder
+    createtime?: SortOrder
     emailVerified?: SortOrderInput | SortOrder
     image?: SortOrderInput | SortOrder
     password?: SortOrderInput | SortOrder
     isAdmin?: SortOrder
     isAuthenticator?: SortOrder
-    createtime?: SortOrder
     _count?: UserCountOrderByAggregateInput
     _max?: UserMaxOrderByAggregateInput
     _min?: UserMinOrderByAggregateInput
@@ -10174,14 +10174,14 @@ export namespace Prisma {
     OR?: UserScalarWhereWithAggregatesInput[]
     NOT?: UserScalarWhereWithAggregatesInput | UserScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"User"> | string
-    name?: StringNullableWithAggregatesFilter<"User"> | string | null
     email?: StringWithAggregatesFilter<"User"> | string
+    name?: StringNullableWithAggregatesFilter<"User"> | string | null
+    createtime?: DateTimeWithAggregatesFilter<"User"> | Date | string
     emailVerified?: DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
     image?: StringNullableWithAggregatesFilter<"User"> | string | null
     password?: StringNullableWithAggregatesFilter<"User"> | string | null
     isAdmin?: BoolWithAggregatesFilter<"User"> | boolean
     isAuthenticator?: BoolWithAggregatesFilter<"User"> | boolean
-    createtime?: DateTimeWithAggregatesFilter<"User"> | Date | string
   }
 
   export type AccountWhereInput = {
@@ -10438,7 +10438,7 @@ export namespace Prisma {
   export type EventCreateInput = {
     id?: string
     name: string
-    slug?: string | null
+    slug: string
     description: string
     date: Date | string
     location: string
@@ -10448,6 +10448,7 @@ export namespace Prisma {
     category?: string | null
     createdAt?: Date | string
     endTime?: string | null
+    image?: string | null
     requireApproval?: boolean
     salesEnd?: Date | string | null
     salesStart?: Date | string | null
@@ -10455,7 +10456,6 @@ export namespace Prisma {
     startTime?: string | null
     updatedAt?: Date | string | null
     venue?: string | null
-    image?: string | null
     createdBy?: UserCreateNestedOneWithoutCreatedEventsInput
     tickets?: TicketCreateNestedManyWithoutEventInput
     ticketTypes?: TicketTypeCreateNestedManyWithoutEventInput
@@ -10464,7 +10464,7 @@ export namespace Prisma {
   export type EventUncheckedCreateInput = {
     id?: string
     name: string
-    slug?: string | null
+    slug: string
     description: string
     date: Date | string
     location: string
@@ -10475,6 +10475,7 @@ export namespace Prisma {
     category?: string | null
     createdAt?: Date | string
     endTime?: string | null
+    image?: string | null
     requireApproval?: boolean
     salesEnd?: Date | string | null
     salesStart?: Date | string | null
@@ -10482,7 +10483,6 @@ export namespace Prisma {
     startTime?: string | null
     updatedAt?: Date | string | null
     venue?: string | null
-    image?: string | null
     tickets?: TicketUncheckedCreateNestedManyWithoutEventInput
     ticketTypes?: TicketTypeUncheckedCreateNestedManyWithoutEventInput
   }
@@ -10490,7 +10490,7 @@ export namespace Prisma {
   export type EventUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    slug?: NullableStringFieldUpdateOperationsInput | string | null
+    slug?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     location?: StringFieldUpdateOperationsInput | string
@@ -10500,6 +10500,7 @@ export namespace Prisma {
     category?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     endTime?: NullableStringFieldUpdateOperationsInput | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
     requireApproval?: BoolFieldUpdateOperationsInput | boolean
     salesEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     salesStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -10507,7 +10508,6 @@ export namespace Prisma {
     startTime?: NullableStringFieldUpdateOperationsInput | string | null
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     venue?: NullableStringFieldUpdateOperationsInput | string | null
-    image?: NullableStringFieldUpdateOperationsInput | string | null
     createdBy?: UserUpdateOneWithoutCreatedEventsNestedInput
     tickets?: TicketUpdateManyWithoutEventNestedInput
     ticketTypes?: TicketTypeUpdateManyWithoutEventNestedInput
@@ -10516,7 +10516,7 @@ export namespace Prisma {
   export type EventUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    slug?: NullableStringFieldUpdateOperationsInput | string | null
+    slug?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     location?: StringFieldUpdateOperationsInput | string
@@ -10527,6 +10527,7 @@ export namespace Prisma {
     category?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     endTime?: NullableStringFieldUpdateOperationsInput | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
     requireApproval?: BoolFieldUpdateOperationsInput | boolean
     salesEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     salesStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -10534,7 +10535,6 @@ export namespace Prisma {
     startTime?: NullableStringFieldUpdateOperationsInput | string | null
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     venue?: NullableStringFieldUpdateOperationsInput | string | null
-    image?: NullableStringFieldUpdateOperationsInput | string | null
     tickets?: TicketUncheckedUpdateManyWithoutEventNestedInput
     ticketTypes?: TicketTypeUncheckedUpdateManyWithoutEventNestedInput
   }
@@ -10542,7 +10542,7 @@ export namespace Prisma {
   export type EventCreateManyInput = {
     id?: string
     name: string
-    slug?: string | null
+    slug: string
     description: string
     date: Date | string
     location: string
@@ -10553,6 +10553,7 @@ export namespace Prisma {
     category?: string | null
     createdAt?: Date | string
     endTime?: string | null
+    image?: string | null
     requireApproval?: boolean
     salesEnd?: Date | string | null
     salesStart?: Date | string | null
@@ -10560,13 +10561,12 @@ export namespace Prisma {
     startTime?: string | null
     updatedAt?: Date | string | null
     venue?: string | null
-    image?: string | null
   }
 
   export type EventUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    slug?: NullableStringFieldUpdateOperationsInput | string | null
+    slug?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     location?: StringFieldUpdateOperationsInput | string
@@ -10576,6 +10576,7 @@ export namespace Prisma {
     category?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     endTime?: NullableStringFieldUpdateOperationsInput | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
     requireApproval?: BoolFieldUpdateOperationsInput | boolean
     salesEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     salesStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -10583,13 +10584,12 @@ export namespace Prisma {
     startTime?: NullableStringFieldUpdateOperationsInput | string | null
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     venue?: NullableStringFieldUpdateOperationsInput | string | null
-    image?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type EventUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    slug?: NullableStringFieldUpdateOperationsInput | string | null
+    slug?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     location?: StringFieldUpdateOperationsInput | string
@@ -10600,6 +10600,7 @@ export namespace Prisma {
     category?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     endTime?: NullableStringFieldUpdateOperationsInput | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
     requireApproval?: BoolFieldUpdateOperationsInput | boolean
     salesEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     salesStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -10607,7 +10608,6 @@ export namespace Prisma {
     startTime?: NullableStringFieldUpdateOperationsInput | string | null
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     venue?: NullableStringFieldUpdateOperationsInput | string | null
-    image?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type TicketCreateInput = {
@@ -10615,8 +10615,8 @@ export namespace Prisma {
     createtime?: Date | string
     used?: boolean
     accesscode: string
-    qrGenerated?: Date | string
     lastScanned?: Date | string | null
+    qrGenerated?: Date | string
     scanCount?: number
     event: EventCreateNestedOneWithoutTicketsInput
     tickettype: TicketTypeCreateNestedOneWithoutTicketsInput
@@ -10626,13 +10626,13 @@ export namespace Prisma {
   export type TicketUncheckedCreateInput = {
     id?: string
     eventid: string
-    tickettypeid: string
     userid: string
     createtime?: Date | string
     used?: boolean
     accesscode: string
-    qrGenerated?: Date | string
+    tickettypeid: string
     lastScanned?: Date | string | null
+    qrGenerated?: Date | string
     scanCount?: number
   }
 
@@ -10641,8 +10641,8 @@ export namespace Prisma {
     createtime?: DateTimeFieldUpdateOperationsInput | Date | string
     used?: BoolFieldUpdateOperationsInput | boolean
     accesscode?: StringFieldUpdateOperationsInput | string
-    qrGenerated?: DateTimeFieldUpdateOperationsInput | Date | string
     lastScanned?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    qrGenerated?: DateTimeFieldUpdateOperationsInput | Date | string
     scanCount?: IntFieldUpdateOperationsInput | number
     event?: EventUpdateOneRequiredWithoutTicketsNestedInput
     tickettype?: TicketTypeUpdateOneRequiredWithoutTicketsNestedInput
@@ -10652,26 +10652,26 @@ export namespace Prisma {
   export type TicketUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     eventid?: StringFieldUpdateOperationsInput | string
-    tickettypeid?: StringFieldUpdateOperationsInput | string
     userid?: StringFieldUpdateOperationsInput | string
     createtime?: DateTimeFieldUpdateOperationsInput | Date | string
     used?: BoolFieldUpdateOperationsInput | boolean
     accesscode?: StringFieldUpdateOperationsInput | string
-    qrGenerated?: DateTimeFieldUpdateOperationsInput | Date | string
+    tickettypeid?: StringFieldUpdateOperationsInput | string
     lastScanned?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    qrGenerated?: DateTimeFieldUpdateOperationsInput | Date | string
     scanCount?: IntFieldUpdateOperationsInput | number
   }
 
   export type TicketCreateManyInput = {
     id?: string
     eventid: string
-    tickettypeid: string
     userid: string
     createtime?: Date | string
     used?: boolean
     accesscode: string
-    qrGenerated?: Date | string
+    tickettypeid: string
     lastScanned?: Date | string | null
+    qrGenerated?: Date | string
     scanCount?: number
   }
 
@@ -10680,34 +10680,34 @@ export namespace Prisma {
     createtime?: DateTimeFieldUpdateOperationsInput | Date | string
     used?: BoolFieldUpdateOperationsInput | boolean
     accesscode?: StringFieldUpdateOperationsInput | string
-    qrGenerated?: DateTimeFieldUpdateOperationsInput | Date | string
     lastScanned?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    qrGenerated?: DateTimeFieldUpdateOperationsInput | Date | string
     scanCount?: IntFieldUpdateOperationsInput | number
   }
 
   export type TicketUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
     eventid?: StringFieldUpdateOperationsInput | string
-    tickettypeid?: StringFieldUpdateOperationsInput | string
     userid?: StringFieldUpdateOperationsInput | string
     createtime?: DateTimeFieldUpdateOperationsInput | Date | string
     used?: BoolFieldUpdateOperationsInput | boolean
     accesscode?: StringFieldUpdateOperationsInput | string
-    qrGenerated?: DateTimeFieldUpdateOperationsInput | Date | string
+    tickettypeid?: StringFieldUpdateOperationsInput | string
     lastScanned?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    qrGenerated?: DateTimeFieldUpdateOperationsInput | Date | string
     scanCount?: IntFieldUpdateOperationsInput | number
   }
 
   export type UserCreateInput = {
     id?: string
-    name?: string | null
     email: string
+    name?: string | null
+    createtime?: Date | string
     emailVerified?: Date | string | null
     image?: string | null
     password?: string | null
     isAdmin?: boolean
     isAuthenticator?: boolean
-    createtime?: Date | string
     accounts?: AccountCreateNestedManyWithoutUserInput
     createdEvents?: EventCreateNestedManyWithoutCreatedByInput
     sessions?: SessionCreateNestedManyWithoutUserInput
@@ -10716,14 +10716,14 @@ export namespace Prisma {
 
   export type UserUncheckedCreateInput = {
     id?: string
-    name?: string | null
     email: string
+    name?: string | null
+    createtime?: Date | string
     emailVerified?: Date | string | null
     image?: string | null
     password?: string | null
     isAdmin?: boolean
     isAuthenticator?: boolean
-    createtime?: Date | string
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     createdEvents?: EventUncheckedCreateNestedManyWithoutCreatedByInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
@@ -10732,14 +10732,14 @@ export namespace Prisma {
 
   export type UserUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    name?: NullableStringFieldUpdateOperationsInput | string | null
     email?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    createtime?: DateTimeFieldUpdateOperationsInput | Date | string
     emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     password?: NullableStringFieldUpdateOperationsInput | string | null
     isAdmin?: BoolFieldUpdateOperationsInput | boolean
     isAuthenticator?: BoolFieldUpdateOperationsInput | boolean
-    createtime?: DateTimeFieldUpdateOperationsInput | Date | string
     accounts?: AccountUpdateManyWithoutUserNestedInput
     createdEvents?: EventUpdateManyWithoutCreatedByNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
@@ -10748,14 +10748,14 @@ export namespace Prisma {
 
   export type UserUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    name?: NullableStringFieldUpdateOperationsInput | string | null
     email?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    createtime?: DateTimeFieldUpdateOperationsInput | Date | string
     emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     password?: NullableStringFieldUpdateOperationsInput | string | null
     isAdmin?: BoolFieldUpdateOperationsInput | boolean
     isAuthenticator?: BoolFieldUpdateOperationsInput | boolean
-    createtime?: DateTimeFieldUpdateOperationsInput | Date | string
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     createdEvents?: EventUncheckedUpdateManyWithoutCreatedByNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
@@ -10764,38 +10764,38 @@ export namespace Prisma {
 
   export type UserCreateManyInput = {
     id?: string
-    name?: string | null
     email: string
+    name?: string | null
+    createtime?: Date | string
     emailVerified?: Date | string | null
     image?: string | null
     password?: string | null
     isAdmin?: boolean
     isAuthenticator?: boolean
-    createtime?: Date | string
   }
 
   export type UserUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
-    name?: NullableStringFieldUpdateOperationsInput | string | null
     email?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    createtime?: DateTimeFieldUpdateOperationsInput | Date | string
     emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     password?: NullableStringFieldUpdateOperationsInput | string | null
     isAdmin?: BoolFieldUpdateOperationsInput | boolean
     isAuthenticator?: BoolFieldUpdateOperationsInput | boolean
-    createtime?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type UserUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
-    name?: NullableStringFieldUpdateOperationsInput | string | null
     email?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    createtime?: DateTimeFieldUpdateOperationsInput | Date | string
     emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     password?: NullableStringFieldUpdateOperationsInput | string | null
     isAdmin?: BoolFieldUpdateOperationsInput | boolean
     isAuthenticator?: BoolFieldUpdateOperationsInput | boolean
-    createtime?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type AccountCreateInput = {
@@ -11073,6 +11073,17 @@ export namespace Prisma {
     not?: NestedStringFilter<$PrismaModel> | string
   }
 
+  export type DateTimeFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeFilter<$PrismaModel> | Date | string
+  }
+
   export type StringNullableFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel> | null
     in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
@@ -11086,17 +11097,6 @@ export namespace Prisma {
     endsWith?: string | StringFieldRefInput<$PrismaModel>
     mode?: QueryMode
     not?: NestedStringNullableFilter<$PrismaModel> | string | null
-  }
-
-  export type DateTimeFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeFilter<$PrismaModel> | Date | string
   }
 
   export type BoolFilter<$PrismaModel = never> = {
@@ -11175,6 +11175,7 @@ export namespace Prisma {
     category?: SortOrder
     createdAt?: SortOrder
     endTime?: SortOrder
+    image?: SortOrder
     requireApproval?: SortOrder
     salesEnd?: SortOrder
     salesStart?: SortOrder
@@ -11182,7 +11183,6 @@ export namespace Prisma {
     startTime?: SortOrder
     updatedAt?: SortOrder
     venue?: SortOrder
-    image?: SortOrder
   }
 
   export type EventAvgOrderByAggregateInput = {
@@ -11203,6 +11203,7 @@ export namespace Prisma {
     category?: SortOrder
     createdAt?: SortOrder
     endTime?: SortOrder
+    image?: SortOrder
     requireApproval?: SortOrder
     salesEnd?: SortOrder
     salesStart?: SortOrder
@@ -11210,7 +11211,6 @@ export namespace Prisma {
     startTime?: SortOrder
     updatedAt?: SortOrder
     venue?: SortOrder
-    image?: SortOrder
   }
 
   export type EventMinOrderByAggregateInput = {
@@ -11227,6 +11227,7 @@ export namespace Prisma {
     category?: SortOrder
     createdAt?: SortOrder
     endTime?: SortOrder
+    image?: SortOrder
     requireApproval?: SortOrder
     salesEnd?: SortOrder
     salesStart?: SortOrder
@@ -11234,7 +11235,6 @@ export namespace Prisma {
     startTime?: SortOrder
     updatedAt?: SortOrder
     venue?: SortOrder
-    image?: SortOrder
   }
 
   export type EventSumOrderByAggregateInput = {
@@ -11259,6 +11259,20 @@ export namespace Prisma {
     _max?: NestedStringFilter<$PrismaModel>
   }
 
+  export type DateTimeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeWithAggregatesFilter<$PrismaModel> | Date | string
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedDateTimeFilter<$PrismaModel>
+    _max?: NestedDateTimeFilter<$PrismaModel>
+  }
+
   export type StringNullableWithAggregatesFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel> | null
     in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
@@ -11275,20 +11289,6 @@ export namespace Prisma {
     _count?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedStringNullableFilter<$PrismaModel>
     _max?: NestedStringNullableFilter<$PrismaModel>
-  }
-
-  export type DateTimeWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeWithAggregatesFilter<$PrismaModel> | Date | string
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedDateTimeFilter<$PrismaModel>
-    _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
   export type BoolWithAggregatesFilter<$PrismaModel = never> = {
@@ -11358,13 +11358,13 @@ export namespace Prisma {
   export type TicketCountOrderByAggregateInput = {
     id?: SortOrder
     eventid?: SortOrder
-    tickettypeid?: SortOrder
     userid?: SortOrder
     createtime?: SortOrder
     used?: SortOrder
     accesscode?: SortOrder
-    qrGenerated?: SortOrder
+    tickettypeid?: SortOrder
     lastScanned?: SortOrder
+    qrGenerated?: SortOrder
     scanCount?: SortOrder
   }
 
@@ -11375,26 +11375,26 @@ export namespace Prisma {
   export type TicketMaxOrderByAggregateInput = {
     id?: SortOrder
     eventid?: SortOrder
-    tickettypeid?: SortOrder
     userid?: SortOrder
     createtime?: SortOrder
     used?: SortOrder
     accesscode?: SortOrder
-    qrGenerated?: SortOrder
+    tickettypeid?: SortOrder
     lastScanned?: SortOrder
+    qrGenerated?: SortOrder
     scanCount?: SortOrder
   }
 
   export type TicketMinOrderByAggregateInput = {
     id?: SortOrder
     eventid?: SortOrder
-    tickettypeid?: SortOrder
     userid?: SortOrder
     createtime?: SortOrder
     used?: SortOrder
     accesscode?: SortOrder
-    qrGenerated?: SortOrder
+    tickettypeid?: SortOrder
     lastScanned?: SortOrder
+    qrGenerated?: SortOrder
     scanCount?: SortOrder
   }
 
@@ -11450,38 +11450,38 @@ export namespace Prisma {
 
   export type UserCountOrderByAggregateInput = {
     id?: SortOrder
-    name?: SortOrder
     email?: SortOrder
+    name?: SortOrder
+    createtime?: SortOrder
     emailVerified?: SortOrder
     image?: SortOrder
     password?: SortOrder
     isAdmin?: SortOrder
     isAuthenticator?: SortOrder
-    createtime?: SortOrder
   }
 
   export type UserMaxOrderByAggregateInput = {
     id?: SortOrder
-    name?: SortOrder
     email?: SortOrder
+    name?: SortOrder
+    createtime?: SortOrder
     emailVerified?: SortOrder
     image?: SortOrder
     password?: SortOrder
     isAdmin?: SortOrder
     isAuthenticator?: SortOrder
-    createtime?: SortOrder
   }
 
   export type UserMinOrderByAggregateInput = {
     id?: SortOrder
-    name?: SortOrder
     email?: SortOrder
+    name?: SortOrder
+    createtime?: SortOrder
     emailVerified?: SortOrder
     image?: SortOrder
     password?: SortOrder
     isAdmin?: SortOrder
     isAuthenticator?: SortOrder
-    createtime?: SortOrder
   }
 
   export type AccountProviderProviderAccountIdCompoundUniqueInput = {
@@ -11663,12 +11663,12 @@ export namespace Prisma {
     set?: string
   }
 
-  export type NullableStringFieldUpdateOperationsInput = {
-    set?: string | null
-  }
-
   export type DateTimeFieldUpdateOperationsInput = {
     set?: Date | string
+  }
+
+  export type NullableStringFieldUpdateOperationsInput = {
+    set?: string | null
   }
 
   export type BoolFieldUpdateOperationsInput = {
@@ -12069,6 +12069,17 @@ export namespace Prisma {
     not?: NestedStringFilter<$PrismaModel> | string
   }
 
+  export type NestedDateTimeFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeFilter<$PrismaModel> | Date | string
+  }
+
   export type NestedStringNullableFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel> | null
     in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
@@ -12081,17 +12092,6 @@ export namespace Prisma {
     startsWith?: string | StringFieldRefInput<$PrismaModel>
     endsWith?: string | StringFieldRefInput<$PrismaModel>
     not?: NestedStringNullableFilter<$PrismaModel> | string | null
-  }
-
-  export type NestedDateTimeFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeFilter<$PrismaModel> | Date | string
   }
 
   export type NestedBoolFilter<$PrismaModel = never> = {
@@ -12149,6 +12149,20 @@ export namespace Prisma {
     not?: NestedIntFilter<$PrismaModel> | number
   }
 
+  export type NestedDateTimeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeWithAggregatesFilter<$PrismaModel> | Date | string
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedDateTimeFilter<$PrismaModel>
+    _max?: NestedDateTimeFilter<$PrismaModel>
+  }
+
   export type NestedStringNullableWithAggregatesFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel> | null
     in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
@@ -12164,20 +12178,6 @@ export namespace Prisma {
     _count?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedStringNullableFilter<$PrismaModel>
     _max?: NestedStringNullableFilter<$PrismaModel>
-  }
-
-  export type NestedDateTimeWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeWithAggregatesFilter<$PrismaModel> | Date | string
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedDateTimeFilter<$PrismaModel>
-    _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
   export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
@@ -12258,14 +12258,14 @@ export namespace Prisma {
 
   export type UserCreateWithoutCreatedEventsInput = {
     id?: string
-    name?: string | null
     email: string
+    name?: string | null
+    createtime?: Date | string
     emailVerified?: Date | string | null
     image?: string | null
     password?: string | null
     isAdmin?: boolean
     isAuthenticator?: boolean
-    createtime?: Date | string
     accounts?: AccountCreateNestedManyWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
     tickets?: TicketCreateNestedManyWithoutUserInput
@@ -12273,14 +12273,14 @@ export namespace Prisma {
 
   export type UserUncheckedCreateWithoutCreatedEventsInput = {
     id?: string
-    name?: string | null
     email: string
+    name?: string | null
+    createtime?: Date | string
     emailVerified?: Date | string | null
     image?: string | null
     password?: string | null
     isAdmin?: boolean
     isAuthenticator?: boolean
-    createtime?: Date | string
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     tickets?: TicketUncheckedCreateNestedManyWithoutUserInput
@@ -12296,8 +12296,8 @@ export namespace Prisma {
     createtime?: Date | string
     used?: boolean
     accesscode: string
-    qrGenerated?: Date | string
     lastScanned?: Date | string | null
+    qrGenerated?: Date | string
     scanCount?: number
     tickettype: TicketTypeCreateNestedOneWithoutTicketsInput
     user: UserCreateNestedOneWithoutTicketsInput
@@ -12305,13 +12305,13 @@ export namespace Prisma {
 
   export type TicketUncheckedCreateWithoutEventInput = {
     id?: string
-    tickettypeid: string
     userid: string
     createtime?: Date | string
     used?: boolean
     accesscode: string
-    qrGenerated?: Date | string
+    tickettypeid: string
     lastScanned?: Date | string | null
+    qrGenerated?: Date | string
     scanCount?: number
   }
 
@@ -12366,14 +12366,14 @@ export namespace Prisma {
 
   export type UserUpdateWithoutCreatedEventsInput = {
     id?: StringFieldUpdateOperationsInput | string
-    name?: NullableStringFieldUpdateOperationsInput | string | null
     email?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    createtime?: DateTimeFieldUpdateOperationsInput | Date | string
     emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     password?: NullableStringFieldUpdateOperationsInput | string | null
     isAdmin?: BoolFieldUpdateOperationsInput | boolean
     isAuthenticator?: BoolFieldUpdateOperationsInput | boolean
-    createtime?: DateTimeFieldUpdateOperationsInput | Date | string
     accounts?: AccountUpdateManyWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
     tickets?: TicketUpdateManyWithoutUserNestedInput
@@ -12381,14 +12381,14 @@ export namespace Prisma {
 
   export type UserUncheckedUpdateWithoutCreatedEventsInput = {
     id?: StringFieldUpdateOperationsInput | string
-    name?: NullableStringFieldUpdateOperationsInput | string | null
     email?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    createtime?: DateTimeFieldUpdateOperationsInput | Date | string
     emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     password?: NullableStringFieldUpdateOperationsInput | string | null
     isAdmin?: BoolFieldUpdateOperationsInput | boolean
     isAuthenticator?: BoolFieldUpdateOperationsInput | boolean
-    createtime?: DateTimeFieldUpdateOperationsInput | Date | string
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     tickets?: TicketUncheckedUpdateManyWithoutUserNestedInput
@@ -12416,13 +12416,13 @@ export namespace Prisma {
     NOT?: TicketScalarWhereInput | TicketScalarWhereInput[]
     id?: StringFilter<"Ticket"> | string
     eventid?: StringFilter<"Ticket"> | string
-    tickettypeid?: StringFilter<"Ticket"> | string
     userid?: StringFilter<"Ticket"> | string
     createtime?: DateTimeFilter<"Ticket"> | Date | string
     used?: BoolFilter<"Ticket"> | boolean
     accesscode?: StringFilter<"Ticket"> | string
-    qrGenerated?: DateTimeFilter<"Ticket"> | Date | string
+    tickettypeid?: StringFilter<"Ticket"> | string
     lastScanned?: DateTimeNullableFilter<"Ticket"> | Date | string | null
+    qrGenerated?: DateTimeFilter<"Ticket"> | Date | string
     scanCount?: IntFilter<"Ticket"> | number
   }
 
@@ -12457,7 +12457,7 @@ export namespace Prisma {
   export type EventCreateWithoutTicketsInput = {
     id?: string
     name: string
-    slug?: string | null
+    slug: string
     description: string
     date: Date | string
     location: string
@@ -12467,6 +12467,7 @@ export namespace Prisma {
     category?: string | null
     createdAt?: Date | string
     endTime?: string | null
+    image?: string | null
     requireApproval?: boolean
     salesEnd?: Date | string | null
     salesStart?: Date | string | null
@@ -12474,7 +12475,6 @@ export namespace Prisma {
     startTime?: string | null
     updatedAt?: Date | string | null
     venue?: string | null
-    image?: string | null
     createdBy?: UserCreateNestedOneWithoutCreatedEventsInput
     ticketTypes?: TicketTypeCreateNestedManyWithoutEventInput
   }
@@ -12482,7 +12482,7 @@ export namespace Prisma {
   export type EventUncheckedCreateWithoutTicketsInput = {
     id?: string
     name: string
-    slug?: string | null
+    slug: string
     description: string
     date: Date | string
     location: string
@@ -12493,6 +12493,7 @@ export namespace Prisma {
     category?: string | null
     createdAt?: Date | string
     endTime?: string | null
+    image?: string | null
     requireApproval?: boolean
     salesEnd?: Date | string | null
     salesStart?: Date | string | null
@@ -12500,7 +12501,6 @@ export namespace Prisma {
     startTime?: string | null
     updatedAt?: Date | string | null
     venue?: string | null
-    image?: string | null
     ticketTypes?: TicketTypeUncheckedCreateNestedManyWithoutEventInput
   }
 
@@ -12534,14 +12534,14 @@ export namespace Prisma {
 
   export type UserCreateWithoutTicketsInput = {
     id?: string
-    name?: string | null
     email: string
+    name?: string | null
+    createtime?: Date | string
     emailVerified?: Date | string | null
     image?: string | null
     password?: string | null
     isAdmin?: boolean
     isAuthenticator?: boolean
-    createtime?: Date | string
     accounts?: AccountCreateNestedManyWithoutUserInput
     createdEvents?: EventCreateNestedManyWithoutCreatedByInput
     sessions?: SessionCreateNestedManyWithoutUserInput
@@ -12549,14 +12549,14 @@ export namespace Prisma {
 
   export type UserUncheckedCreateWithoutTicketsInput = {
     id?: string
-    name?: string | null
     email: string
+    name?: string | null
+    createtime?: Date | string
     emailVerified?: Date | string | null
     image?: string | null
     password?: string | null
     isAdmin?: boolean
     isAuthenticator?: boolean
-    createtime?: Date | string
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     createdEvents?: EventUncheckedCreateNestedManyWithoutCreatedByInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
@@ -12581,7 +12581,7 @@ export namespace Prisma {
   export type EventUpdateWithoutTicketsInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    slug?: NullableStringFieldUpdateOperationsInput | string | null
+    slug?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     location?: StringFieldUpdateOperationsInput | string
@@ -12591,6 +12591,7 @@ export namespace Prisma {
     category?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     endTime?: NullableStringFieldUpdateOperationsInput | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
     requireApproval?: BoolFieldUpdateOperationsInput | boolean
     salesEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     salesStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -12598,7 +12599,6 @@ export namespace Prisma {
     startTime?: NullableStringFieldUpdateOperationsInput | string | null
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     venue?: NullableStringFieldUpdateOperationsInput | string | null
-    image?: NullableStringFieldUpdateOperationsInput | string | null
     createdBy?: UserUpdateOneWithoutCreatedEventsNestedInput
     ticketTypes?: TicketTypeUpdateManyWithoutEventNestedInput
   }
@@ -12606,7 +12606,7 @@ export namespace Prisma {
   export type EventUncheckedUpdateWithoutTicketsInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    slug?: NullableStringFieldUpdateOperationsInput | string | null
+    slug?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     location?: StringFieldUpdateOperationsInput | string
@@ -12617,6 +12617,7 @@ export namespace Prisma {
     category?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     endTime?: NullableStringFieldUpdateOperationsInput | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
     requireApproval?: BoolFieldUpdateOperationsInput | boolean
     salesEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     salesStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -12624,7 +12625,6 @@ export namespace Prisma {
     startTime?: NullableStringFieldUpdateOperationsInput | string | null
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     venue?: NullableStringFieldUpdateOperationsInput | string | null
-    image?: NullableStringFieldUpdateOperationsInput | string | null
     ticketTypes?: TicketTypeUncheckedUpdateManyWithoutEventNestedInput
   }
 
@@ -12670,14 +12670,14 @@ export namespace Prisma {
 
   export type UserUpdateWithoutTicketsInput = {
     id?: StringFieldUpdateOperationsInput | string
-    name?: NullableStringFieldUpdateOperationsInput | string | null
     email?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    createtime?: DateTimeFieldUpdateOperationsInput | Date | string
     emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     password?: NullableStringFieldUpdateOperationsInput | string | null
     isAdmin?: BoolFieldUpdateOperationsInput | boolean
     isAuthenticator?: BoolFieldUpdateOperationsInput | boolean
-    createtime?: DateTimeFieldUpdateOperationsInput | Date | string
     accounts?: AccountUpdateManyWithoutUserNestedInput
     createdEvents?: EventUpdateManyWithoutCreatedByNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
@@ -12685,14 +12685,14 @@ export namespace Prisma {
 
   export type UserUncheckedUpdateWithoutTicketsInput = {
     id?: StringFieldUpdateOperationsInput | string
-    name?: NullableStringFieldUpdateOperationsInput | string | null
     email?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    createtime?: DateTimeFieldUpdateOperationsInput | Date | string
     emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     password?: NullableStringFieldUpdateOperationsInput | string | null
     isAdmin?: BoolFieldUpdateOperationsInput | boolean
     isAuthenticator?: BoolFieldUpdateOperationsInput | boolean
-    createtime?: DateTimeFieldUpdateOperationsInput | Date | string
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     createdEvents?: EventUncheckedUpdateManyWithoutCreatedByNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
@@ -12739,7 +12739,7 @@ export namespace Prisma {
   export type EventCreateWithoutCreatedByInput = {
     id?: string
     name: string
-    slug?: string | null
+    slug: string
     description: string
     date: Date | string
     location: string
@@ -12749,6 +12749,7 @@ export namespace Prisma {
     category?: string | null
     createdAt?: Date | string
     endTime?: string | null
+    image?: string | null
     requireApproval?: boolean
     salesEnd?: Date | string | null
     salesStart?: Date | string | null
@@ -12756,7 +12757,6 @@ export namespace Prisma {
     startTime?: string | null
     updatedAt?: Date | string | null
     venue?: string | null
-    image?: string | null
     tickets?: TicketCreateNestedManyWithoutEventInput
     ticketTypes?: TicketTypeCreateNestedManyWithoutEventInput
   }
@@ -12764,7 +12764,7 @@ export namespace Prisma {
   export type EventUncheckedCreateWithoutCreatedByInput = {
     id?: string
     name: string
-    slug?: string | null
+    slug: string
     description: string
     date: Date | string
     location: string
@@ -12774,6 +12774,7 @@ export namespace Prisma {
     category?: string | null
     createdAt?: Date | string
     endTime?: string | null
+    image?: string | null
     requireApproval?: boolean
     salesEnd?: Date | string | null
     salesStart?: Date | string | null
@@ -12781,7 +12782,6 @@ export namespace Prisma {
     startTime?: string | null
     updatedAt?: Date | string | null
     venue?: string | null
-    image?: string | null
     tickets?: TicketUncheckedCreateNestedManyWithoutEventInput
     ticketTypes?: TicketTypeUncheckedCreateNestedManyWithoutEventInput
   }
@@ -12823,8 +12823,8 @@ export namespace Prisma {
     createtime?: Date | string
     used?: boolean
     accesscode: string
-    qrGenerated?: Date | string
     lastScanned?: Date | string | null
+    qrGenerated?: Date | string
     scanCount?: number
     event: EventCreateNestedOneWithoutTicketsInput
     tickettype: TicketTypeCreateNestedOneWithoutTicketsInput
@@ -12833,12 +12833,12 @@ export namespace Prisma {
   export type TicketUncheckedCreateWithoutUserInput = {
     id?: string
     eventid: string
-    tickettypeid: string
     createtime?: Date | string
     used?: boolean
     accesscode: string
-    qrGenerated?: Date | string
+    tickettypeid: string
     lastScanned?: Date | string | null
+    qrGenerated?: Date | string
     scanCount?: number
   }
 
@@ -12908,7 +12908,7 @@ export namespace Prisma {
     NOT?: EventScalarWhereInput | EventScalarWhereInput[]
     id?: StringFilter<"Event"> | string
     name?: StringFilter<"Event"> | string
-    slug?: StringNullableFilter<"Event"> | string | null
+    slug?: StringFilter<"Event"> | string
     description?: StringFilter<"Event"> | string
     date?: DateTimeFilter<"Event"> | Date | string
     location?: StringFilter<"Event"> | string
@@ -12919,6 +12919,7 @@ export namespace Prisma {
     category?: StringNullableFilter<"Event"> | string | null
     createdAt?: DateTimeFilter<"Event"> | Date | string
     endTime?: StringNullableFilter<"Event"> | string | null
+    image?: StringNullableFilter<"Event"> | string | null
     requireApproval?: BoolFilter<"Event"> | boolean
     salesEnd?: DateTimeNullableFilter<"Event"> | Date | string | null
     salesStart?: DateTimeNullableFilter<"Event"> | Date | string | null
@@ -12926,7 +12927,6 @@ export namespace Prisma {
     startTime?: StringNullableFilter<"Event"> | string | null
     updatedAt?: DateTimeNullableFilter<"Event"> | Date | string | null
     venue?: StringNullableFilter<"Event"> | string | null
-    image?: StringNullableFilter<"Event"> | string | null
   }
 
   export type SessionUpsertWithWhereUniqueWithoutUserInput = {
@@ -12973,14 +12973,14 @@ export namespace Prisma {
 
   export type UserCreateWithoutAccountsInput = {
     id?: string
-    name?: string | null
     email: string
+    name?: string | null
+    createtime?: Date | string
     emailVerified?: Date | string | null
     image?: string | null
     password?: string | null
     isAdmin?: boolean
     isAuthenticator?: boolean
-    createtime?: Date | string
     createdEvents?: EventCreateNestedManyWithoutCreatedByInput
     sessions?: SessionCreateNestedManyWithoutUserInput
     tickets?: TicketCreateNestedManyWithoutUserInput
@@ -12988,14 +12988,14 @@ export namespace Prisma {
 
   export type UserUncheckedCreateWithoutAccountsInput = {
     id?: string
-    name?: string | null
     email: string
+    name?: string | null
+    createtime?: Date | string
     emailVerified?: Date | string | null
     image?: string | null
     password?: string | null
     isAdmin?: boolean
     isAuthenticator?: boolean
-    createtime?: Date | string
     createdEvents?: EventUncheckedCreateNestedManyWithoutCreatedByInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     tickets?: TicketUncheckedCreateNestedManyWithoutUserInput
@@ -13019,14 +13019,14 @@ export namespace Prisma {
 
   export type UserUpdateWithoutAccountsInput = {
     id?: StringFieldUpdateOperationsInput | string
-    name?: NullableStringFieldUpdateOperationsInput | string | null
     email?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    createtime?: DateTimeFieldUpdateOperationsInput | Date | string
     emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     password?: NullableStringFieldUpdateOperationsInput | string | null
     isAdmin?: BoolFieldUpdateOperationsInput | boolean
     isAuthenticator?: BoolFieldUpdateOperationsInput | boolean
-    createtime?: DateTimeFieldUpdateOperationsInput | Date | string
     createdEvents?: EventUpdateManyWithoutCreatedByNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
     tickets?: TicketUpdateManyWithoutUserNestedInput
@@ -13034,14 +13034,14 @@ export namespace Prisma {
 
   export type UserUncheckedUpdateWithoutAccountsInput = {
     id?: StringFieldUpdateOperationsInput | string
-    name?: NullableStringFieldUpdateOperationsInput | string | null
     email?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    createtime?: DateTimeFieldUpdateOperationsInput | Date | string
     emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     password?: NullableStringFieldUpdateOperationsInput | string | null
     isAdmin?: BoolFieldUpdateOperationsInput | boolean
     isAuthenticator?: BoolFieldUpdateOperationsInput | boolean
-    createtime?: DateTimeFieldUpdateOperationsInput | Date | string
     createdEvents?: EventUncheckedUpdateManyWithoutCreatedByNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     tickets?: TicketUncheckedUpdateManyWithoutUserNestedInput
@@ -13049,14 +13049,14 @@ export namespace Prisma {
 
   export type UserCreateWithoutSessionsInput = {
     id?: string
-    name?: string | null
     email: string
+    name?: string | null
+    createtime?: Date | string
     emailVerified?: Date | string | null
     image?: string | null
     password?: string | null
     isAdmin?: boolean
     isAuthenticator?: boolean
-    createtime?: Date | string
     accounts?: AccountCreateNestedManyWithoutUserInput
     createdEvents?: EventCreateNestedManyWithoutCreatedByInput
     tickets?: TicketCreateNestedManyWithoutUserInput
@@ -13064,14 +13064,14 @@ export namespace Prisma {
 
   export type UserUncheckedCreateWithoutSessionsInput = {
     id?: string
-    name?: string | null
     email: string
+    name?: string | null
+    createtime?: Date | string
     emailVerified?: Date | string | null
     image?: string | null
     password?: string | null
     isAdmin?: boolean
     isAuthenticator?: boolean
-    createtime?: Date | string
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     createdEvents?: EventUncheckedCreateNestedManyWithoutCreatedByInput
     tickets?: TicketUncheckedCreateNestedManyWithoutUserInput
@@ -13095,14 +13095,14 @@ export namespace Prisma {
 
   export type UserUpdateWithoutSessionsInput = {
     id?: StringFieldUpdateOperationsInput | string
-    name?: NullableStringFieldUpdateOperationsInput | string | null
     email?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    createtime?: DateTimeFieldUpdateOperationsInput | Date | string
     emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     password?: NullableStringFieldUpdateOperationsInput | string | null
     isAdmin?: BoolFieldUpdateOperationsInput | boolean
     isAuthenticator?: BoolFieldUpdateOperationsInput | boolean
-    createtime?: DateTimeFieldUpdateOperationsInput | Date | string
     accounts?: AccountUpdateManyWithoutUserNestedInput
     createdEvents?: EventUpdateManyWithoutCreatedByNestedInput
     tickets?: TicketUpdateManyWithoutUserNestedInput
@@ -13110,14 +13110,14 @@ export namespace Prisma {
 
   export type UserUncheckedUpdateWithoutSessionsInput = {
     id?: StringFieldUpdateOperationsInput | string
-    name?: NullableStringFieldUpdateOperationsInput | string | null
     email?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    createtime?: DateTimeFieldUpdateOperationsInput | Date | string
     emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     password?: NullableStringFieldUpdateOperationsInput | string | null
     isAdmin?: BoolFieldUpdateOperationsInput | boolean
     isAuthenticator?: BoolFieldUpdateOperationsInput | boolean
-    createtime?: DateTimeFieldUpdateOperationsInput | Date | string
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     createdEvents?: EventUncheckedUpdateManyWithoutCreatedByNestedInput
     tickets?: TicketUncheckedUpdateManyWithoutUserNestedInput
@@ -13128,8 +13128,8 @@ export namespace Prisma {
     createtime?: Date | string
     used?: boolean
     accesscode: string
-    qrGenerated?: Date | string
     lastScanned?: Date | string | null
+    qrGenerated?: Date | string
     scanCount?: number
     event: EventCreateNestedOneWithoutTicketsInput
     user: UserCreateNestedOneWithoutTicketsInput
@@ -13142,8 +13142,8 @@ export namespace Prisma {
     createtime?: Date | string
     used?: boolean
     accesscode: string
-    qrGenerated?: Date | string
     lastScanned?: Date | string | null
+    qrGenerated?: Date | string
     scanCount?: number
   }
 
@@ -13160,7 +13160,7 @@ export namespace Prisma {
   export type EventCreateWithoutTicketTypesInput = {
     id?: string
     name: string
-    slug?: string | null
+    slug: string
     description: string
     date: Date | string
     location: string
@@ -13170,6 +13170,7 @@ export namespace Prisma {
     category?: string | null
     createdAt?: Date | string
     endTime?: string | null
+    image?: string | null
     requireApproval?: boolean
     salesEnd?: Date | string | null
     salesStart?: Date | string | null
@@ -13177,7 +13178,6 @@ export namespace Prisma {
     startTime?: string | null
     updatedAt?: Date | string | null
     venue?: string | null
-    image?: string | null
     createdBy?: UserCreateNestedOneWithoutCreatedEventsInput
     tickets?: TicketCreateNestedManyWithoutEventInput
   }
@@ -13185,7 +13185,7 @@ export namespace Prisma {
   export type EventUncheckedCreateWithoutTicketTypesInput = {
     id?: string
     name: string
-    slug?: string | null
+    slug: string
     description: string
     date: Date | string
     location: string
@@ -13196,6 +13196,7 @@ export namespace Prisma {
     category?: string | null
     createdAt?: Date | string
     endTime?: string | null
+    image?: string | null
     requireApproval?: boolean
     salesEnd?: Date | string | null
     salesStart?: Date | string | null
@@ -13203,7 +13204,6 @@ export namespace Prisma {
     startTime?: string | null
     updatedAt?: Date | string | null
     venue?: string | null
-    image?: string | null
     tickets?: TicketUncheckedCreateNestedManyWithoutEventInput
   }
 
@@ -13242,7 +13242,7 @@ export namespace Prisma {
   export type EventUpdateWithoutTicketTypesInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    slug?: NullableStringFieldUpdateOperationsInput | string | null
+    slug?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     location?: StringFieldUpdateOperationsInput | string
@@ -13252,6 +13252,7 @@ export namespace Prisma {
     category?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     endTime?: NullableStringFieldUpdateOperationsInput | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
     requireApproval?: BoolFieldUpdateOperationsInput | boolean
     salesEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     salesStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -13259,7 +13260,6 @@ export namespace Prisma {
     startTime?: NullableStringFieldUpdateOperationsInput | string | null
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     venue?: NullableStringFieldUpdateOperationsInput | string | null
-    image?: NullableStringFieldUpdateOperationsInput | string | null
     createdBy?: UserUpdateOneWithoutCreatedEventsNestedInput
     tickets?: TicketUpdateManyWithoutEventNestedInput
   }
@@ -13267,7 +13267,7 @@ export namespace Prisma {
   export type EventUncheckedUpdateWithoutTicketTypesInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    slug?: NullableStringFieldUpdateOperationsInput | string | null
+    slug?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     location?: StringFieldUpdateOperationsInput | string
@@ -13278,6 +13278,7 @@ export namespace Prisma {
     category?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     endTime?: NullableStringFieldUpdateOperationsInput | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
     requireApproval?: BoolFieldUpdateOperationsInput | boolean
     salesEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     salesStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -13285,19 +13286,18 @@ export namespace Prisma {
     startTime?: NullableStringFieldUpdateOperationsInput | string | null
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     venue?: NullableStringFieldUpdateOperationsInput | string | null
-    image?: NullableStringFieldUpdateOperationsInput | string | null
     tickets?: TicketUncheckedUpdateManyWithoutEventNestedInput
   }
 
   export type TicketCreateManyEventInput = {
     id?: string
-    tickettypeid: string
     userid: string
     createtime?: Date | string
     used?: boolean
     accesscode: string
-    qrGenerated?: Date | string
+    tickettypeid: string
     lastScanned?: Date | string | null
+    qrGenerated?: Date | string
     scanCount?: number
   }
 
@@ -13314,8 +13314,8 @@ export namespace Prisma {
     createtime?: DateTimeFieldUpdateOperationsInput | Date | string
     used?: BoolFieldUpdateOperationsInput | boolean
     accesscode?: StringFieldUpdateOperationsInput | string
-    qrGenerated?: DateTimeFieldUpdateOperationsInput | Date | string
     lastScanned?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    qrGenerated?: DateTimeFieldUpdateOperationsInput | Date | string
     scanCount?: IntFieldUpdateOperationsInput | number
     tickettype?: TicketTypeUpdateOneRequiredWithoutTicketsNestedInput
     user?: UserUpdateOneRequiredWithoutTicketsNestedInput
@@ -13323,25 +13323,25 @@ export namespace Prisma {
 
   export type TicketUncheckedUpdateWithoutEventInput = {
     id?: StringFieldUpdateOperationsInput | string
-    tickettypeid?: StringFieldUpdateOperationsInput | string
     userid?: StringFieldUpdateOperationsInput | string
     createtime?: DateTimeFieldUpdateOperationsInput | Date | string
     used?: BoolFieldUpdateOperationsInput | boolean
     accesscode?: StringFieldUpdateOperationsInput | string
-    qrGenerated?: DateTimeFieldUpdateOperationsInput | Date | string
+    tickettypeid?: StringFieldUpdateOperationsInput | string
     lastScanned?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    qrGenerated?: DateTimeFieldUpdateOperationsInput | Date | string
     scanCount?: IntFieldUpdateOperationsInput | number
   }
 
   export type TicketUncheckedUpdateManyWithoutEventInput = {
     id?: StringFieldUpdateOperationsInput | string
-    tickettypeid?: StringFieldUpdateOperationsInput | string
     userid?: StringFieldUpdateOperationsInput | string
     createtime?: DateTimeFieldUpdateOperationsInput | Date | string
     used?: BoolFieldUpdateOperationsInput | boolean
     accesscode?: StringFieldUpdateOperationsInput | string
-    qrGenerated?: DateTimeFieldUpdateOperationsInput | Date | string
+    tickettypeid?: StringFieldUpdateOperationsInput | string
     lastScanned?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    qrGenerated?: DateTimeFieldUpdateOperationsInput | Date | string
     scanCount?: IntFieldUpdateOperationsInput | number
   }
 
@@ -13388,7 +13388,7 @@ export namespace Prisma {
   export type EventCreateManyCreatedByInput = {
     id?: string
     name: string
-    slug?: string | null
+    slug: string
     description: string
     date: Date | string
     location: string
@@ -13398,6 +13398,7 @@ export namespace Prisma {
     category?: string | null
     createdAt?: Date | string
     endTime?: string | null
+    image?: string | null
     requireApproval?: boolean
     salesEnd?: Date | string | null
     salesStart?: Date | string | null
@@ -13405,7 +13406,6 @@ export namespace Prisma {
     startTime?: string | null
     updatedAt?: Date | string | null
     venue?: string | null
-    image?: string | null
   }
 
   export type SessionCreateManyUserInput = {
@@ -13417,12 +13417,12 @@ export namespace Prisma {
   export type TicketCreateManyUserInput = {
     id?: string
     eventid: string
-    tickettypeid: string
     createtime?: Date | string
     used?: boolean
     accesscode: string
-    qrGenerated?: Date | string
+    tickettypeid: string
     lastScanned?: Date | string | null
+    qrGenerated?: Date | string
     scanCount?: number
   }
 
@@ -13471,7 +13471,7 @@ export namespace Prisma {
   export type EventUpdateWithoutCreatedByInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    slug?: NullableStringFieldUpdateOperationsInput | string | null
+    slug?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     location?: StringFieldUpdateOperationsInput | string
@@ -13481,6 +13481,7 @@ export namespace Prisma {
     category?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     endTime?: NullableStringFieldUpdateOperationsInput | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
     requireApproval?: BoolFieldUpdateOperationsInput | boolean
     salesEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     salesStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -13488,7 +13489,6 @@ export namespace Prisma {
     startTime?: NullableStringFieldUpdateOperationsInput | string | null
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     venue?: NullableStringFieldUpdateOperationsInput | string | null
-    image?: NullableStringFieldUpdateOperationsInput | string | null
     tickets?: TicketUpdateManyWithoutEventNestedInput
     ticketTypes?: TicketTypeUpdateManyWithoutEventNestedInput
   }
@@ -13496,7 +13496,7 @@ export namespace Prisma {
   export type EventUncheckedUpdateWithoutCreatedByInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    slug?: NullableStringFieldUpdateOperationsInput | string | null
+    slug?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     location?: StringFieldUpdateOperationsInput | string
@@ -13506,6 +13506,7 @@ export namespace Prisma {
     category?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     endTime?: NullableStringFieldUpdateOperationsInput | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
     requireApproval?: BoolFieldUpdateOperationsInput | boolean
     salesEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     salesStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -13513,7 +13514,6 @@ export namespace Prisma {
     startTime?: NullableStringFieldUpdateOperationsInput | string | null
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     venue?: NullableStringFieldUpdateOperationsInput | string | null
-    image?: NullableStringFieldUpdateOperationsInput | string | null
     tickets?: TicketUncheckedUpdateManyWithoutEventNestedInput
     ticketTypes?: TicketTypeUncheckedUpdateManyWithoutEventNestedInput
   }
@@ -13521,7 +13521,7 @@ export namespace Prisma {
   export type EventUncheckedUpdateManyWithoutCreatedByInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    slug?: NullableStringFieldUpdateOperationsInput | string | null
+    slug?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     location?: StringFieldUpdateOperationsInput | string
@@ -13531,6 +13531,7 @@ export namespace Prisma {
     category?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     endTime?: NullableStringFieldUpdateOperationsInput | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
     requireApproval?: BoolFieldUpdateOperationsInput | boolean
     salesEnd?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     salesStart?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -13538,7 +13539,6 @@ export namespace Prisma {
     startTime?: NullableStringFieldUpdateOperationsInput | string | null
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     venue?: NullableStringFieldUpdateOperationsInput | string | null
-    image?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type SessionUpdateWithoutUserInput = {
@@ -13564,8 +13564,8 @@ export namespace Prisma {
     createtime?: DateTimeFieldUpdateOperationsInput | Date | string
     used?: BoolFieldUpdateOperationsInput | boolean
     accesscode?: StringFieldUpdateOperationsInput | string
-    qrGenerated?: DateTimeFieldUpdateOperationsInput | Date | string
     lastScanned?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    qrGenerated?: DateTimeFieldUpdateOperationsInput | Date | string
     scanCount?: IntFieldUpdateOperationsInput | number
     event?: EventUpdateOneRequiredWithoutTicketsNestedInput
     tickettype?: TicketTypeUpdateOneRequiredWithoutTicketsNestedInput
@@ -13574,24 +13574,24 @@ export namespace Prisma {
   export type TicketUncheckedUpdateWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
     eventid?: StringFieldUpdateOperationsInput | string
-    tickettypeid?: StringFieldUpdateOperationsInput | string
     createtime?: DateTimeFieldUpdateOperationsInput | Date | string
     used?: BoolFieldUpdateOperationsInput | boolean
     accesscode?: StringFieldUpdateOperationsInput | string
-    qrGenerated?: DateTimeFieldUpdateOperationsInput | Date | string
+    tickettypeid?: StringFieldUpdateOperationsInput | string
     lastScanned?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    qrGenerated?: DateTimeFieldUpdateOperationsInput | Date | string
     scanCount?: IntFieldUpdateOperationsInput | number
   }
 
   export type TicketUncheckedUpdateManyWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
     eventid?: StringFieldUpdateOperationsInput | string
-    tickettypeid?: StringFieldUpdateOperationsInput | string
     createtime?: DateTimeFieldUpdateOperationsInput | Date | string
     used?: BoolFieldUpdateOperationsInput | boolean
     accesscode?: StringFieldUpdateOperationsInput | string
-    qrGenerated?: DateTimeFieldUpdateOperationsInput | Date | string
+    tickettypeid?: StringFieldUpdateOperationsInput | string
     lastScanned?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    qrGenerated?: DateTimeFieldUpdateOperationsInput | Date | string
     scanCount?: IntFieldUpdateOperationsInput | number
   }
 
@@ -13602,8 +13602,8 @@ export namespace Prisma {
     createtime?: Date | string
     used?: boolean
     accesscode: string
-    qrGenerated?: Date | string
     lastScanned?: Date | string | null
+    qrGenerated?: Date | string
     scanCount?: number
   }
 
@@ -13612,8 +13612,8 @@ export namespace Prisma {
     createtime?: DateTimeFieldUpdateOperationsInput | Date | string
     used?: BoolFieldUpdateOperationsInput | boolean
     accesscode?: StringFieldUpdateOperationsInput | string
-    qrGenerated?: DateTimeFieldUpdateOperationsInput | Date | string
     lastScanned?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    qrGenerated?: DateTimeFieldUpdateOperationsInput | Date | string
     scanCount?: IntFieldUpdateOperationsInput | number
     event?: EventUpdateOneRequiredWithoutTicketsNestedInput
     user?: UserUpdateOneRequiredWithoutTicketsNestedInput
@@ -13626,8 +13626,8 @@ export namespace Prisma {
     createtime?: DateTimeFieldUpdateOperationsInput | Date | string
     used?: BoolFieldUpdateOperationsInput | boolean
     accesscode?: StringFieldUpdateOperationsInput | string
-    qrGenerated?: DateTimeFieldUpdateOperationsInput | Date | string
     lastScanned?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    qrGenerated?: DateTimeFieldUpdateOperationsInput | Date | string
     scanCount?: IntFieldUpdateOperationsInput | number
   }
 
@@ -13638,8 +13638,8 @@ export namespace Prisma {
     createtime?: DateTimeFieldUpdateOperationsInput | Date | string
     used?: BoolFieldUpdateOperationsInput | boolean
     accesscode?: StringFieldUpdateOperationsInput | string
-    qrGenerated?: DateTimeFieldUpdateOperationsInput | Date | string
     lastScanned?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    qrGenerated?: DateTimeFieldUpdateOperationsInput | Date | string
     scanCount?: IntFieldUpdateOperationsInput | number
   }
 

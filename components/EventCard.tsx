@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import type { Event } from "@prisma/client";
+import type { Event } from "@/lib/generated/prisma/client";
 import { useState } from "react";
 import { MapPin, Calendar, Trash2 } from "lucide-react";
 
@@ -39,11 +39,11 @@ export default function EventCard({ event }: EventCardProps) {
               Událost
             </span>
           </div>
-          
+
           <h2 className="text-2xl font-semibold group-hover:text-primary transition-colors mb-4 text-foreground">
             {event.name}
           </h2>
-          
+
           <div className="space-y-2">
             <div className="flex items-center space-x-2 text-foreground-muted">
               <MapPin className="w-4 h-4" />
@@ -54,14 +54,14 @@ export default function EventCard({ event }: EventCardProps) {
               <span>{new Date(event.date).toLocaleDateString("cs-CZ")}</span>
             </div>
           </div>
-          
+
           {error && (
             <div className="mt-4 p-3 bg-destructive/10 border border-destructive/20 rounded-lg">
               <div className="text-destructive text-sm">{error}</div>
             </div>
           )}
         </div>
-        
+
         <div className="mt-6 flex justify-end">
           <button
             onClick={handleDelete}

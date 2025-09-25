@@ -1,8 +1,8 @@
 import React from "react";
 import { TicketType } from "@/lib/generated/prisma/client";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Ticket, Users, Clock, MapPin } from "lucide-react";
+import { Ticket, Clock } from "lucide-react";
 
 interface TicketTypesProps {
   ticketTypes: TicketType[];
