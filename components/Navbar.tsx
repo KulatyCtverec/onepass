@@ -126,22 +126,7 @@ export default function Navbar() {
 
           {/* User menu */}
           <div className="flex items-center space-x-4">
-            {!session ? (
-              <SignIn />
-            ) : (
-              <div className="flex items-center space-x-4">
-                <Link
-                  href="/profile"
-                  className="relative h-10 w-10 rounded-full glass-effect border-border/30 hover:border-primary/50 transition-all duration-300 flex items-center justify-center"
-                >
-                  <span className="text-sm font-medium text-primary">
-                    {session?.user?.name?.charAt(0) ||
-                      session?.user?.email?.charAt(0) ||
-                      "U"}
-                  </span>
-                </Link>
-              </div>
-            )}
+            <SignIn />
           </div>
         </div>
       </div>
