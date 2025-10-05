@@ -2,7 +2,7 @@ import { auth } from "@/auth";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import AdminDashboard from "@/components/AdminDashboard";
-
+import { Role } from "@/lib/generated/prisma";
 export default async function AdminPage() {
   const session = await auth();
 
@@ -13,10 +13,10 @@ export default async function AdminPage() {
   // Zkontrolovat, zda je uživatel admin
   const user = await prisma.user.findUnique({
     where: { id: session.user.id },
-    select: { isAdmin: true },
+    select: { role: true },
   });
 
-  if (!user?.isAdmin) {
+  if (user?.role !== Role.ADMIN) {
     redirect("/");
   }
 

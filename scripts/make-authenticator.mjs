@@ -1,4 +1,5 @@
 import { PrismaClient } from "../lib/generated/prisma/index.js";
+import { Role } from "@/lib/generated/prisma";
 
 const prisma = new PrismaClient();
 
@@ -6,14 +7,13 @@ async function makeAuthenticator(email) {
   try {
     const user = await prisma.user.update({
       where: { email },
-      data: { isAuthenticator: true },
+      data: { role: Role.AUTHENTICATOR },
     });
 
     console.log(`✅ Uživatel ${user.email} je nyní ověřovatel`);
     console.log(`ID: ${user.id}`);
     console.log(`Jméno: ${user.name || "N/A"}`);
-    console.log(`Ověřovatel: ${user.isAuthenticator}`);
-    console.log(`Admin: ${user.isAdmin}`);
+    console.log(`Role: ${user.role}`);
   } catch (error) {
     if (error.code === "P2025") {
       console.error(`❌ Uživatel s emailem ${email} nebyl nalezen`);

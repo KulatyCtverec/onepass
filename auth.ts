@@ -3,6 +3,7 @@ import Google from "next-auth/providers/google";
 import Credentials from "next-auth/providers/credentials";
 import { prisma } from "./lib/prisma";
 import bcrypt from "bcryptjs";
+import { Role } from "@/lib/generated/prisma";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
@@ -43,8 +44,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           email: user.email,
           name: user.name,
           emailVerified: user.emailVerified,
-          isAdmin: user.isAdmin,
-          isAuthenticator: user.isAuthenticator,
+          role: user.role,
         } as any;
       },
     }),
@@ -61,8 +61,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       if (user) {
         token.id = user.id;
         token.emailVerified = user.emailVerified;
-        token.isAdmin = user.isAdmin;
-        token.isAuthenticator = user.isAuthenticator;
+        token.role = user.role;
       }
       return token;
     },
@@ -70,8 +69,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       if (token) {
         session.user.id = token.id as string;
         session.user.emailVerified = token.emailVerified as Date | null;
-        session.user.isAdmin = token.isAdmin as boolean;
-        session.user.isAuthenticator = token.isAuthenticator as boolean;
+        session.user.role = token.role as Role;
       }
       return session;
     },

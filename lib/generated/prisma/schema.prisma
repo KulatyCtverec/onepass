@@ -53,20 +53,26 @@ model Ticket {
   user         User       @relation(fields: [userid], references: [id])
 }
 
+enum Role {
+  USER
+  ORGANIZER
+  ADMIN
+  AUTHENTICATOR
+}
+
 model User {
-  id              String    @id @default(cuid())
-  email           String    @unique
-  name            String?
-  createtime      DateTime  @default(now())
-  emailVerified   DateTime?
-  image           String?
-  password        String?
-  isAdmin         Boolean   @default(false)
-  isAuthenticator Boolean   @default(false)
-  accounts        Account[]
-  createdEvents   Event[]   @relation("EventCreator")
-  sessions        Session[]
-  tickets         Ticket[]
+  id            String    @id @default(cuid())
+  email         String    @unique
+  name          String?
+  createtime    DateTime  @default(now())
+  emailVerified DateTime?
+  image         String?
+  password      String?
+  role          Role      @default(USER)
+  accounts      Account[]
+  createdEvents Event[]   @relation("EventCreator")
+  sessions      Session[]
+  tickets       Ticket[]
 }
 
 model Account {

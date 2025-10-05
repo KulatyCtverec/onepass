@@ -5,7 +5,7 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Event, TicketType } from "@/lib/generated/prisma/client";
+import { Event, TicketType, Role } from "@/lib/generated/prisma/client";
 import {
   Edit,
   Trash2,
@@ -34,7 +34,10 @@ export default function MyEventsPage() {
       return;
     }
 
-    if (!session.user?.isAdmin) {
+    if (
+      session.user?.role !== Role.ADMIN &&
+      session.user?.role !== Role.ORGANIZER
+    ) {
       router.push("/");
       return;
     }
@@ -95,7 +98,10 @@ export default function MyEventsPage() {
     );
   }
 
-  if (!session?.user?.isAdmin) {
+  if (
+    session?.user?.role !== Role.ADMIN &&
+    session?.user?.role !== Role.ORGANIZER
+  ) {
     return (
       <div className="container mx-auto px-6 py-12">
         <Card className="glass-effect border-border/30">

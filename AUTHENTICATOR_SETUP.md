@@ -8,7 +8,7 @@ Tato funkce umožňuje určitým uživatelům ověřovat vstupenky pomocí QR k�
 
 ### 1. Nový typ uživatele
 
-- Přidáno pole `isAuthenticator` do tabulky `users`
+- Přidáno pole `AUTHETICATOR` do tabulky `users`
 - Ověřovatelé mohou přistupovat ke stránce `/authenticator`
 
 ### 2. Komponenta QRCodeScanner
@@ -59,11 +59,6 @@ node scripts/make-authenticator.mjs user@example.com
 
 ## Technické detaily
 
-### Databáze
-
-- Nové pole `isAuthenticator: Boolean` v tabulce `users`
-- Výchozí hodnota: `false`
-
 ### API
 
 - `/api/auth/check-authenticator` - kontrola oprávnění
@@ -72,7 +67,6 @@ node scripts/make-authenticator.mjs user@example.com
 ### Bezpečnost
 
 - Middleware chrání stránku `/authenticator`
-- Pouze přihlášení uživatelé s `isAuthenticator: true`
 - Ověřování přes NextAuth session
 
 ## Poznámky

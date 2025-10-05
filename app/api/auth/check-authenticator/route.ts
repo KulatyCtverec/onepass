@@ -1,16 +1,17 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/auth";
+import { Role } from "@/lib/generated/prisma";
 
 export async function GET(request: NextRequest) {
   try {
     const session = await auth();
 
     if (!session?.user?.id) {
-      return NextResponse.json({ isAuthenticator: false }, { status: 401 });
+      return NextResponse.json({ role: session?.user?.role }, { status: 401 });
     }
 
     return NextResponse.json({
-      isAuthenticator: session.user.isAuthenticator || false,
+      role: session.user.role,
     });
   } catch (error) {
     return NextResponse.json(

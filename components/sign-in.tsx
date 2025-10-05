@@ -17,15 +17,15 @@ import {
 import LoginForm from "./login-form";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { Role } from "@/lib/generated/prisma";
 
 export default function SignIn() {
   const { data: session } = useSession();
-  const [isAdmin, setIsAdmin] = useState(false);
+  const [userRole, setUserRole] = useState<Role>(Role.USER);
 
   useEffect(() => {
-    if (session?.user) {
-      // Zkontrolovat, zda je uživatel admin
-      setIsAdmin(session.user.isAdmin || false);
+    if (session?.user?.role) {
+      setUserRole(session.user.role);
     }
   }, [session]);
 
@@ -59,7 +59,7 @@ export default function SignIn() {
               🎫 Moje lístky
             </Link>
           </DropdownMenuItem>
-          {isAdmin && (
+          {(userRole === Role.ADMIN || userRole === Role.ORGANIZER) && (
             <>
               <DropdownMenuItem asChild>
                 <Link href="/admin" className="cursor-pointer">

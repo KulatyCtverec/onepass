@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { auth } from "@/auth";
+import { Role } from "@/lib/generated/prisma";
 
 export async function middleware() {
   const session = await auth();
@@ -10,7 +11,7 @@ export async function middleware() {
     );
   }
 
-  if (!session.user.isAuthenticator) {
+  if (session.user.role !== Role.AUTHENTICATOR) {
     return NextResponse.redirect(new URL("/", process.env.NEXTAUTH_URL));
   }
 

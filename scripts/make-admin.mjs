@@ -1,4 +1,4 @@
-import { PrismaClient } from "../lib/generated/prisma/client/index.js";
+import { PrismaClient, Role } from "../lib/generated/prisma/client/index.js";
 
 const prisma = new PrismaClient();
 
@@ -6,14 +6,14 @@ async function makeAdmin(email) {
   try {
     const user = await prisma.user.update({
       where: { email },
-      data: { isAdmin: true },
+      data: { role: Role.ADMIN },
     });
 
     console.log(`✅ Uživatel ${email} je nyní admin`);
     console.log(`ID: ${user.id}`);
     console.log(`Jméno: ${user.name}`);
     console.log(`Email: ${user.email}`);
-    console.log(`Admin: ${user.isAdmin}`);
+    console.log(`Role: ${user.role}`);
   } catch (error) {
     if (error.code === "P2025") {
       console.error(`❌ Uživatel s emailem ${email} nebyl nalezen`);

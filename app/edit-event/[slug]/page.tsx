@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Loader2, ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import EditEventForm from "@/components/EditEventForm";
-import { Event, TicketType } from "@/lib/generated/prisma/client";
+import { Event, TicketType, Role } from "@/lib/generated/prisma/client";
 
 export default function EditEventPage() {
   const { data: session, status } = useSession();
@@ -30,7 +30,10 @@ export default function EditEventPage() {
       return;
     }
 
-    if (!session.user?.isAdmin) {
+    if (
+      session.user?.role !== Role.ADMIN &&
+      session.user?.role !== Role.ORGANIZER
+    ) {
       router.push("/");
       return;
     }
@@ -72,7 +75,10 @@ export default function EditEventPage() {
     );
   }
 
-  if (!session?.user?.isAdmin) {
+  if (
+    session?.user?.role !== Role.ADMIN &&
+    session?.user?.role !== Role.ORGANIZER
+  ) {
     return (
       <div className="container mx-auto px-6 py-12">
         <Card className="glass-effect border-border/30">

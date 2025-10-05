@@ -10,17 +10,16 @@ import {
   NavigationMenuList,
 } from "@/components/ui/navigation";
 import SignIn from "@/components/sign-in";
+import { Role } from "@/lib/generated/prisma";
 
 export default function Navbar() {
   const { data: session } = useSession();
-  const [isAdmin, setIsAdmin] = useState(false);
-  const [isAuthenticator, setIsAuthenticator] = useState(false);
+  const [role, setRole] = useState<Role | null>(null);
 
   useEffect(() => {
     if (session?.user) {
       // Zkontrolovat, zda je uživatel admin nebo ověřovatel
-      setIsAdmin(session.user.isAdmin || false);
-      setIsAuthenticator(session.user.isAuthenticator || false);
+      setRole(session.user.role || null);
     }
   }, [session]);
 
@@ -73,7 +72,7 @@ export default function Navbar() {
                   </NavigationMenuItem>
                 )}
 
-                {isAdmin && (
+                {role === Role.ADMIN && (
                   <>
                     <NavigationMenuItem>
                       <NavigationMenuLink asChild>
@@ -108,7 +107,7 @@ export default function Navbar() {
                   </>
                 )}
 
-                {isAuthenticator && (
+                {role === Role.AUTHENTICATOR && (
                   <NavigationMenuItem>
                     <NavigationMenuLink asChild>
                       <Link

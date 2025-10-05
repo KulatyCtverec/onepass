@@ -50,6 +50,25 @@ export type VerificationToken = $Result.DefaultSelection<Prisma.$VerificationTok
 export type TicketType = $Result.DefaultSelection<Prisma.$TicketTypePayload>
 
 /**
+ * Enums
+ */
+export namespace $Enums {
+  export const Role: {
+  USER: 'USER',
+  ORGANIZER: 'ORGANIZER',
+  ADMIN: 'ADMIN',
+  AUTHENTICATOR: 'AUTHENTICATOR'
+};
+
+export type Role = (typeof Role)[keyof typeof Role]
+
+}
+
+export type Role = $Enums.Role
+
+export const Role: typeof $Enums.Role
+
+/**
  * ##  Prisma Client ʲˢ
  *
  * Type-safe database client for TypeScript & Node.js
@@ -4124,8 +4143,7 @@ export namespace Prisma {
     emailVerified: Date | null
     image: string | null
     password: string | null
-    isAdmin: boolean | null
-    isAuthenticator: boolean | null
+    role: $Enums.Role | null
   }
 
   export type UserMaxAggregateOutputType = {
@@ -4136,8 +4154,7 @@ export namespace Prisma {
     emailVerified: Date | null
     image: string | null
     password: string | null
-    isAdmin: boolean | null
-    isAuthenticator: boolean | null
+    role: $Enums.Role | null
   }
 
   export type UserCountAggregateOutputType = {
@@ -4148,8 +4165,7 @@ export namespace Prisma {
     emailVerified: number
     image: number
     password: number
-    isAdmin: number
-    isAuthenticator: number
+    role: number
     _all: number
   }
 
@@ -4162,8 +4178,7 @@ export namespace Prisma {
     emailVerified?: true
     image?: true
     password?: true
-    isAdmin?: true
-    isAuthenticator?: true
+    role?: true
   }
 
   export type UserMaxAggregateInputType = {
@@ -4174,8 +4189,7 @@ export namespace Prisma {
     emailVerified?: true
     image?: true
     password?: true
-    isAdmin?: true
-    isAuthenticator?: true
+    role?: true
   }
 
   export type UserCountAggregateInputType = {
@@ -4186,8 +4200,7 @@ export namespace Prisma {
     emailVerified?: true
     image?: true
     password?: true
-    isAdmin?: true
-    isAuthenticator?: true
+    role?: true
     _all?: true
   }
 
@@ -4271,8 +4284,7 @@ export namespace Prisma {
     emailVerified: Date | null
     image: string | null
     password: string | null
-    isAdmin: boolean
-    isAuthenticator: boolean
+    role: $Enums.Role
     _count: UserCountAggregateOutputType | null
     _min: UserMinAggregateOutputType | null
     _max: UserMaxAggregateOutputType | null
@@ -4300,8 +4312,7 @@ export namespace Prisma {
     emailVerified?: boolean
     image?: boolean
     password?: boolean
-    isAdmin?: boolean
-    isAuthenticator?: boolean
+    role?: boolean
     accounts?: boolean | User$accountsArgs<ExtArgs>
     createdEvents?: boolean | User$createdEventsArgs<ExtArgs>
     sessions?: boolean | User$sessionsArgs<ExtArgs>
@@ -4317,8 +4328,7 @@ export namespace Prisma {
     emailVerified?: boolean
     image?: boolean
     password?: boolean
-    isAdmin?: boolean
-    isAuthenticator?: boolean
+    role?: boolean
   }, ExtArgs["result"]["user"]>
 
   export type UserSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -4329,8 +4339,7 @@ export namespace Prisma {
     emailVerified?: boolean
     image?: boolean
     password?: boolean
-    isAdmin?: boolean
-    isAuthenticator?: boolean
+    role?: boolean
   }, ExtArgs["result"]["user"]>
 
   export type UserSelectScalar = {
@@ -4341,11 +4350,10 @@ export namespace Prisma {
     emailVerified?: boolean
     image?: boolean
     password?: boolean
-    isAdmin?: boolean
-    isAuthenticator?: boolean
+    role?: boolean
   }
 
-  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "email" | "name" | "createtime" | "emailVerified" | "image" | "password" | "isAdmin" | "isAuthenticator", ExtArgs["result"]["user"]>
+  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "email" | "name" | "createtime" | "emailVerified" | "image" | "password" | "role", ExtArgs["result"]["user"]>
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     accounts?: boolean | User$accountsArgs<ExtArgs>
     createdEvents?: boolean | User$createdEventsArgs<ExtArgs>
@@ -4372,8 +4380,7 @@ export namespace Prisma {
       emailVerified: Date | null
       image: string | null
       password: string | null
-      isAdmin: boolean
-      isAuthenticator: boolean
+      role: $Enums.Role
     }, ExtArgs["result"]["user"]>
     composites: {}
   }
@@ -4808,8 +4815,7 @@ export namespace Prisma {
     readonly emailVerified: FieldRef<"User", 'DateTime'>
     readonly image: FieldRef<"User", 'String'>
     readonly password: FieldRef<"User", 'String'>
-    readonly isAdmin: FieldRef<"User", 'Boolean'>
-    readonly isAuthenticator: FieldRef<"User", 'Boolean'>
+    readonly role: FieldRef<"User", 'Role'>
   }
     
 
@@ -9717,8 +9723,7 @@ export namespace Prisma {
     emailVerified: 'emailVerified',
     image: 'image',
     password: 'password',
-    isAdmin: 'isAdmin',
-    isAuthenticator: 'isAuthenticator'
+    role: 'role'
   };
 
   export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
@@ -9848,6 +9853,20 @@ export namespace Prisma {
    * Reference to a field of type 'Int[]'
    */
   export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'Role'
+   */
+  export type EnumRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Role'>
+    
+
+
+  /**
+   * Reference to a field of type 'Role[]'
+   */
+  export type ListEnumRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Role[]'>
     
 
 
@@ -10111,8 +10130,7 @@ export namespace Prisma {
     emailVerified?: DateTimeNullableFilter<"User"> | Date | string | null
     image?: StringNullableFilter<"User"> | string | null
     password?: StringNullableFilter<"User"> | string | null
-    isAdmin?: BoolFilter<"User"> | boolean
-    isAuthenticator?: BoolFilter<"User"> | boolean
+    role?: EnumRoleFilter<"User"> | $Enums.Role
     accounts?: AccountListRelationFilter
     createdEvents?: EventListRelationFilter
     sessions?: SessionListRelationFilter
@@ -10127,8 +10145,7 @@ export namespace Prisma {
     emailVerified?: SortOrderInput | SortOrder
     image?: SortOrderInput | SortOrder
     password?: SortOrderInput | SortOrder
-    isAdmin?: SortOrder
-    isAuthenticator?: SortOrder
+    role?: SortOrder
     accounts?: AccountOrderByRelationAggregateInput
     createdEvents?: EventOrderByRelationAggregateInput
     sessions?: SessionOrderByRelationAggregateInput
@@ -10146,8 +10163,7 @@ export namespace Prisma {
     emailVerified?: DateTimeNullableFilter<"User"> | Date | string | null
     image?: StringNullableFilter<"User"> | string | null
     password?: StringNullableFilter<"User"> | string | null
-    isAdmin?: BoolFilter<"User"> | boolean
-    isAuthenticator?: BoolFilter<"User"> | boolean
+    role?: EnumRoleFilter<"User"> | $Enums.Role
     accounts?: AccountListRelationFilter
     createdEvents?: EventListRelationFilter
     sessions?: SessionListRelationFilter
@@ -10162,8 +10178,7 @@ export namespace Prisma {
     emailVerified?: SortOrderInput | SortOrder
     image?: SortOrderInput | SortOrder
     password?: SortOrderInput | SortOrder
-    isAdmin?: SortOrder
-    isAuthenticator?: SortOrder
+    role?: SortOrder
     _count?: UserCountOrderByAggregateInput
     _max?: UserMaxOrderByAggregateInput
     _min?: UserMinOrderByAggregateInput
@@ -10180,8 +10195,7 @@ export namespace Prisma {
     emailVerified?: DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
     image?: StringNullableWithAggregatesFilter<"User"> | string | null
     password?: StringNullableWithAggregatesFilter<"User"> | string | null
-    isAdmin?: BoolWithAggregatesFilter<"User"> | boolean
-    isAuthenticator?: BoolWithAggregatesFilter<"User"> | boolean
+    role?: EnumRoleWithAggregatesFilter<"User"> | $Enums.Role
   }
 
   export type AccountWhereInput = {
@@ -10706,8 +10720,7 @@ export namespace Prisma {
     emailVerified?: Date | string | null
     image?: string | null
     password?: string | null
-    isAdmin?: boolean
-    isAuthenticator?: boolean
+    role?: $Enums.Role
     accounts?: AccountCreateNestedManyWithoutUserInput
     createdEvents?: EventCreateNestedManyWithoutCreatedByInput
     sessions?: SessionCreateNestedManyWithoutUserInput
@@ -10722,8 +10735,7 @@ export namespace Prisma {
     emailVerified?: Date | string | null
     image?: string | null
     password?: string | null
-    isAdmin?: boolean
-    isAuthenticator?: boolean
+    role?: $Enums.Role
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     createdEvents?: EventUncheckedCreateNestedManyWithoutCreatedByInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
@@ -10738,8 +10750,7 @@ export namespace Prisma {
     emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     password?: NullableStringFieldUpdateOperationsInput | string | null
-    isAdmin?: BoolFieldUpdateOperationsInput | boolean
-    isAuthenticator?: BoolFieldUpdateOperationsInput | boolean
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     accounts?: AccountUpdateManyWithoutUserNestedInput
     createdEvents?: EventUpdateManyWithoutCreatedByNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
@@ -10754,8 +10765,7 @@ export namespace Prisma {
     emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     password?: NullableStringFieldUpdateOperationsInput | string | null
-    isAdmin?: BoolFieldUpdateOperationsInput | boolean
-    isAuthenticator?: BoolFieldUpdateOperationsInput | boolean
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     createdEvents?: EventUncheckedUpdateManyWithoutCreatedByNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
@@ -10770,8 +10780,7 @@ export namespace Prisma {
     emailVerified?: Date | string | null
     image?: string | null
     password?: string | null
-    isAdmin?: boolean
-    isAuthenticator?: boolean
+    role?: $Enums.Role
   }
 
   export type UserUpdateManyMutationInput = {
@@ -10782,8 +10791,7 @@ export namespace Prisma {
     emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     password?: NullableStringFieldUpdateOperationsInput | string | null
-    isAdmin?: BoolFieldUpdateOperationsInput | boolean
-    isAuthenticator?: BoolFieldUpdateOperationsInput | boolean
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
   }
 
   export type UserUncheckedUpdateManyInput = {
@@ -10794,8 +10802,7 @@ export namespace Prisma {
     emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     password?: NullableStringFieldUpdateOperationsInput | string | null
-    isAdmin?: BoolFieldUpdateOperationsInput | boolean
-    isAuthenticator?: BoolFieldUpdateOperationsInput | boolean
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
   }
 
   export type AccountCreateInput = {
@@ -11418,6 +11425,13 @@ export namespace Prisma {
     _max?: NestedIntFilter<$PrismaModel>
   }
 
+  export type EnumRoleFilter<$PrismaModel = never> = {
+    equals?: $Enums.Role | EnumRoleFieldRefInput<$PrismaModel>
+    in?: $Enums.Role[] | ListEnumRoleFieldRefInput<$PrismaModel>
+    notIn?: $Enums.Role[] | ListEnumRoleFieldRefInput<$PrismaModel>
+    not?: NestedEnumRoleFilter<$PrismaModel> | $Enums.Role
+  }
+
   export type AccountListRelationFilter = {
     every?: AccountWhereInput
     some?: AccountWhereInput
@@ -11456,8 +11470,7 @@ export namespace Prisma {
     emailVerified?: SortOrder
     image?: SortOrder
     password?: SortOrder
-    isAdmin?: SortOrder
-    isAuthenticator?: SortOrder
+    role?: SortOrder
   }
 
   export type UserMaxOrderByAggregateInput = {
@@ -11468,8 +11481,7 @@ export namespace Prisma {
     emailVerified?: SortOrder
     image?: SortOrder
     password?: SortOrder
-    isAdmin?: SortOrder
-    isAuthenticator?: SortOrder
+    role?: SortOrder
   }
 
   export type UserMinOrderByAggregateInput = {
@@ -11480,8 +11492,17 @@ export namespace Prisma {
     emailVerified?: SortOrder
     image?: SortOrder
     password?: SortOrder
-    isAdmin?: SortOrder
-    isAuthenticator?: SortOrder
+    role?: SortOrder
+  }
+
+  export type EnumRoleWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.Role | EnumRoleFieldRefInput<$PrismaModel>
+    in?: $Enums.Role[] | ListEnumRoleFieldRefInput<$PrismaModel>
+    notIn?: $Enums.Role[] | ListEnumRoleFieldRefInput<$PrismaModel>
+    not?: NestedEnumRoleWithAggregatesFilter<$PrismaModel> | $Enums.Role
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumRoleFilter<$PrismaModel>
+    _max?: NestedEnumRoleFilter<$PrismaModel>
   }
 
   export type AccountProviderProviderAccountIdCompoundUniqueInput = {
@@ -11857,6 +11878,10 @@ export namespace Prisma {
     connectOrCreate?: TicketCreateOrConnectWithoutUserInput | TicketCreateOrConnectWithoutUserInput[]
     createMany?: TicketCreateManyUserInputEnvelope
     connect?: TicketWhereUniqueInput | TicketWhereUniqueInput[]
+  }
+
+  export type EnumRoleFieldUpdateOperationsInput = {
+    set?: $Enums.Role
   }
 
   export type AccountUpdateManyWithoutUserNestedInput = {
@@ -12256,6 +12281,23 @@ export namespace Prisma {
     not?: NestedFloatFilter<$PrismaModel> | number
   }
 
+  export type NestedEnumRoleFilter<$PrismaModel = never> = {
+    equals?: $Enums.Role | EnumRoleFieldRefInput<$PrismaModel>
+    in?: $Enums.Role[] | ListEnumRoleFieldRefInput<$PrismaModel>
+    notIn?: $Enums.Role[] | ListEnumRoleFieldRefInput<$PrismaModel>
+    not?: NestedEnumRoleFilter<$PrismaModel> | $Enums.Role
+  }
+
+  export type NestedEnumRoleWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.Role | EnumRoleFieldRefInput<$PrismaModel>
+    in?: $Enums.Role[] | ListEnumRoleFieldRefInput<$PrismaModel>
+    notIn?: $Enums.Role[] | ListEnumRoleFieldRefInput<$PrismaModel>
+    not?: NestedEnumRoleWithAggregatesFilter<$PrismaModel> | $Enums.Role
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumRoleFilter<$PrismaModel>
+    _max?: NestedEnumRoleFilter<$PrismaModel>
+  }
+
   export type UserCreateWithoutCreatedEventsInput = {
     id?: string
     email: string
@@ -12264,8 +12306,7 @@ export namespace Prisma {
     emailVerified?: Date | string | null
     image?: string | null
     password?: string | null
-    isAdmin?: boolean
-    isAuthenticator?: boolean
+    role?: $Enums.Role
     accounts?: AccountCreateNestedManyWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
     tickets?: TicketCreateNestedManyWithoutUserInput
@@ -12279,8 +12320,7 @@ export namespace Prisma {
     emailVerified?: Date | string | null
     image?: string | null
     password?: string | null
-    isAdmin?: boolean
-    isAuthenticator?: boolean
+    role?: $Enums.Role
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     tickets?: TicketUncheckedCreateNestedManyWithoutUserInput
@@ -12372,8 +12412,7 @@ export namespace Prisma {
     emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     password?: NullableStringFieldUpdateOperationsInput | string | null
-    isAdmin?: BoolFieldUpdateOperationsInput | boolean
-    isAuthenticator?: BoolFieldUpdateOperationsInput | boolean
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     accounts?: AccountUpdateManyWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
     tickets?: TicketUpdateManyWithoutUserNestedInput
@@ -12387,8 +12426,7 @@ export namespace Prisma {
     emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     password?: NullableStringFieldUpdateOperationsInput | string | null
-    isAdmin?: BoolFieldUpdateOperationsInput | boolean
-    isAuthenticator?: BoolFieldUpdateOperationsInput | boolean
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     tickets?: TicketUncheckedUpdateManyWithoutUserNestedInput
@@ -12540,8 +12578,7 @@ export namespace Prisma {
     emailVerified?: Date | string | null
     image?: string | null
     password?: string | null
-    isAdmin?: boolean
-    isAuthenticator?: boolean
+    role?: $Enums.Role
     accounts?: AccountCreateNestedManyWithoutUserInput
     createdEvents?: EventCreateNestedManyWithoutCreatedByInput
     sessions?: SessionCreateNestedManyWithoutUserInput
@@ -12555,8 +12592,7 @@ export namespace Prisma {
     emailVerified?: Date | string | null
     image?: string | null
     password?: string | null
-    isAdmin?: boolean
-    isAuthenticator?: boolean
+    role?: $Enums.Role
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     createdEvents?: EventUncheckedCreateNestedManyWithoutCreatedByInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
@@ -12676,8 +12712,7 @@ export namespace Prisma {
     emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     password?: NullableStringFieldUpdateOperationsInput | string | null
-    isAdmin?: BoolFieldUpdateOperationsInput | boolean
-    isAuthenticator?: BoolFieldUpdateOperationsInput | boolean
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     accounts?: AccountUpdateManyWithoutUserNestedInput
     createdEvents?: EventUpdateManyWithoutCreatedByNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
@@ -12691,8 +12726,7 @@ export namespace Prisma {
     emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     password?: NullableStringFieldUpdateOperationsInput | string | null
-    isAdmin?: BoolFieldUpdateOperationsInput | boolean
-    isAuthenticator?: BoolFieldUpdateOperationsInput | boolean
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     createdEvents?: EventUncheckedUpdateManyWithoutCreatedByNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
@@ -12979,8 +13013,7 @@ export namespace Prisma {
     emailVerified?: Date | string | null
     image?: string | null
     password?: string | null
-    isAdmin?: boolean
-    isAuthenticator?: boolean
+    role?: $Enums.Role
     createdEvents?: EventCreateNestedManyWithoutCreatedByInput
     sessions?: SessionCreateNestedManyWithoutUserInput
     tickets?: TicketCreateNestedManyWithoutUserInput
@@ -12994,8 +13027,7 @@ export namespace Prisma {
     emailVerified?: Date | string | null
     image?: string | null
     password?: string | null
-    isAdmin?: boolean
-    isAuthenticator?: boolean
+    role?: $Enums.Role
     createdEvents?: EventUncheckedCreateNestedManyWithoutCreatedByInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     tickets?: TicketUncheckedCreateNestedManyWithoutUserInput
@@ -13025,8 +13057,7 @@ export namespace Prisma {
     emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     password?: NullableStringFieldUpdateOperationsInput | string | null
-    isAdmin?: BoolFieldUpdateOperationsInput | boolean
-    isAuthenticator?: BoolFieldUpdateOperationsInput | boolean
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     createdEvents?: EventUpdateManyWithoutCreatedByNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
     tickets?: TicketUpdateManyWithoutUserNestedInput
@@ -13040,8 +13071,7 @@ export namespace Prisma {
     emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     password?: NullableStringFieldUpdateOperationsInput | string | null
-    isAdmin?: BoolFieldUpdateOperationsInput | boolean
-    isAuthenticator?: BoolFieldUpdateOperationsInput | boolean
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     createdEvents?: EventUncheckedUpdateManyWithoutCreatedByNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     tickets?: TicketUncheckedUpdateManyWithoutUserNestedInput
@@ -13055,8 +13085,7 @@ export namespace Prisma {
     emailVerified?: Date | string | null
     image?: string | null
     password?: string | null
-    isAdmin?: boolean
-    isAuthenticator?: boolean
+    role?: $Enums.Role
     accounts?: AccountCreateNestedManyWithoutUserInput
     createdEvents?: EventCreateNestedManyWithoutCreatedByInput
     tickets?: TicketCreateNestedManyWithoutUserInput
@@ -13070,8 +13099,7 @@ export namespace Prisma {
     emailVerified?: Date | string | null
     image?: string | null
     password?: string | null
-    isAdmin?: boolean
-    isAuthenticator?: boolean
+    role?: $Enums.Role
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     createdEvents?: EventUncheckedCreateNestedManyWithoutCreatedByInput
     tickets?: TicketUncheckedCreateNestedManyWithoutUserInput
@@ -13101,8 +13129,7 @@ export namespace Prisma {
     emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     password?: NullableStringFieldUpdateOperationsInput | string | null
-    isAdmin?: BoolFieldUpdateOperationsInput | boolean
-    isAuthenticator?: BoolFieldUpdateOperationsInput | boolean
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     accounts?: AccountUpdateManyWithoutUserNestedInput
     createdEvents?: EventUpdateManyWithoutCreatedByNestedInput
     tickets?: TicketUpdateManyWithoutUserNestedInput
@@ -13116,8 +13143,7 @@ export namespace Prisma {
     emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
     password?: NullableStringFieldUpdateOperationsInput | string | null
-    isAdmin?: BoolFieldUpdateOperationsInput | boolean
-    isAuthenticator?: BoolFieldUpdateOperationsInput | boolean
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     createdEvents?: EventUncheckedUpdateManyWithoutCreatedByNestedInput
     tickets?: TicketUncheckedUpdateManyWithoutUserNestedInput

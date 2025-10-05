@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/auth";
 import { PrismaClient } from "@/lib/generated/prisma/client";
+import { Role } from "@/lib/generated/prisma";
 import { writeFile, mkdir } from "fs/promises";
 import { join } from "path";
 import { generateEventSlug, checkEventNameExists } from "@/lib/utils";
@@ -52,7 +53,10 @@ export async function PUT(
       );
     }
 
-    if (!session.user.isAdmin) {
+    if (
+      session.user.role !== Role.ADMIN &&
+      session.user.role !== Role.ORGANIZER
+    ) {
       return NextResponse.json(
         { error: "Nedostatečná oprávnění" },
         { status: 403 }
@@ -224,7 +228,10 @@ export async function DELETE(
       );
     }
 
-    if (!session.user.isAdmin) {
+    if (
+      session.user.role !== Role.ADMIN &&
+      session.user.role !== Role.ORGANIZER
+    ) {
       return NextResponse.json(
         { error: "Nedostatečná oprávnění" },
         { status: 403 }

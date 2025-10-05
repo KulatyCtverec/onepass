@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
+import { Role } from "@/lib/generated/prisma";
 
 export async function PUT(
   request: NextRequest,
@@ -13,13 +14,13 @@ export async function PUT(
       return NextResponse.json({ error: "Nepřihlášen" }, { status: 401 });
     }
 
-    // Zkontrolovat, zda je uživatel admin
+    // Zkontrolovat, zda má uživatel admin nebo organizer roli
     const user = await prisma.user.findUnique({
       where: { id: session.user.id },
-      select: { isAdmin: true },
+      select: { role: true },
     });
 
-    if (!user?.isAdmin) {
+    if (user?.role !== Role.ADMIN && user?.role !== Role.ORGANIZER) {
       return NextResponse.json(
         { error: "Nedostatečná oprávnění" },
         { status: 403 }
@@ -87,13 +88,13 @@ export async function DELETE(
       return NextResponse.json({ error: "Nepřihlášen" }, { status: 401 });
     }
 
-    // Zkontrolovat, zda je uživatel admin
+    // Zkontrolovat, zda má uživatel admin nebo organizer roli
     const user = await prisma.user.findUnique({
       where: { id: session.user.id },
-      select: { isAdmin: true },
+      select: { role: true },
     });
 
-    if (!user?.isAdmin) {
+    if (user?.role !== Role.ADMIN && user?.role !== Role.ORGANIZER) {
       return NextResponse.json(
         { error: "Nedostatečná oprávnění" },
         { status: 403 }
