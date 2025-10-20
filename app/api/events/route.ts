@@ -25,6 +25,7 @@ export async function POST(request: Request) {
     const allowResale = formData.get("allowResale") === "true";
     const requireApproval = formData.get("requireApproval") === "true";
     const sendEmails = formData.get("sendEmails") === "true";
+    const image = formData.get("image") as string;
 
     // Extract ticket types
     const ticketTypesJson = formData.get("ticketTypes") as string;
@@ -60,55 +61,6 @@ export async function POST(request: Request) {
     // Generate unique slug
     const slug = generateEventSlug(name, eventDate);
 
-    // TODO: PŘED NASÁZENÍM DO PRODUKCE - migrovat na Vercel Blob Storage
-    // Aktuálně ukládáme lokálně do public/uploads/ pro development
-    // V produkci použít: https://vercel.com/docs/storage/vercel-blob
-
-    // Handle image - save to local filesystem (development only)
-    const imageFile = formData.get("image") as File | null;
-    let imagePath = null;
-
-    if (imageFile) {
-      try {
-        // Check file size (limit to 5MB)
-        const maxSize = 5 * 1024 * 1024;
-        if (imageFile.size > maxSize) {
-          console.warn(
-            `[API] Image too large: ${imageFile.size} bytes, max: ${maxSize} bytes`
-          );
-          return NextResponse.json(
-            { message: "Obrázek je příliš velký. Maximální velikost je 5MB." },
-            { status: 400 }
-          );
-        }
-
-        // Create uploads directory if it doesn't exist
-        const uploadsDir = join(process.cwd(), "public", "uploads");
-        await mkdir(uploadsDir, { recursive: true });
-
-        // Generate unique filename
-        const timestamp = Date.now();
-        const fileExtension = imageFile.name.split(".").pop();
-        const filename = `event-${timestamp}.${fileExtension}`;
-        const filePath = join(uploadsDir, filename);
-
-        // Save file to filesystem
-        const bytes = await imageFile.arrayBuffer();
-        const buffer = Buffer.from(bytes);
-        await writeFile(filePath, buffer);
-
-        // Store relative path in database (not binary data)
-        imagePath = `/uploads/${filename}`;
-        console.log(`[API] Image saved: ${filePath} -> ${imagePath}`);
-      } catch (imageError) {
-        console.error("[API] Error saving image:", imageError);
-        return NextResponse.json(
-          { message: "Chyba při ukládání obrázku." },
-          { status: 500 }
-        );
-      }
-    }
-
     // Create event with slug and image path
     const event = await prisma.event.create({
       data: {
@@ -117,7 +69,7 @@ export async function POST(request: Request) {
         description,
         date: eventDate,
         location: `${venue}, ${address}`, // Combine venue and address for backward compatibility
-        image: imagePath, // Store file path, not binary data
+        image: image, // Store file path, not binary data
         category,
         venue,
         capacity: parseInt(capacity),

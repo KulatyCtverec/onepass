@@ -53,7 +53,16 @@ export type TicketType = $Result.DefaultSelection<Prisma.$TicketTypePayload>
  * Enums
  */
 export namespace $Enums {
-  export const Role: {
+  export const EventStatus: {
+  DRAFT: 'DRAFT',
+  PUBLISHED: 'PUBLISHED',
+  CANCELLED: 'CANCELLED'
+};
+
+export type EventStatus = (typeof EventStatus)[keyof typeof EventStatus]
+
+
+export const Role: {
   USER: 'USER',
   ORGANIZER: 'ORGANIZER',
   ADMIN: 'ADMIN',
@@ -63,6 +72,10 @@ export namespace $Enums {
 export type Role = (typeof Role)[keyof typeof Role]
 
 }
+
+export type EventStatus = $Enums.EventStatus
+
+export const EventStatus: typeof $Enums.EventStatus
 
 export type Role = $Enums.Role
 
@@ -1617,6 +1630,7 @@ export namespace Prisma {
     startTime: string | null
     updatedAt: Date | null
     venue: string | null
+    status: $Enums.EventStatus | null
   }
 
   export type EventMaxAggregateOutputType = {
@@ -1641,6 +1655,7 @@ export namespace Prisma {
     startTime: string | null
     updatedAt: Date | null
     venue: string | null
+    status: $Enums.EventStatus | null
   }
 
   export type EventCountAggregateOutputType = {
@@ -1665,6 +1680,7 @@ export namespace Prisma {
     startTime: number
     updatedAt: number
     venue: number
+    status: number
     _all: number
   }
 
@@ -1699,6 +1715,7 @@ export namespace Prisma {
     startTime?: true
     updatedAt?: true
     venue?: true
+    status?: true
   }
 
   export type EventMaxAggregateInputType = {
@@ -1723,6 +1740,7 @@ export namespace Prisma {
     startTime?: true
     updatedAt?: true
     venue?: true
+    status?: true
   }
 
   export type EventCountAggregateInputType = {
@@ -1747,6 +1765,7 @@ export namespace Prisma {
     startTime?: true
     updatedAt?: true
     venue?: true
+    status?: true
     _all?: true
   }
 
@@ -1858,6 +1877,7 @@ export namespace Prisma {
     startTime: string | null
     updatedAt: Date | null
     venue: string | null
+    status: $Enums.EventStatus
     _count: EventCountAggregateOutputType | null
     _avg: EventAvgAggregateOutputType | null
     _sum: EventSumAggregateOutputType | null
@@ -1901,6 +1921,7 @@ export namespace Prisma {
     startTime?: boolean
     updatedAt?: boolean
     venue?: boolean
+    status?: boolean
     createdBy?: boolean | Event$createdByArgs<ExtArgs>
     tickets?: boolean | Event$ticketsArgs<ExtArgs>
     ticketTypes?: boolean | Event$ticketTypesArgs<ExtArgs>
@@ -1929,6 +1950,7 @@ export namespace Prisma {
     startTime?: boolean
     updatedAt?: boolean
     venue?: boolean
+    status?: boolean
     createdBy?: boolean | Event$createdByArgs<ExtArgs>
   }, ExtArgs["result"]["event"]>
 
@@ -1954,6 +1976,7 @@ export namespace Prisma {
     startTime?: boolean
     updatedAt?: boolean
     venue?: boolean
+    status?: boolean
     createdBy?: boolean | Event$createdByArgs<ExtArgs>
   }, ExtArgs["result"]["event"]>
 
@@ -1979,9 +2002,10 @@ export namespace Prisma {
     startTime?: boolean
     updatedAt?: boolean
     venue?: boolean
+    status?: boolean
   }
 
-  export type EventOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "slug" | "description" | "date" | "location" | "createdById" | "address" | "allowResale" | "capacity" | "category" | "createdAt" | "endTime" | "image" | "requireApproval" | "salesEnd" | "salesStart" | "sendEmails" | "startTime" | "updatedAt" | "venue", ExtArgs["result"]["event"]>
+  export type EventOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "slug" | "description" | "date" | "location" | "createdById" | "address" | "allowResale" | "capacity" | "category" | "createdAt" | "endTime" | "image" | "requireApproval" | "salesEnd" | "salesStart" | "sendEmails" | "startTime" | "updatedAt" | "venue" | "status", ExtArgs["result"]["event"]>
   export type EventInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     createdBy?: boolean | Event$createdByArgs<ExtArgs>
     tickets?: boolean | Event$ticketsArgs<ExtArgs>
@@ -2024,6 +2048,7 @@ export namespace Prisma {
       startTime: string | null
       updatedAt: Date | null
       venue: string | null
+      status: $Enums.EventStatus
     }, ExtArgs["result"]["event"]>
     composites: {}
   }
@@ -2471,6 +2496,7 @@ export namespace Prisma {
     readonly startTime: FieldRef<"Event", 'String'>
     readonly updatedAt: FieldRef<"Event", 'DateTime'>
     readonly venue: FieldRef<"Event", 'String'>
+    readonly status: FieldRef<"Event", 'EventStatus'>
   }
     
 
@@ -9693,7 +9719,8 @@ export namespace Prisma {
     sendEmails: 'sendEmails',
     startTime: 'startTime',
     updatedAt: 'updatedAt',
-    venue: 'venue'
+    venue: 'venue',
+    status: 'status'
   };
 
   export type EventScalarFieldEnum = (typeof EventScalarFieldEnum)[keyof typeof EventScalarFieldEnum]
@@ -9857,6 +9884,20 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'EventStatus'
+   */
+  export type EnumEventStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'EventStatus'>
+    
+
+
+  /**
+   * Reference to a field of type 'EventStatus[]'
+   */
+  export type ListEnumEventStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'EventStatus[]'>
+    
+
+
+  /**
    * Reference to a field of type 'Role'
    */
   export type EnumRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Role'>
@@ -9912,6 +9953,7 @@ export namespace Prisma {
     startTime?: StringNullableFilter<"Event"> | string | null
     updatedAt?: DateTimeNullableFilter<"Event"> | Date | string | null
     venue?: StringNullableFilter<"Event"> | string | null
+    status?: EnumEventStatusFilter<"Event"> | $Enums.EventStatus
     createdBy?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
     tickets?: TicketListRelationFilter
     ticketTypes?: TicketTypeListRelationFilter
@@ -9939,6 +9981,7 @@ export namespace Prisma {
     startTime?: SortOrderInput | SortOrder
     updatedAt?: SortOrderInput | SortOrder
     venue?: SortOrderInput | SortOrder
+    status?: SortOrder
     createdBy?: UserOrderByWithRelationInput
     tickets?: TicketOrderByRelationAggregateInput
     ticketTypes?: TicketTypeOrderByRelationAggregateInput
@@ -9970,6 +10013,7 @@ export namespace Prisma {
     startTime?: StringNullableFilter<"Event"> | string | null
     updatedAt?: DateTimeNullableFilter<"Event"> | Date | string | null
     venue?: StringNullableFilter<"Event"> | string | null
+    status?: EnumEventStatusFilter<"Event"> | $Enums.EventStatus
     createdBy?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
     tickets?: TicketListRelationFilter
     ticketTypes?: TicketTypeListRelationFilter
@@ -9997,6 +10041,7 @@ export namespace Prisma {
     startTime?: SortOrderInput | SortOrder
     updatedAt?: SortOrderInput | SortOrder
     venue?: SortOrderInput | SortOrder
+    status?: SortOrder
     _count?: EventCountOrderByAggregateInput
     _avg?: EventAvgOrderByAggregateInput
     _max?: EventMaxOrderByAggregateInput
@@ -10029,6 +10074,7 @@ export namespace Prisma {
     startTime?: StringNullableWithAggregatesFilter<"Event"> | string | null
     updatedAt?: DateTimeNullableWithAggregatesFilter<"Event"> | Date | string | null
     venue?: StringNullableWithAggregatesFilter<"Event"> | string | null
+    status?: EnumEventStatusWithAggregatesFilter<"Event"> | $Enums.EventStatus
   }
 
   export type TicketWhereInput = {
@@ -10470,6 +10516,7 @@ export namespace Prisma {
     startTime?: string | null
     updatedAt?: Date | string | null
     venue?: string | null
+    status?: $Enums.EventStatus
     createdBy?: UserCreateNestedOneWithoutCreatedEventsInput
     tickets?: TicketCreateNestedManyWithoutEventInput
     ticketTypes?: TicketTypeCreateNestedManyWithoutEventInput
@@ -10497,6 +10544,7 @@ export namespace Prisma {
     startTime?: string | null
     updatedAt?: Date | string | null
     venue?: string | null
+    status?: $Enums.EventStatus
     tickets?: TicketUncheckedCreateNestedManyWithoutEventInput
     ticketTypes?: TicketTypeUncheckedCreateNestedManyWithoutEventInput
   }
@@ -10522,6 +10570,7 @@ export namespace Prisma {
     startTime?: NullableStringFieldUpdateOperationsInput | string | null
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     venue?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumEventStatusFieldUpdateOperationsInput | $Enums.EventStatus
     createdBy?: UserUpdateOneWithoutCreatedEventsNestedInput
     tickets?: TicketUpdateManyWithoutEventNestedInput
     ticketTypes?: TicketTypeUpdateManyWithoutEventNestedInput
@@ -10549,6 +10598,7 @@ export namespace Prisma {
     startTime?: NullableStringFieldUpdateOperationsInput | string | null
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     venue?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumEventStatusFieldUpdateOperationsInput | $Enums.EventStatus
     tickets?: TicketUncheckedUpdateManyWithoutEventNestedInput
     ticketTypes?: TicketTypeUncheckedUpdateManyWithoutEventNestedInput
   }
@@ -10575,6 +10625,7 @@ export namespace Prisma {
     startTime?: string | null
     updatedAt?: Date | string | null
     venue?: string | null
+    status?: $Enums.EventStatus
   }
 
   export type EventUpdateManyMutationInput = {
@@ -10598,6 +10649,7 @@ export namespace Prisma {
     startTime?: NullableStringFieldUpdateOperationsInput | string | null
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     venue?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumEventStatusFieldUpdateOperationsInput | $Enums.EventStatus
   }
 
   export type EventUncheckedUpdateManyInput = {
@@ -10622,6 +10674,7 @@ export namespace Prisma {
     startTime?: NullableStringFieldUpdateOperationsInput | string | null
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     venue?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumEventStatusFieldUpdateOperationsInput | $Enums.EventStatus
   }
 
   export type TicketCreateInput = {
@@ -11133,6 +11186,13 @@ export namespace Prisma {
     not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
   }
 
+  export type EnumEventStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.EventStatus | EnumEventStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.EventStatus[] | ListEnumEventStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.EventStatus[] | ListEnumEventStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumEventStatusFilter<$PrismaModel> | $Enums.EventStatus
+  }
+
   export type UserNullableScalarRelationFilter = {
     is?: UserWhereInput | null
     isNot?: UserWhereInput | null
@@ -11190,6 +11250,7 @@ export namespace Prisma {
     startTime?: SortOrder
     updatedAt?: SortOrder
     venue?: SortOrder
+    status?: SortOrder
   }
 
   export type EventAvgOrderByAggregateInput = {
@@ -11218,6 +11279,7 @@ export namespace Prisma {
     startTime?: SortOrder
     updatedAt?: SortOrder
     venue?: SortOrder
+    status?: SortOrder
   }
 
   export type EventMinOrderByAggregateInput = {
@@ -11242,6 +11304,7 @@ export namespace Prisma {
     startTime?: SortOrder
     updatedAt?: SortOrder
     venue?: SortOrder
+    status?: SortOrder
   }
 
   export type EventSumOrderByAggregateInput = {
@@ -11334,6 +11397,16 @@ export namespace Prisma {
     _count?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedDateTimeNullableFilter<$PrismaModel>
     _max?: NestedDateTimeNullableFilter<$PrismaModel>
+  }
+
+  export type EnumEventStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.EventStatus | EnumEventStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.EventStatus[] | ListEnumEventStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.EventStatus[] | ListEnumEventStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumEventStatusWithAggregatesFilter<$PrismaModel> | $Enums.EventStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumEventStatusFilter<$PrismaModel>
+    _max?: NestedEnumEventStatusFilter<$PrismaModel>
   }
 
   export type IntFilter<$PrismaModel = never> = {
@@ -11706,6 +11779,10 @@ export namespace Prisma {
 
   export type NullableDateTimeFieldUpdateOperationsInput = {
     set?: Date | string | null
+  }
+
+  export type EnumEventStatusFieldUpdateOperationsInput = {
+    set?: $Enums.EventStatus
   }
 
   export type UserUpdateOneWithoutCreatedEventsNestedInput = {
@@ -12146,6 +12223,13 @@ export namespace Prisma {
     not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
   }
 
+  export type NestedEnumEventStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.EventStatus | EnumEventStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.EventStatus[] | ListEnumEventStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.EventStatus[] | ListEnumEventStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumEventStatusFilter<$PrismaModel> | $Enums.EventStatus
+  }
+
   export type NestedStringWithAggregatesFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -12252,6 +12336,16 @@ export namespace Prisma {
     _count?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedDateTimeNullableFilter<$PrismaModel>
     _max?: NestedDateTimeNullableFilter<$PrismaModel>
+  }
+
+  export type NestedEnumEventStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.EventStatus | EnumEventStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.EventStatus[] | ListEnumEventStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.EventStatus[] | ListEnumEventStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumEventStatusWithAggregatesFilter<$PrismaModel> | $Enums.EventStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumEventStatusFilter<$PrismaModel>
+    _max?: NestedEnumEventStatusFilter<$PrismaModel>
   }
 
   export type NestedIntWithAggregatesFilter<$PrismaModel = never> = {
@@ -12513,6 +12607,7 @@ export namespace Prisma {
     startTime?: string | null
     updatedAt?: Date | string | null
     venue?: string | null
+    status?: $Enums.EventStatus
     createdBy?: UserCreateNestedOneWithoutCreatedEventsInput
     ticketTypes?: TicketTypeCreateNestedManyWithoutEventInput
   }
@@ -12539,6 +12634,7 @@ export namespace Prisma {
     startTime?: string | null
     updatedAt?: Date | string | null
     venue?: string | null
+    status?: $Enums.EventStatus
     ticketTypes?: TicketTypeUncheckedCreateNestedManyWithoutEventInput
   }
 
@@ -12635,6 +12731,7 @@ export namespace Prisma {
     startTime?: NullableStringFieldUpdateOperationsInput | string | null
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     venue?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumEventStatusFieldUpdateOperationsInput | $Enums.EventStatus
     createdBy?: UserUpdateOneWithoutCreatedEventsNestedInput
     ticketTypes?: TicketTypeUpdateManyWithoutEventNestedInput
   }
@@ -12661,6 +12758,7 @@ export namespace Prisma {
     startTime?: NullableStringFieldUpdateOperationsInput | string | null
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     venue?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumEventStatusFieldUpdateOperationsInput | $Enums.EventStatus
     ticketTypes?: TicketTypeUncheckedUpdateManyWithoutEventNestedInput
   }
 
@@ -12791,6 +12889,7 @@ export namespace Prisma {
     startTime?: string | null
     updatedAt?: Date | string | null
     venue?: string | null
+    status?: $Enums.EventStatus
     tickets?: TicketCreateNestedManyWithoutEventInput
     ticketTypes?: TicketTypeCreateNestedManyWithoutEventInput
   }
@@ -12816,6 +12915,7 @@ export namespace Prisma {
     startTime?: string | null
     updatedAt?: Date | string | null
     venue?: string | null
+    status?: $Enums.EventStatus
     tickets?: TicketUncheckedCreateNestedManyWithoutEventInput
     ticketTypes?: TicketTypeUncheckedCreateNestedManyWithoutEventInput
   }
@@ -12961,6 +13061,7 @@ export namespace Prisma {
     startTime?: StringNullableFilter<"Event"> | string | null
     updatedAt?: DateTimeNullableFilter<"Event"> | Date | string | null
     venue?: StringNullableFilter<"Event"> | string | null
+    status?: EnumEventStatusFilter<"Event"> | $Enums.EventStatus
   }
 
   export type SessionUpsertWithWhereUniqueWithoutUserInput = {
@@ -13204,6 +13305,7 @@ export namespace Prisma {
     startTime?: string | null
     updatedAt?: Date | string | null
     venue?: string | null
+    status?: $Enums.EventStatus
     createdBy?: UserCreateNestedOneWithoutCreatedEventsInput
     tickets?: TicketCreateNestedManyWithoutEventInput
   }
@@ -13230,6 +13332,7 @@ export namespace Prisma {
     startTime?: string | null
     updatedAt?: Date | string | null
     venue?: string | null
+    status?: $Enums.EventStatus
     tickets?: TicketUncheckedCreateNestedManyWithoutEventInput
   }
 
@@ -13286,6 +13389,7 @@ export namespace Prisma {
     startTime?: NullableStringFieldUpdateOperationsInput | string | null
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     venue?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumEventStatusFieldUpdateOperationsInput | $Enums.EventStatus
     createdBy?: UserUpdateOneWithoutCreatedEventsNestedInput
     tickets?: TicketUpdateManyWithoutEventNestedInput
   }
@@ -13312,6 +13416,7 @@ export namespace Prisma {
     startTime?: NullableStringFieldUpdateOperationsInput | string | null
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     venue?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumEventStatusFieldUpdateOperationsInput | $Enums.EventStatus
     tickets?: TicketUncheckedUpdateManyWithoutEventNestedInput
   }
 
@@ -13432,6 +13537,7 @@ export namespace Prisma {
     startTime?: string | null
     updatedAt?: Date | string | null
     venue?: string | null
+    status?: $Enums.EventStatus
   }
 
   export type SessionCreateManyUserInput = {
@@ -13515,6 +13621,7 @@ export namespace Prisma {
     startTime?: NullableStringFieldUpdateOperationsInput | string | null
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     venue?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumEventStatusFieldUpdateOperationsInput | $Enums.EventStatus
     tickets?: TicketUpdateManyWithoutEventNestedInput
     ticketTypes?: TicketTypeUpdateManyWithoutEventNestedInput
   }
@@ -13540,6 +13647,7 @@ export namespace Prisma {
     startTime?: NullableStringFieldUpdateOperationsInput | string | null
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     venue?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumEventStatusFieldUpdateOperationsInput | $Enums.EventStatus
     tickets?: TicketUncheckedUpdateManyWithoutEventNestedInput
     ticketTypes?: TicketTypeUncheckedUpdateManyWithoutEventNestedInput
   }
@@ -13565,6 +13673,7 @@ export namespace Prisma {
     startTime?: NullableStringFieldUpdateOperationsInput | string | null
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     venue?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumEventStatusFieldUpdateOperationsInput | $Enums.EventStatus
   }
 
   export type SessionUpdateWithoutUserInput = {

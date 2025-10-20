@@ -8,6 +8,12 @@ datasource db {
   url      = env("POSTGRES_URL")
 }
 
+enum EventStatus {
+  DRAFT
+  PUBLISHED
+  CANCELLED
+}
+
 model Event {
   id              String       @id @default(cuid())
   name            String
@@ -33,6 +39,7 @@ model Event {
   createdBy       User?        @relation("EventCreator", fields: [createdById], references: [id])
   tickets         Ticket[]
   ticketTypes     TicketType[]
+  status          EventStatus  @default(DRAFT)
 
   @@unique([name, date]) // validace: stejný název eventu nemůže být v ten samý den
 }
@@ -117,5 +124,5 @@ model TicketType {
   total   Int
   eventid String
   tickets Ticket[]
-  event   Event    @relation(fields: [eventid], references: [id])
+  event   Event    @relation(fields: [eventid], references: [id], onDelete: Cascade)
 }

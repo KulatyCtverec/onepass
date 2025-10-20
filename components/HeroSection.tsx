@@ -2,10 +2,12 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import { Role } from "@/lib/generated/prisma/client";
+import { useSession } from "next-auth/react";
 
 export default function HeroSection() {
   const [activeSection, setActiveSection] = useState<string>("");
-
+  const { data: session } = useSession();
   useEffect(() => {
     const handleScroll = () => {
       const eventsSection = document.getElementById("events");
@@ -32,6 +34,7 @@ export default function HeroSection() {
       });
     }
   };
+  console.log("session?.user?.role", session);
 
   return (
     <section className="relative py-24 px-6 overflow-hidden">
@@ -84,12 +87,15 @@ export default function HeroSection() {
                 ? "✓ Procházet události"
                 : "Procházet události"}
             </button>
-            <Link
-              href="/create-event"
-              className="px-8 py-4 rounded-xl text-lg font-medium bg-gradient-primary text-white hover:scale-105 transition-all duration-300 neon-glow"
-            >
-              Vytvořit událost
-            </Link>
+            {(session?.user?.role === Role.ADMIN ||
+              session?.user?.role === Role.ORGANIZER) && (
+              <Link
+                href="/create-event"
+                className="px-8 py-4 rounded-xl text-lg font-medium bg-gradient-primary text-white hover:scale-105 transition-all duration-300 neon-glow"
+              >
+                Vytvořit událost
+              </Link>
+            )}
           </div>
         </div>
       </div>

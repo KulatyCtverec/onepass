@@ -1,23 +1,41 @@
 "use client";
 import { useState, useRef } from "react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 import {
   Upload,
   Plus,
   Trash2,
-  Calendar,
+  Calendar as CalendarIcon,
   MapPin,
-  Clock,
   Users,
   Star,
   Zap,
   X,
+  Info,
 } from "lucide-react";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
+import { Calendar } from "@/components/ui/calendar";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { ChevronDownIcon } from "lucide-react";
+import { PutBlobResult } from "@vercel/blob";
 
 interface TicketType {
   id: number;
@@ -48,10 +66,10 @@ export default function CreateEventForm() {
   const [ticketTypes, setTicketTypes] = useState<TicketType[]>([
     { id: 1, name: "", price: "", quantity: "" },
   ]);
-
-  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [blob, setBlob] = useState<PutBlobResult | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [datePickerOpen, setDatePickerOpen] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
 
@@ -85,29 +103,9 @@ export default function CreateEventForm() {
     );
   };
 
-  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      if (file.size > 10 * 1024 * 1024) {
-        // 10MB limit
-        alert("Soubor je příliš velký. Maximální velikost je 10MB.");
-        return;
-      }
-
-      setImageFile(file);
-
-      // Vytvoření preview
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        setImagePreview(e.target?.result as string);
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-
   const removeImage = () => {
-    setImageFile(null);
     setImagePreview(null);
+    setBlob(null); // ← PŘIDEJ TOTO
     if (fileInputRef.current) {
       fileInputRef.current.value = "";
     }
@@ -127,14 +125,24 @@ export default function CreateEventForm() {
           submitData.append(key, value.toString());
         }
       });
+      if (fileInputRef.current?.files?.[0]) {
+        console.log("File:", fileInputRef.current?.files);
+        const file = fileInputRef.current?.files?.[0];
+        const fileUploadResponse = await fetch(
+          `/api/events/image-upload?filename=${file?.name}`,
+          {
+            method: "POST",
+            body: file,
+          }
+        );
+        console.log("File Upload Response:", fileUploadResponse);
+        const newBlob = (await fileUploadResponse.json()) as PutBlobResult;
+        setBlob(newBlob);
+        submitData.append("image", newBlob.url);
+      }
 
       // Přidání ticket types
       submitData.append("ticketTypes", JSON.stringify(ticketTypes));
-
-      // Přidání obrázku
-      if (imageFile) {
-        submitData.append("image", imageFile);
-      }
 
       const response = await fetch("/api/events", {
         method: "POST",
@@ -154,7 +162,22 @@ export default function CreateEventForm() {
       setLoading(false);
     }
   };
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      if (file.size > 4.4 * 1024 * 1024) {
+        alert("Soubor je příliš velký. Maximální velikost je 4.4MB.");
+        return;
+      }
 
+      // Vytvoření preview
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setImagePreview(e.target?.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
   const handleChange = (
     e: React.ChangeEvent<
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
@@ -174,14 +197,10 @@ export default function CreateEventForm() {
       <div className="container mx-auto px-6 py-8">
         {/* Header */}
         <div className="text-center mb-12">
-          <div className="px-4 py-2 rounded-full text-sm font-medium glass-button border-blue-400/30 text-blue-400 inline-flex items-center mb-4">
-            <Zap className="h-3 w-3 mr-1" />
-            Tvůrce událostí
-          </div>
           <h1 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-white to-blue-200 bg-clip-text text-transparent">
-            Vytvořit novou událost
+            Vytvoření události
           </h1>
-          <p className="text-foreground-muted text-lg max-w-2xl mx-auto">
+          <p className="text-foreground-muted text-lg max-w-2xl mx-auto opacity-60">
             Vyplňte detaily pro vytvoření vaší úžasné události a začněte
             prodávat vstupenky
           </p>
@@ -190,76 +209,26 @@ export default function CreateEventForm() {
         <div className="max-w-4xl mx-auto">
           <form onSubmit={handleSubmit} className="space-y-8">
             {/* Basic Information */}
-            <Card className="bg-gradient-card border-border/20">
+            <Card className="bg-gradient-card border-border/20 p-8">
               <CardHeader>
                 <CardTitle className="flex items-center text-xl">
                   <div className="p-2 rounded-lg bg-gradient-primary mr-3">
-                    <Calendar className="h-5 w-5 text-white" />
+                    <Info className="h-5 w-5 text-white" />
                   </div>
                   Základní informace
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div>
-                    <Label htmlFor="name" className="text-foreground">
-                      Název události
-                    </Label>
-                    <Input
-                      id="name"
-                      name="name"
-                      value={formData.name}
-                      onChange={handleChange}
-                      placeholder="Zadejte název události"
-                      className="glass-effect border-border/30 focus:border-blue-400/50 mt-2"
-                      required
-                    />
-                  </div>
-                  <div>
-                    <Label htmlFor="category" className="text-foreground">
-                      Kategorie
-                    </Label>
-                    <select
-                      id="category"
-                      name="category"
-                      value={formData.category}
-                      onChange={handleChange}
-                      className="w-full rounded-md border border-border/30 bg-input-background px-3 py-2 text-sm text-foreground focus:border-blue-400/50 focus:outline-none mt-2"
-                      required
-                    >
-                      <option value="">Vyberte kategorii</option>
-                      {categories.map((category) => (
-                        <option key={category.value} value={category.value}>
-                          {category.icon} {category.label}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                </div>
-
-                <div>
-                  <Label htmlFor="description" className="text-foreground">
-                    Popis události
-                  </Label>
-                  <Textarea
-                    id="description"
-                    name="description"
-                    value={formData.description}
-                    onChange={handleChange}
-                    placeholder="Popište vaši událost detailně..."
-                    className="min-h-[120px] glass-effect border-border/30 focus:border-blue-400/50 mt-2"
-                    required
-                  />
-                </div>
-
                 <div>
                   <Label className="text-foreground">Obrázek události</Label>
                   <div className="mt-3">
-                    {imagePreview ? (
+                    {imagePreview || blob?.url ? (
                       <div className="relative">
-                        <img
-                          src={imagePreview}
+                        <Image
+                          src={blob?.url || imagePreview || ""}
                           alt="Preview"
+                          width={100}
+                          height={100}
                           className="w-full h-48 object-cover rounded-xl border border-border/30"
                         />
                         <Button
@@ -282,24 +251,89 @@ export default function CreateEventForm() {
                           Klikněte pro nahrání obrázku události
                         </p>
                         <p className="text-xs text-foreground-muted">
-                          PNG, JPG až 10MB
+                          PNG, JPG až 4,4MB
                         </p>
                       </div>
                     )}
                     <input
                       ref={fileInputRef}
+                      onChange={handleImageUpload}
                       type="file"
                       accept="image/*"
-                      onChange={handleImageUpload}
                       className="hidden"
                     />
                   </div>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <Label htmlFor="name" className="text-foreground">
+                      Název události
+                    </Label>
+                    <Input
+                      id="name"
+                      name="name"
+                      value={formData.name}
+                      onChange={handleChange}
+                      placeholder="Zadejte název události"
+                      className="glass-effect border-border/30 focus:border-blue-400/50 mt-2"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="category" className="text-foreground">
+                      Kategorie
+                    </Label>
+                    <Select
+                      value={formData.category}
+                      onValueChange={(value) =>
+                        setFormData({ ...formData, category: value })
+                      }
+                    >
+                      <SelectTrigger className="w-full glass-effect border-border/30 transition-all duration-200 hover:border-blue-400/50 focus:border-blue-400/50 focus:ring-2 focus:ring-blue-400/20 mt-2 h-10">
+                        <SelectValue placeholder="Vyberte kategorii" />
+                      </SelectTrigger>
+                      <SelectContent className="border border-border/30 bg-gradient-card backdrop-blur-xl shadow-2xl">
+                        <SelectGroup>
+                          <SelectLabel className="text-foreground-muted font-semibold text-xs uppercase tracking-wider px-2 py-2">
+                            Kategorie události
+                          </SelectLabel>
+                          {categories.map((category) => (
+                            <SelectItem
+                              key={category.value}
+                              value={category.value}
+                              className="cursor-pointer transition-all duration-200 hover:bg-blue-500/10 focus:bg-blue-500/20 focus:text-foreground rounded-md my-0.5 text-foreground"
+                            >
+                              <span className="flex items-center gap-2">
+                                <span className="text-lg">{category.icon}</span>
+                                <span>{category.label}</span>
+                              </span>
+                            </SelectItem>
+                          ))}
+                        </SelectGroup>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
+
+                <div>
+                  <Label htmlFor="description" className="text-foreground">
+                    Popis události
+                  </Label>
+                  <Textarea
+                    id="description"
+                    name="description"
+                    value={formData.description}
+                    onChange={handleChange}
+                    placeholder="Popište vaši událost detailně..."
+                    className="min-h-[120px] glass-effect border-border/30 focus:border-blue-400/50 mt-2"
+                    required
+                  />
                 </div>
               </CardContent>
             </Card>
 
             {/* Date & Location */}
-            <Card className="bg-gradient-card border-border/20">
+            <Card className="bg-gradient-card border-border/20 p-8">
               <CardHeader>
                 <CardTitle className="flex items-center text-xl">
                   <div className="p-2 rounded-lg bg-gradient-primary mr-3">
@@ -311,18 +345,61 @@ export default function CreateEventForm() {
               <CardContent className="space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                   <div>
-                    <Label htmlFor="date" className="text-foreground">
+                    <Label className="text-foreground border-border/30">
                       Datum události
                     </Label>
-                    <Input
-                      id="date"
-                      name="date"
-                      type="date"
-                      value={formData.date}
-                      onChange={handleChange}
-                      className="glass-effect border-border/30 focus:border-blue-400/50 mt-2"
-                      required
-                    />
+                    <Popover
+                      open={datePickerOpen}
+                      onOpenChange={setDatePickerOpen}
+                    >
+                      <PopoverTrigger asChild>
+                        <Button className="w-full justify-between font-normal glass-effect border-border/30 hover:border-blue-400/50 focus:border-blue-400/50 mt-2 h-10">
+                          {formData.date
+                            ? new Date(formData.date).toLocaleDateString(
+                                "cs-CZ"
+                              )
+                            : "Vyberte datum"}
+                          <ChevronDownIcon className="h-4 w-4 opacity-50" />
+                        </Button>
+                      </PopoverTrigger>
+                      <PopoverContent
+                        className="w-auto overflow-hidden p-0 border-border/30 bg-gradient-card backdrop-blur-xl shadow-2xl"
+                        align="start"
+                      >
+                        <Calendar
+                          mode="single"
+                          selected={
+                            formData.date ? new Date(formData.date) : undefined
+                          }
+                          captionLayout="dropdown"
+                          fromDate={new Date()}
+                          toDate={
+                            new Date(new Date().getFullYear() + 3, 11, 31)
+                          }
+                          fromYear={new Date().getFullYear()}
+                          toYear={new Date().getFullYear() + 3}
+                          onSelect={(date) => {
+                            if (date) {
+                              // Použij lokální datum bez timezone konverze
+                              const year = date.getFullYear();
+                              const month = String(
+                                date.getMonth() + 1
+                              ).padStart(2, "0");
+                              const day = String(date.getDate()).padStart(
+                                2,
+                                "0"
+                              );
+                              setFormData({
+                                ...formData,
+                                date: `${year}-${month}-${day}`,
+                              });
+                              setDatePickerOpen(false);
+                            }
+                          }}
+                          className="rounded-lg"
+                        />
+                      </PopoverContent>
+                    </Popover>
                   </div>
                   <div>
                     <Label htmlFor="startTime" className="text-foreground">
@@ -404,7 +481,7 @@ export default function CreateEventForm() {
             </Card>
 
             {/* Ticket Types */}
-            <Card className="bg-gradient-card border-border/20">
+            <Card className="bg-gradient-card border-border/20 p-8">
               <CardHeader>
                 <CardTitle className="flex items-center justify-between">
                   <div className="flex items-center text-xl">
@@ -515,7 +592,7 @@ export default function CreateEventForm() {
             </Card>
 
             {/* Additional Settings */}
-            <Card className="bg-gradient-card border-border/20">
+            <Card className="bg-gradient-card border-border/20 p-8  ">
               <CardHeader>
                 <CardTitle className="flex items-center text-xl">
                   <div className="p-2 rounded-lg bg-gradient-primary mr-3">

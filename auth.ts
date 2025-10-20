@@ -57,8 +57,28 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     error: "/auth/signin",
   },
   callbacks: {
+    async signIn({ user, account, profile }) {
+      // Pro Google login načti roli z databáze
+      console.log("signIn callback");
+      console.log("user", user);
+      if (account?.provider === "google" && user.email) {
+        const dbUser = await prisma.user.findUnique({
+          where: { email: user.email },
+          select: { id: true, role: true },
+        });
+
+        if (dbUser) {
+          user.id = dbUser.id;
+          user.role = dbUser.role;
+        }
+      }
+      return true;
+    },
     async jwt({ token, user, account }) {
       if (user) {
+        console.log("jwt callback");
+        console.log("user", user);
+        console.log("token", token);
         token.id = user.id;
         token.emailVerified = user.emailVerified;
         token.role = user.role;

@@ -5,6 +5,17 @@ declare module "next-auth" {
     emailVerified: Date | null;
     role: Role;
   }
+
+  interface Session {
+    user: {
+      id: string;
+      name?: string | null;
+      email?: string | null;
+      image?: string | null;
+      emailVerified: Date | null;
+      role: Role;
+    };
+  }
 }
 
 declare module "next-auth/jwt" {
