@@ -124,5 +124,5 @@ model TicketType {
   total   Int
   eventid String
   tickets Ticket[]
-  event   Event    @relation(fields: [eventid], references: [id])
+  event   Event    @relation(fields: [eventid], references: [id], onDelete: Cascade)
 }
