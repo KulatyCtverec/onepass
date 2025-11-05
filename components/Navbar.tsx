@@ -54,7 +54,7 @@ export default function Navbar() {
                       href="/marketplace"
                       className="px-4 py-2 rounded-lg transition-all duration-300 text-foreground-muted hover:text-primary hover:bg-white/5"
                     >
-                      🛒 Marketplace
+                      Marketplace
                     </Link>
                   </NavigationMenuLink>
                 </NavigationMenuItem>
@@ -80,7 +80,7 @@ export default function Navbar() {
                           href="/my-events"
                           className="px-4 py-2 rounded-lg transition-all duration-300 text-foreground-muted hover:text-primary hover:bg-white/5"
                         >
-                          📅 Mé události
+                          Mé události
                         </Link>
                       </NavigationMenuLink>
                     </NavigationMenuItem>
@@ -90,7 +90,7 @@ export default function Navbar() {
                           href="/create-event"
                           className="px-4 py-2 rounded-lg transition-all duration-300 text-foreground-muted hover:text-primary hover:bg-white/5"
                         >
-                          ➕ Vytvořit událost
+                          Vytvořit událost
                         </Link>
                       </NavigationMenuLink>
                     </NavigationMenuItem>
@@ -100,7 +100,7 @@ export default function Navbar() {
                           href="/admin"
                           className="px-4 py-2 rounded-lg transition-all duration-300 text-foreground-muted hover:text-primary hover:bg-white/5"
                         >
-                          👑 Administrace
+                          Administrace
                         </Link>
                       </NavigationMenuLink>
                     </NavigationMenuItem>
@@ -114,7 +114,7 @@ export default function Navbar() {
                         href="/authenticator"
                         className="px-4 py-2 rounded-lg transition-all duration-300 text-foreground-muted hover:text-primary hover:bg-white/5"
                       >
-                        📱 Ověřit vstupenky
+                        Ověřit vstupenky
                       </Link>
                     </NavigationMenuLink>
                   </NavigationMenuItem>

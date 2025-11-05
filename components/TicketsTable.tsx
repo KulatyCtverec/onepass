@@ -57,12 +57,10 @@ export default function TicketsTable(props: { caption: string }) {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold mb-4">{props.caption}</h1>
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+      <h1 className="text-2xl font-bold mb-8">{props.caption}</h1>
+      <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
         {tickets.map((ticket) => (
-          <div key={ticket.id} className="aspect-[4/3]">
-            <TicketCard ticket={ticket} />
-          </div>
+          <TicketCard key={ticket.id} ticket={ticket} />
         ))}
       </div>
     </div>

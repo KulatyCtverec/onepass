@@ -93,14 +93,11 @@ export default function LoginForm({
 
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
-      <Card className="overflow-hidden p-0 border-border/30 bg-[#151419]">
-        <CardContent className="grid p-0">
+      <Card className="overflow-hidden p-0 bg-[#151419] border-0">
+        <CardContent className="grid p-0 ">
           <div className="p-8 md:p-12">
             {/* Header */}
             <div className="text-center mb-8">
-              <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-primary flex items-center justify-center">
-                <Ticket className="h-8 w-8 text-white" />
-              </div>
               <h1 className="text-3xl font-bold text-foreground mb-2">
                 {isLogin ? "Vítejte zpět" : "Vytvořte účet"}
               </h1>
@@ -126,7 +123,7 @@ export default function LoginForm({
                       type="text"
                       required={!isLogin}
                       placeholder="Zadejte své jméno"
-                      className="pl-10 pr-4 py-3 glass-effect border-border/30 focus:border-primary/50 focus:ring-primary/25 transition-all duration-300"
+                      className="pl-10 pr-4 py-3 border-border/30 focus:border-primary/50 focus:ring-primary/25 transition-all duration-300"
                     />
                   </div>
                 </div>
@@ -144,7 +141,7 @@ export default function LoginForm({
                     type="email"
                     required
                     placeholder="Zadejte svůj email"
-                    className="pl-10 pr-4 py-3 glass-effect border-border/30 focus:border-primary/50 focus:ring-primary/25 transition-all duration-300"
+                    className="pl-10 pr-4 py-3 border-border/30 focus:border-primary/50 focus:ring-primary/25 transition-all duration-300"
                   />
                 </div>
               </div>
@@ -164,7 +161,7 @@ export default function LoginForm({
                     type={showPassword ? "text" : "password"}
                     required
                     placeholder="Zadejte své heslo"
-                    className="pl-10 pr-12 py-3 glass-effect border-border/30 focus:border-primary/50 focus:ring-primary/25 transition-all duration-300"
+                    className="pl-10 pr-12 py-3 border-border/30 focus:border-primary/50 focus:ring-primary/25 transition-all duration-300"
                   />
                   <button
                     type="button"

@@ -40,16 +40,48 @@ export function useSSE<E extends { id: string }>(
 
   useEffect(() => {
     const eventSource = new EventSource(sseUrl);
+    let hasError = false;
 
     eventSource.onmessage = (event) => {
-      const parsedData: SSEMessage<E & { id: string }> = JSON.parse(event.data);
-      functionMap[parsedData.type](parsedData.data);
+      try {
+        const parsedData: SSEMessage<E & { id: string }> = JSON.parse(
+          event.data
+        );
+        functionMap[parsedData.type](parsedData.data);
+        // Pokud se zpráva podaří zpracovat, vymaž chybu
+        if (hasError) {
+          hasError = false;
+          error.setter(null);
+        }
+      } catch (e) {
+        console.error("Chyba při zpracování SSE zprávy:", e);
+      }
     };
 
     eventSource.onerror = (err) => {
-      console.error("Chyba SSE:", err);
-      error.setter("Chyba při komunikaci se serverem.");
-      eventSource.close();
+      // EventSource automaticky reconnectuje, takže jen logujeme
+      // Zavřeme připojení pouze pokud je readyState CLOSED (3)
+      if (eventSource.readyState === EventSource.CLOSED) {
+        console.error("Chyba SSE: připojení bylo uzavřeno", err);
+        // Nastavíme chybu pouze pokud už nebyla nastavena (např. z useInitialFetch)
+        if (!hasError) {
+          hasError = true;
+          // Nepřepisujeme chybu z useInitialFetch, pokud už existuje
+          error.setter((prev) => prev || "Chyba při komunikaci se serverem.");
+        }
+        eventSource.close();
+      } else {
+        // Při reconnectu jen logujeme, EventSource se pokusí znovu připojit
+        console.warn("SSE reconnect...", eventSource.readyState);
+      }
+    };
+
+    eventSource.onopen = () => {
+      // Když se připojení otevře, vymaž chyby
+      if (hasError) {
+        hasError = false;
+        error.setter(null);
+      }
     };
 
     return () => {

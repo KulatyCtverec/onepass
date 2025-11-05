@@ -39,6 +39,7 @@ export default function EditEventPage() {
     }
 
     fetchEvent();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [session, status, router, eventSlug]);
 
   const fetchEvent = async () => {
@@ -52,8 +53,11 @@ export default function EditEventPage() {
 
       const data = await response.json();
 
-      // Kontrola, zda je uživatel tvůrcem události
-      if (data.createdById !== session?.user?.id) {
+      // Kontrola, zda je uživatel tvůrcem události (nebo je admin)
+      if (
+        data.createdById !== session?.user?.id &&
+        session?.user?.role !== Role.ADMIN
+      ) {
         throw new Error("Nemáte oprávnění upravovat tuto událost");
       }
 

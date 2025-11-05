@@ -3,7 +3,7 @@ import { Client } from "pg";
 // Nastavení runtime na nodejs, protože SSE a pg klient potřebují Node prostředí
 export const runtime = "nodejs"; // 👈 nutné pro SSE + pg
 
-// Handler pro GET požadavek na /api/events/stream
+// Handler pro GET požadavek na /api/tickets/stream
 export async function GET() {
   // Vytvoření nového PostgreSQL klienta s connection stringem z .env
   const client = new Client({
@@ -13,8 +13,8 @@ export async function GET() {
   // Připojení ke PostgreSQL databázi
   await client.connect();
 
-  // Začneme poslouchat na kanálu "events_channel" (musí být nastaven v DB pomocí NOTIFY)
-  await client.query("LISTEN events_channel");
+  // Začneme poslouchat na kanálu "tickets_channel" (musí být nastaven v DB pomocí NOTIFY)
+  await client.query("LISTEN tickets_channel");
 
   // TextEncoder pro převod textu na streamované byty
   const encoder = new TextEncoder();

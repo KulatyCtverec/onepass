@@ -51,24 +51,24 @@ export default function SignIn() {
         >
           <DropdownMenuItem asChild>
             <Link href="/profile" className="cursor-pointer">
-              👤 Profil
+              Profil
             </Link>
           </DropdownMenuItem>
           <DropdownMenuItem asChild>
             <Link href="/my-tickets" className="cursor-pointer">
-              🎫 Moje lístky
+              Moje lístky
             </Link>
           </DropdownMenuItem>
           {(userRole === Role.ADMIN || userRole === Role.ORGANIZER) && (
             <>
               <DropdownMenuItem asChild>
                 <Link href="/admin" className="cursor-pointer">
-                  👑 Admin Dashboard
+                  Admin Dashboard
                 </Link>
               </DropdownMenuItem>
               <DropdownMenuItem asChild>
                 <Link href="/create-event" className="cursor-pointer">
-                  ➕ Vytvořit událost
+                  Vytvořit událost
                 </Link>
               </DropdownMenuItem>
             </>
@@ -77,7 +77,7 @@ export default function SignIn() {
             onClick={() => signOut()}
             className="cursor-pointer text-red-400 hover:text-red-300"
           >
-            🚪 Odhlásit se
+            Odhlásit se
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
@@ -94,11 +94,9 @@ export default function SignIn() {
           Přihlásit se
         </Button>
       </DialogTrigger>
-      <DialogContent className="glass-effect border-border/30 shadow-2xl max-w-md p-0">
-        <DialogHeader className="border-b border-border/30 pb-4 px-8 pt-8">
-          <DialogTitle className="text-foreground text-xl font-bold text-center">
-            Vítejte v OnePass
-          </DialogTitle>
+      <DialogContent className="shadow-2xl max-w-md p-0 bg-[#151419]">
+        <DialogHeader className=" pb-4 px-8 pt-8">
+          <DialogTitle className="text-foreground text-xl font-bold text-center"></DialogTitle>
         </DialogHeader>
         <div className="px-8 pb-8">
           <LoginForm />

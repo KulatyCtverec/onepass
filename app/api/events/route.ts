@@ -1,13 +1,30 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
+import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
-import { writeFile, mkdir } from "fs/promises";
-import { join } from "path";
 import { generateEventSlug, checkEventNameExists } from "@/lib/utils";
+import { Role } from "@/lib/generated/prisma";
 
-export async function POST(request: Request) {
-  console.log("[API] POST /api/events called with request:", request);
-
+export async function POST(request: NextRequest) {
   try {
+    const session = await auth();
+
+    if (!session?.user) {
+      return NextResponse.json(
+        { error: "Nepřihlášený uživatel" },
+        { status: 401 }
+      );
+    }
+
+    if (
+      session.user.role !== Role.ADMIN &&
+      session.user.role !== Role.ORGANIZER
+    ) {
+      return NextResponse.json(
+        { error: "Nedostatečná oprávnění" },
+        { status: 403 }
+      );
+    }
+
     const formData = await request.formData();
 
     // Extract basic event data
@@ -33,7 +50,6 @@ export async function POST(request: Request) {
 
     // Validate required fields
     if (!name || !description || !date || !venue || !capacity || !address) {
-      console.warn("[API] POST /api/events - missing required fields");
       return NextResponse.json(
         { message: "Všechna povinná pole musí být vyplněná." },
         { status: 400 }
@@ -81,6 +97,7 @@ export async function POST(request: Request) {
         allowResale,
         requireApproval,
         sendEmails,
+        createdById: session.user.id,
       },
     });
 
@@ -99,12 +116,6 @@ export async function POST(request: Request) {
       }
     }
 
-    console.log("[API] Event created successfully:", {
-      name,
-      date,
-      venue,
-      slug,
-    });
     return NextResponse.json(
       {
         message: "Událost vytvořena úspěšně.",

@@ -2,6 +2,7 @@
 import { useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import OnepassCalendar from "@/components/OnepassCalendar";
 import {
   Upload,
   Plus,
@@ -28,13 +29,6 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
-import { Calendar } from "@/components/ui/calendar";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import { ChevronDownIcon } from "lucide-react";
 import { PutBlobResult } from "@vercel/blob";
 
 interface TicketType {
@@ -69,7 +63,6 @@ export default function CreateEventForm() {
   const [blob, setBlob] = useState<PutBlobResult | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
-  const [datePickerOpen, setDatePickerOpen] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
 
@@ -348,58 +341,13 @@ export default function CreateEventForm() {
                     <Label className="text-foreground border-border/30">
                       Datum události
                     </Label>
-                    <Popover
-                      open={datePickerOpen}
-                      onOpenChange={setDatePickerOpen}
-                    >
-                      <PopoverTrigger asChild>
-                        <Button className="w-full justify-between font-normal glass-effect border-border/30 hover:border-blue-400/50 focus:border-blue-400/50 mt-2 h-10">
-                          {formData.date
-                            ? new Date(formData.date).toLocaleDateString(
-                                "cs-CZ"
-                              )
-                            : "Vyberte datum"}
-                          <ChevronDownIcon className="h-4 w-4 opacity-50" />
-                        </Button>
-                      </PopoverTrigger>
-                      <PopoverContent
-                        className="w-auto overflow-hidden p-0 border-border/30 bg-gradient-card backdrop-blur-xl shadow-2xl"
-                        align="start"
-                      >
-                        <Calendar
-                          mode="single"
-                          selected={
-                            formData.date ? new Date(formData.date) : undefined
-                          }
-                          captionLayout="dropdown"
-                          fromDate={new Date()}
-                          toDate={
-                            new Date(new Date().getFullYear() + 3, 11, 31)
-                          }
-                          fromYear={new Date().getFullYear()}
-                          toYear={new Date().getFullYear() + 3}
-                          onSelect={(date) => {
-                            if (date) {
-                              // Použij lokální datum bez timezone konverze
-                              const year = date.getFullYear();
-                              const month = String(
-                                date.getMonth() + 1
-                              ).padStart(2, "0");
-                              const day = String(date.getDate()).padStart(
-                                2,
-                                "0"
-                              );
-                              setFormData({
-                                ...formData,
-                                date: `${year}-${month}-${day}`,
-                              });
-                              setDatePickerOpen(false);
-                            }
-                          }}
-                          className="rounded-lg"
-                        />
-                      </PopoverContent>
-                    </Popover>
+                    <OnepassCalendar
+                      date={formData.date}
+                      setDate={(date: string) => {
+                        setFormData({ ...formData, date });
+                      }}
+                      className="mt-2"
+                    />
                   </div>
                   <div>
                     <Label htmlFor="startTime" className="text-foreground">
@@ -607,12 +555,11 @@ export default function CreateEventForm() {
                     <Label htmlFor="salesStart" className="text-foreground">
                       Začátek prodeje vstupenek
                     </Label>
-                    <Input
-                      id="salesStart"
-                      name="salesStart"
-                      type="datetime-local"
-                      value={formData.salesStart}
-                      onChange={handleChange}
+                    <OnepassCalendar
+                      date={formData.salesStart}
+                      setDate={(date: string) => {
+                        setFormData({ ...formData, salesStart: date });
+                      }}
                       className="glass-effect border-border/30 focus:border-blue-400/50 mt-2"
                     />
                   </div>
@@ -620,12 +567,11 @@ export default function CreateEventForm() {
                     <Label htmlFor="salesEnd" className="text-foreground">
                       Konec prodeje vstupenek
                     </Label>
-                    <Input
-                      id="salesEnd"
-                      name="salesEnd"
-                      type="datetime-local"
-                      value={formData.salesEnd}
-                      onChange={handleChange}
+                    <OnepassCalendar
+                      date={formData.salesEnd}
+                      setDate={(date: string) => {
+                        setFormData({ ...formData, salesEnd: date });
+                      }}
                       className="glass-effect border-border/30 focus:border-blue-400/50 mt-2"
                     />
                   </div>
@@ -692,7 +638,6 @@ export default function CreateEventForm() {
                 disabled={loading}
                 className="bg-gradient-primary hover:scale-105 transition-all duration-300 neon-glow px-8 py-3 text-lg"
               >
-                <Zap className="h-5 w-5 mr-2" />
                 {loading ? "Vytvářím..." : "Publikovat událost"}
               </Button>
             </div>

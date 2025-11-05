@@ -34,8 +34,6 @@ export default function HeroSection() {
       });
     }
   };
-  console.log("session?.user?.role", session);
-
   return (
     <section className="relative py-24 px-6 overflow-hidden">
       {/* Animated background elements */}

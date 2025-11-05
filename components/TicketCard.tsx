@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import {
@@ -9,7 +9,9 @@ import {
   Ticket as TicketIcon,
   Copy,
   Download,
+  QrCode,
 } from "lucide-react";
+import { QRCodeSVG } from "qrcode.react";
 import {
   Ticket,
   TicketType,
@@ -27,6 +29,8 @@ export default function TicketCard({
   };
 }) {
   const [qrData, setQrData] = useState<string>("");
+  const [copied, setCopied] = useState(false);
+  const qrRef = useRef<HTMLDivElement>(null);
 
   // Automaticky načteme QR kód z ticket.accesscode (generovaný triggerem)
   useEffect(() => {
@@ -37,8 +41,8 @@ export default function TicketCard({
     if (qrData) {
       try {
         await navigator.clipboard.writeText(qrData);
-        // Můžeme přidat toast notifikaci
-        console.log("QR kód zkopírován do schránky");
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
       } catch (error) {
         console.error("Failed to copy:", error);
       }
@@ -46,17 +50,37 @@ export default function TicketCard({
   };
 
   const downloadQR = () => {
-    if (qrData) {
-      const blob = new Blob([qrData], { type: "text/plain" });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = `ticket-${ticket.id}.txt`;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
-    }
+    if (!qrRef.current) return;
+
+    const svg = qrRef.current.querySelector("svg");
+    if (!svg) return;
+
+    const svgData = new XMLSerializer().serializeToString(svg);
+    const canvas = document.createElement("canvas");
+    const ctx = canvas.getContext("2d");
+    const img = new Image();
+
+    img.onload = () => {
+      canvas.width = img.width;
+      canvas.height = img.height;
+      ctx?.drawImage(img, 0, 0);
+
+      canvas.toBlob((blob) => {
+        if (!blob) return;
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = `ticket-${ticket.id}-qr.png`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+      });
+    };
+
+    img.src =
+      "data:image/svg+xml;base64," +
+      btoa(unescape(encodeURIComponent(svgData)));
   };
 
   const formatDate = (date: Date) => {
@@ -87,14 +111,14 @@ export default function TicketCard({
   }
 
   return (
-    <Card className="h-full glass-effect border-border/30 hover:border-primary/50 transition-all duration-300 hover:scale-105 hover:shadow-xl">
-      <CardHeader className="pb-4">
+    <Card className="h-full glass-effect border-border/30 hover:border-primary/50 transition-all duration-300 hover:shadow-xl flex flex-col">
+      <CardHeader className="p-4">
         <div className="flex items-center justify-between">
-          <CardTitle className="text-lg font-semibold text-foreground">
+          <CardTitle className="text-lg font-semibold text-foreground line-clamp-1">
             {ticket.event.name}
           </CardTitle>
           <div
-            className={`px-3 py-1 rounded-full text-xs font-medium ${
+            className={`px-3 py-1 rounded-full text-xs font-medium shrink-0 ${
               ticket.used
                 ? "bg-destructive/10 text-destructive border border-destructive/20"
                 : "bg-primary/10 text-primary border border-primary/20"
@@ -105,80 +129,95 @@ export default function TicketCard({
         </div>
       </CardHeader>
 
-      <CardContent className="space-y-4">
+      <CardContent className="space-y-4 flex-1 flex flex-col">
         {/* Informace o události */}
-        <div className="space-y-3">
+        <div className="space-y-2.5">
           <div className="flex items-center gap-3 text-sm text-foreground-muted">
-            <Calendar className="w-4 h-4" />
-            <span>{formatDate(ticket.event.date)}</span>
+            <Calendar className="w-4 h-4 shrink-0" />
+            <span className="truncate">{formatDate(ticket.event.date)}</span>
           </div>
 
           <div className="flex items-center gap-3 text-sm text-foreground-muted">
-            <MapPin className="w-4 h-4" />
-            <span>{ticket.event.location}</span>
+            <MapPin className="w-4 h-4 shrink-0" />
+            <span className="truncate">{ticket.event.location}</span>
           </div>
 
           <div className="flex items-center gap-3 text-sm text-foreground-muted">
-            <User className="w-4 h-4" />
-            <span>{ticket.user.name}</span>
+            <User className="w-4 h-4 shrink-0" />
+            <span className="truncate">
+              {ticket.user.name || ticket.user.email}
+            </span>
           </div>
 
           <div className="flex items-center gap-3 text-sm text-foreground-muted">
-            <TicketIcon className="w-4 h-4" />
-            <span>{ticket.tickettype.name}</span>
+            <TicketIcon className="w-4 h-4 shrink-0" />
+            <span className="truncate">{ticket.tickettype.name}</span>
           </div>
         </div>
 
         {/* Cena */}
-        <div className="text-center py-4 bg-gradient-card rounded-lg border border-border/20">
+        <div className="text-center py-3 bg-gradient-card rounded-lg border border-border/20">
           <p className="text-2xl font-bold text-primary">
             {formatPrice(ticket.tickettype.price)}
           </p>
         </div>
 
-        {/* QR kód - automaticky generovaný triggerem */}
-        <div className="mt-4 p-4 bg-gradient-card rounded-lg border border-border/20">
-          <div className="text-center mb-3">
-            <h4 className="text-sm font-semibold text-foreground mb-2">QR Kód pro vstup</h4>
-            {qrData ? (
-              <div className="bg-white p-3 rounded-lg border border-border/20">
-                <code className="text-xs break-all font-mono text-gray-800 font-bold">
-                  {qrData}
-                </code>
+        {/* QR kód */}
+        <div className="mt-auto pt-2">
+          <div className="p-4 bg-gradient-card rounded-lg border border-border/20">
+            <div className="text-center mb-3">
+              <div className="flex items-center justify-center gap-2 mb-3">
+                <QrCode className="w-4 h-4 text-primary" />
+                <h4 className="text-sm font-semibold text-foreground">
+                  QR Kód pro vstup
+                </h4>
               </div>
-            ) : (
-              <div className="bg-gray-100 p-3 rounded-lg border-2 border-dashed border-gray-300">
-                <p className="text-gray-500 text-sm">
-                  QR kód se generuje automaticky...
-                </p>
+              {qrData ? (
+                <div
+                  ref={qrRef}
+                  className="bg-white p-4 rounded-lg border border-border/20 inline-block"
+                >
+                  <QRCodeSVG
+                    value={qrData}
+                    size={160}
+                    level="H"
+                    includeMargin={false}
+                    fgColor="#000000"
+                    bgColor="#ffffff"
+                  />
+                </div>
+              ) : (
+                <div className="bg-gray-100 p-8 rounded-lg border-2 border-dashed border-gray-300 inline-block">
+                  <p className="text-gray-500 text-sm">QR kód se generuje...</p>
+                </div>
+              )}
+            </div>
+
+            {/* Tlačítka pro kopírování a stažení */}
+            {qrData && (
+              <div className="flex gap-2 justify-center mt-4">
+                <Button
+                  onClick={copyToClipboard}
+                  variant="outline"
+                  size="sm"
+                  className="flex items-center gap-2 text-xs glass-button"
+                >
+                  <Copy className="w-3 h-3" />
+                  {copied ? "Zkopírováno!" : "Kopírovat"}
+                </Button>
+
+                <Button
+                  onClick={downloadQR}
+                  variant="outline"
+                  size="sm"
+                  className="flex items-center gap-2 text-xs glass-button"
+                >
+                  <Download className="w-3 h-3" />
+                  Stáhnout
+                </Button>
               </div>
             )}
           </div>
-
-          {/* Tlačítka pro kopírování a stažení */}
-          {qrData && (
-            <div className="flex gap-2 justify-center">
-              <Button
-                onClick={copyToClipboard}
-                variant="outline"
-                size="sm"
-                className="flex items-center gap-2 text-xs glass-button"
-              >
-                <Copy className="w-3 h-3" />
-                Kopírovat
-              </Button>
-
-              <Button
-                onClick={downloadQR}
-                variant="outline"
-                size="sm"
-                className="flex items-center gap-2 text-xs glass-button"
-              >
-                <Download className="w-3 h-3" />
-                Stáhnout
-              </Button>
-            </div>
-          )}
         </div>
       </CardContent>
     </Card>

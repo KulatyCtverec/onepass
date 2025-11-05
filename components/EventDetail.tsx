@@ -5,18 +5,13 @@ import {
   ArrowLeft,
   Calendar,
   MapPin,
-  //Clock,
-  Users,
   Share2,
   Heart,
   Ticket,
-  Star,
-  TrendingUp,
 } from "lucide-react";
 import type { Event } from "@/lib/generated/prisma/client";
 import { useInitialFetch } from "@/lib/hooks/useInitialFetch";
 import TicketTypes from "@/components/TicketTypes";
-import SeatMap from "@/components/SeatMap";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { TicketType } from "@/lib/generated/prisma/client";

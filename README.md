@@ -50,23 +50,6 @@ Aplikace používá moderní design systém inspirovaný hyper-moderním dark th
 - **Autentifikace**: NextAuth.js
 - **Deployment**: Vercel
 
-## 📱 Komponenty
-
-### Hlavní komponenty
-
-- `Navbar` - Navigační lišta s glass efektem
-- `EventCard` - Karty událostí s moderním designem
-- `TicketCard` - Karty vstupenek s QR kódy
-- `AdminDashboard` - Administrační rozhraní
-- `CreateEventForm` - Formulář pro vytváření událostí
-
-### UI komponenty
-
-- Všechny shadcn/ui komponenty stylované podle design systému
-- Glass efekty a gradient pozadí
-- Responsivní grid layout
-- Moderní animace a přechody
-
 ## 🎯 Instalace
 
 1. **Klonování repozitáře**
@@ -173,4 +156,4 @@ Matěj Janeček
 
 ---
 
-**OnePass** - Moderní platforma pro správu událostí s hyper-moderním designem 🎫✨
+**OnePass** - Moderní platforma pro správu událostí s garancí bezpečných přeprodejů

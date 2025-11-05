@@ -1,12 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/auth";
-import { PrismaClient } from "@/lib/generated/prisma/client";
+import { prisma } from "@/lib/prisma";
 import { Role } from "@/lib/generated/prisma";
-import { writeFile, mkdir } from "fs/promises";
-import { join } from "path";
 import { generateEventSlug, checkEventNameExists } from "@/lib/utils";
-
-const prisma = new PrismaClient();
 
 export async function GET(
   request: NextRequest,
@@ -75,7 +71,10 @@ export async function PUT(
       );
     }
 
-    if (existingEvent.createdById !== session.user.id) {
+    if (
+      existingEvent.createdById !== session.user.id &&
+      session.user.role !== Role.ADMIN
+    ) {
       return NextResponse.json(
         { error: "Nemáte oprávnění upravovat tuto událost" },
         { status: 403 }
@@ -101,7 +100,6 @@ export async function PUT(
     const requireApproval = formData.get("requireApproval") === "true";
     const sendEmails = formData.get("sendEmails") === "true";
     const ticketTypesJson = formData.get("ticketTypes") as string;
-    const imageFile = formData.get("image") as File | null;
 
     // Parsovat ticket types
     const ticketTypes = JSON.parse(ticketTypesJson);
@@ -137,27 +135,8 @@ export async function PUT(
       newSlug = generateEventSlug(name, eventDate);
     }
 
-    // Zpracovat obrázek, pokud byl nahrán nový
-    let imagePath = existingEvent.image;
-    if (imageFile) {
-      const bytes = await imageFile.arrayBuffer();
-      const buffer = Buffer.from(bytes);
-
-      // Vytvořit složku uploads, pokud neexistuje
-      const uploadsDir = join(process.cwd(), "public", "uploads");
-      await mkdir(uploadsDir, { recursive: true });
-
-      // Generovat unikátní název souboru
-      const timestamp = Date.now();
-      const originalName = imageFile.name;
-      const extension = originalName.split(".").pop();
-      const fileName = `event_${existingEvent.id}_${timestamp}.${extension}`;
-      const filePath = join(uploadsDir, fileName);
-
-      // Uložit soubor
-      await writeFile(filePath, buffer);
-      imagePath = `/uploads/${fileName}`;
-    }
+    // Obrázek zůstává stejný při editaci
+    const imagePath = existingEvent.image;
 
     // Aktualizovat událost
     const updatedEvent = await prisma.event.update({
@@ -250,7 +229,10 @@ export async function DELETE(
       );
     }
 
-    if (existingEvent.createdById !== session.user.id) {
+    if (
+      existingEvent.createdById !== session.user.id &&
+      session.user.role !== Role.ADMIN
+    ) {
       return NextResponse.json(
         { error: "Nemáte oprávnění smazat tuto událost" },
         { status: 403 }

@@ -1,12 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { Button } from "./ui/button";
 import { Event, TicketType } from "@/lib/generated/prisma/client";
 import Link from "next/link";
 import { Calendar, MapPin, Ticket, Clock, Loader2, Filter } from "lucide-react";
-import { useInitialFetch } from "@/lib/hooks/useInitialFetch";
 import { useSSE } from "@/lib/hooks/useSSE";
+
+const EVENTS_PER_PAGE = 12;
 
 export default function HomepageEventsTable() {
   const [events, setEvents] = useState<
@@ -14,15 +15,33 @@ export default function HomepageEventsTable() {
   >([]);
   const [error, setError] = useState<string | null>(null);
   const [showAll, setShowAll] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const [loadingMore, setLoadingMore] = useState(false);
+  const [hasMore, setHasMore] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState("all");
+  const [initialLoading, setInitialLoading] = useState(true);
+  const observerTarget = useRef<HTMLDivElement>(null);
 
-  // Načítáme events pomocí useInitialFetch
-  useInitialFetch<(Event & { ticketTypes: TicketType[] })[]>(
-    "/api/events",
-    { value: events, setter: setEvents },
-    { value: error, setter: setError }
-  );
+  // Načítání počátečních událostí
+  useEffect(() => {
+    const fetchInitialEvents = async () => {
+      try {
+        setInitialLoading(true);
+        const response = await fetch(
+          `/api/events?take=${EVENTS_PER_PAGE}&skip=0`
+        );
+        if (!response.ok) throw new Error("Chyba při načítání událostí");
+        const newEvents = await response.json();
+        setEvents(newEvents);
+        setHasMore(newEvents.length === EVENTS_PER_PAGE);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : "Nastala chyba");
+      } finally {
+        setInitialLoading(false);
+      }
+    };
+
+    fetchInitialEvents();
+  }, []);
 
   // Real-time updates pomocí SSE
   useSSE<Event & { ticketTypes: TicketType[] }>(
@@ -30,6 +49,57 @@ export default function HomepageEventsTable() {
     { value: events, setter: setEvents },
     { value: error, setter: setError }
   );
+
+  // Funkce pro načtení dalších events
+  const loadMoreEvents = useCallback(async () => {
+    if (loadingMore || !hasMore) return;
+
+    setLoadingMore(true);
+    try {
+      const response = await fetch(
+        `/api/events?take=${EVENTS_PER_PAGE}&skip=${events.length}`
+      );
+      if (!response.ok) throw new Error("Chyba při načítání událostí");
+      const newEvents = await response.json();
+
+      if (newEvents.length > 0) {
+        setEvents((prev) => [...prev, ...newEvents]);
+        setHasMore(newEvents.length === EVENTS_PER_PAGE);
+      } else {
+        setHasMore(false);
+      }
+    } catch (error) {
+      console.error("Chyba při načítání dalších událostí:", error);
+      setError("Nepodařilo se načíst další události");
+    } finally {
+      setLoadingMore(false);
+    }
+  }, [events.length, loadingMore, hasMore]);
+
+  // Intersection Observer pro automatické načítání při scrollu
+  useEffect(() => {
+    if (!showAll || !hasMore || loadingMore) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && hasMore && !loadingMore) {
+          loadMoreEvents();
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    const currentTarget = observerTarget.current;
+    if (currentTarget) {
+      observer.observe(currentTarget);
+    }
+
+    return () => {
+      if (currentTarget) {
+        observer.unobserve(currentTarget);
+      }
+    };
+  }, [showAll, hasMore, loadingMore, loadMoreEvents]);
 
   // Kategorie pro filtrování
   const categories = [
@@ -84,24 +154,6 @@ export default function HomepageEventsTable() {
       ? events
       : events?.filter((event) => event.category === selectedCategory) || [];
 
-  // Funkce pro načtení dalších events
-  const loadMoreEvents = async () => {
-    setLoading(true);
-    try {
-      const response = await fetch(`/api/events?take=20&skip=${events.length}`);
-      const newEvents = await response.json();
-
-      if (newEvents.length > 0) {
-        setEvents((prev) => [...prev, ...newEvents]);
-        setShowAll(true);
-      }
-    } catch (error) {
-      console.error("Chyba při načítání dalších událostí:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
   if (error) {
     return (
       <div className="glass-effect border-border/30 rounded-lg p-12 text-center">
@@ -116,6 +168,19 @@ export default function HomepageEventsTable() {
   }
 
   // Loading stav když se events načítají
+  if (initialLoading) {
+    return (
+      <div className="glass-effect border-border/30 rounded-lg p-12 text-center">
+        <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-muted/20 flex items-center justify-center">
+          <Loader2 className="w-8 h-8 text-muted-foreground animate-spin" />
+        </div>
+        <p className="text-foreground-muted text-lg mb-6">
+          Načítám události...
+        </p>
+      </div>
+    );
+  }
+
   if (!events || events.length === 0) {
     return (
       <div className="glass-effect border-border/30 rounded-lg p-12 text-center">
@@ -123,28 +188,22 @@ export default function HomepageEventsTable() {
           <Ticket className="w-8 h-8 text-muted-foreground" />
         </div>
         <p className="text-foreground-muted text-lg mb-6">
-          {!events
-            ? "Načítám události..."
-            : "Zatím nejsou k dispozici žádné události"}
+          Zatím nejsou k dispozici žádné události
         </p>
-        {!events ? (
-          <div className="flex items-center justify-center">
-            <Loader2 className="w-6 h-6 animate-spin text-primary" />
-          </div>
-        ) : (
-          <Link
-            href="/create-event"
-            className="inline-block glass-button px-6 py-3 rounded-xl text-white hover:scale-105 transition-all duration-300"
-          >
-            Vytvořit první událost
-          </Link>
-        )}
+        <Link
+          href="/create-event"
+          className="inline-block glass-button px-6 py-3 rounded-xl text-white hover:scale-105 transition-all duration-300"
+        >
+          Vytvořit první událost
+        </Link>
       </div>
     );
   }
 
-  // Zobrazujeme první 4 events, nebo všechny pokud showAll = true
-  const displayedEvents = showAll ? filteredEvents : filteredEvents.slice(0, 4);
+  // Zobrazujeme prvních 4 events, nebo všechny pokud showAll = true
+  const displayedEvents = showAll
+    ? filteredEvents
+    : filteredEvents.slice(0, EVENTS_PER_PAGE);
 
   return (
     <div>
@@ -196,7 +255,7 @@ export default function HomepageEventsTable() {
                   } události`}
             </h2>
             <p className="text-foreground-muted">
-              Nenechte si ujít tyto úžasné nadcházející události
+              Nenechte si ujít tyto skvělé nadcházející události
             </p>
           </div>
           {selectedCategory !== "all" && (
@@ -336,31 +395,35 @@ export default function HomepageEventsTable() {
             </Button>
           )}
 
-          {showAll && filteredEvents && filteredEvents.length > 4 && (
+          {showAll && (
             <div className="space-y-3">
-              <Button
-                onClick={() => setShowAll(false)}
-                variant="outline"
-                className="glass-button border-primary/30 text-primary hover:border-primary/50 hover:scale-105 transition-all duration-300"
-              >
-                Zobrazit méně
-              </Button>
-
-              <Button
-                onClick={loadMoreEvents}
-                disabled={loading}
-                variant="outline"
-                className="glass-button border-primary/30 text-primary hover:border-primary/50 hover:scale-105 transition-all duration-300 ml-3"
-              >
-                {loading ? (
-                  <>
-                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                    Načítám...
-                  </>
-                ) : (
-                  "Načíst dalších 20"
-                )}
-              </Button>
+              {hasMore && (
+                <>
+                  <div ref={observerTarget} className="h-10" />
+                  {loadingMore && (
+                    <div className="flex items-center justify-center">
+                      <Loader2 className="w-6 h-6 animate-spin text-primary" />
+                      <span className="ml-2 text-foreground-muted">
+                        Načítám další události...
+                      </span>
+                    </div>
+                  )}
+                  {!loadingMore && (
+                    <Button
+                      onClick={loadMoreEvents}
+                      variant="outline"
+                      className="glass-button border-primary/30 text-primary hover:border-primary/50 hover:scale-105 transition-all duration-300"
+                    >
+                      Načíst dalších {EVENTS_PER_PAGE}
+                    </Button>
+                  )}
+                </>
+              )}
+              {!hasMore && events.length > 4 && (
+                <p className="text-foreground-muted">
+                  Zobrazeny všechny dostupné události
+                </p>
+              )}
             </div>
           )}
         </div>

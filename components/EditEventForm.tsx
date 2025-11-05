@@ -1,14 +1,12 @@
 "use client";
 import { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 import {
   Upload,
   Plus,
   Trash2,
-  Calendar,
   MapPin,
-  Clock,
-  Users,
   Star,
   Zap,
   X,
@@ -22,6 +20,7 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
 import { Event, TicketType } from "@/lib/generated/prisma/client";
+import { PutBlobResult } from "@vercel/blob";
 
 interface TicketTypeForm {
   id: number;
@@ -57,20 +56,23 @@ export default function EditEventForm({ event }: EditEventFormProps) {
     sendEmails: event.sendEmails !== false,
   });
 
-  const [ticketTypes, setTicketTypes] = useState<TicketTypeForm[]>(
+  const [ticketTypes, setTicketTypes] = useState<TicketType[]>(
     event.ticketTypes.map((tt) => ({
-      id: parseInt(tt.id),
+      id: tt.id,
       name: tt.name,
-      price: (tt.price / 100).toString(),
-      quantity: tt.stock.toString(),
+      price: tt.price,
+      stock: tt.stock,
+      total: tt.total,
+      eventid: tt.eventid,
     }))
   );
 
-  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [blob, setBlob] = useState<PutBlobResult | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(
     event.image || null
   );
   const [loading, setLoading] = useState(false);
+  const [uploadingImage, setUploadingImage] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
 
@@ -85,48 +87,86 @@ export default function EditEventForm({ event }: EditEventFormProps) {
   ];
 
   const addTicketType = () => {
-    const newId = Math.max(...ticketTypes.map((t) => t.id), 0) + 1;
+    const newId = Math.max(...ticketTypes.map((t) => parseInt(t.id)), 0) + 1;
     setTicketTypes([
       ...ticketTypes,
-      { id: newId, name: "", price: "", quantity: "" },
+      {
+        id: newId.toString(),
+        name: "",
+        price: 0,
+        stock: 0,
+        total: 0,
+        eventid: "",
+      },
     ]);
   };
 
-  const removeTicketType = (id: number) => {
+  const removeTicketType = (id: string) => {
     if (ticketTypes.length > 1) {
       setTicketTypes(ticketTypes.filter((t) => t.id !== id));
     }
   };
 
-  const updateTicketType = (id: number, field: string, value: string) => {
+  const updateTicketType = (id: string, field: string, value: string) => {
     setTicketTypes(
       ticketTypes.map((t) => (t.id === id ? { ...t, [field]: value } : t))
     );
   };
 
-  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (file) {
-      if (file.size > 10 * 1024 * 1024) {
-        // 10MB limit
-        alert("Soubor je příliš velký. Maximální velikost je 10MB.");
-        return;
+    if (!file) return;
+
+    // Validace velikosti
+    if (file.size > 4.4 * 1024 * 1024) {
+      alert("Soubor je příliš velký. Maximální velikost je 4.4MB.");
+      if (fileInputRef.current) {
+        fileInputRef.current.value = "";
+      }
+      return;
+    }
+
+    // Vytvoření lokálního preview pro okamžitou vizualizaci
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      setImagePreview(e.target?.result as string);
+    };
+    reader.readAsDataURL(file);
+
+    // Nahrání do blob storage
+    setUploadingImage(true);
+    try {
+      const fileUploadResponse = await fetch(
+        `/api/events/image-upload?filename=${file.name}`,
+        {
+          method: "POST",
+          body: file,
+        }
+      );
+
+      if (!fileUploadResponse.ok) {
+        throw new Error("Chyba při nahrávání obrázku");
       }
 
-      setImageFile(file);
-
-      // Vytvoření preview
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        setImagePreview(e.target?.result as string);
-      };
-      reader.readAsDataURL(file);
+      const newBlob = (await fileUploadResponse.json()) as PutBlobResult;
+      setBlob(newBlob);
+      // Preview z blob URL (místo lokálního data URL)
+      setImagePreview(newBlob.url);
+    } catch (error) {
+      console.error("Chyba při nahrávání obrázku:", error);
+      alert("Chyba při nahrávání obrázku. Zkuste to prosím znovu.");
+      setImagePreview(event.image || null); // Vrátit na původní obrázek
+      if (fileInputRef.current) {
+        fileInputRef.current.value = "";
+      }
+    } finally {
+      setUploadingImage(false);
     }
   };
 
   const removeImage = () => {
-    setImageFile(null);
-    setImagePreview(null);
+    setBlob(null);
+    setImagePreview(event.image || null); // Vrátit na původní obrázek z eventu
     if (fileInputRef.current) {
       fileInputRef.current.value = "";
     }
@@ -153,9 +193,10 @@ export default function EditEventForm({ event }: EditEventFormProps) {
       // Přidat ticket types
       formDataToSend.append("ticketTypes", JSON.stringify(ticketTypes));
 
-      // Přidat obrázek, pokud byl vybrán nový;
-      if (imageFile) {
-        formDataToSend.append("image", imageFile);
+      // Přidat URL obrázku z blob storage (pokud byl nahrán nový)
+      // Pokud nebyl nahrán nový, použije se původní obrázek z eventu
+      if (blob?.url) {
+        formDataToSend.append("image", blob.url);
       }
 
       const response = await fetch(`/api/events/${event.slug || event.id}`, {
@@ -480,9 +521,9 @@ export default function EditEventForm({ event }: EditEventFormProps) {
                 <Label>Množství</Label>
                 <Input
                   type="number"
-                  value={ticketType.quantity}
+                  value={ticketType.stock}
                   onChange={(e) =>
-                    updateTicketType(ticketType.id, "quantity", e.target.value)
+                    updateTicketType(ticketType.id, "stock", e.target.value)
                   }
                   placeholder="0"
                   className="glass-effect border-border/30"
@@ -536,26 +577,35 @@ export default function EditEventForm({ event }: EditEventFormProps) {
               className="glass-effect border-border/30"
             />
             <p className="text-xs text-foreground-muted">
-              Maximální velikost: 10MB. Podporované formáty: JPG, PNG, GIF
+              Maximální velikost: 4.4MB. Podporované formáty: JPG, PNG, GIF
             </p>
           </div>
 
           {imagePreview && (
             <div className="relative">
-              <img
+              <Image
                 src={imagePreview}
                 alt="Náhled obrázku"
+                width={100}
+                height={100}
                 className="w-full max-w-md h-48 object-cover rounded-lg"
               />
-              <Button
-                type="button"
-                variant="outline"
-                size="sm"
-                onClick={removeImage}
-                className="absolute top-2 right-2 glass-button border-destructive/30 text-destructive hover:border-destructive/50"
-              >
-                <X className="w-4 h-4" />
-              </Button>
+              {uploadingImage && (
+                <div className="absolute inset-0 bg-black/50 rounded-lg flex items-center justify-center">
+                  <div className="text-white font-medium">Nahrávání...</div>
+                </div>
+              )}
+              {!uploadingImage && (
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={removeImage}
+                  className="absolute top-2 right-2 glass-button border-destructive/30 text-destructive hover:border-destructive/50"
+                >
+                  <X className="w-4 h-4" />
+                </Button>
+              )}
             </div>
           )}
         </CardContent>

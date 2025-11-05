@@ -12,14 +12,25 @@ export function useInitialFetch<T>(
     const fetchItems = async () => {
       try {
         const res = await fetch(apiUrl);
-        if (!res.ok) throw new Error("Chyba při načítání dat.");
+        if (!res.ok) {
+          const errorData = await res.json().catch(() => ({}));
+          throw new Error(
+            errorData.message || errorData.error || "Chyba při načítání dat."
+          );
+        }
         const json = await res.json();
         setData(json);
 
         if (items) items.setter(json);
+        // Vymaž chybu při úspěšném načtení
+        if (error) error.setter(null);
       } catch (e) {
         console.error("Chyba při načítání dat:", e);
-        if (error) error.setter("Chyba při komunikaci se serverem:");
+        if (error) {
+          const errorMessage =
+            e instanceof Error ? e.message : "Chyba při načítání dat.";
+          error.setter(errorMessage);
+        }
       }
       return data;
     };
