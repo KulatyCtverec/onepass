@@ -171,12 +171,41 @@ export async function PUT(
 
     // Vytvořit nové
     for (const ticketType of ticketTypes) {
+      // Podpora pro EditEventForm (posílá stock a price už v centech)
+      // i CreateEventForm (posílá quantity a price v korunách)
+      const quantity = ticketType.quantity || ticketType.stock;
+      const priceValue = ticketType.price;
+
+      // Převést quantity/stock na číslo
+      const stockNum = quantity ? parseInt(String(quantity)) : 0;
+      if (isNaN(stockNum) || stockNum < 0) {
+        continue; // Přeskočit neplatné ticket types
+      }
+
+      // Zpracovat cenu - EditEventForm už posílá cenu v centech
+      // CreateEventForm posílá v korunách (menší hodnoty)
+      let priceInCents: number;
+      const priceNum = priceValue ? parseFloat(String(priceValue)) : 0;
+
+      if (isNaN(priceNum) || priceNum < 0) {
+        continue; // Přeskočit neplatné ticket types
+      }
+
+      // Pokud je cena menší než 1000, předpokládáme koruny a převedeme na centy
+      // Pokud je větší nebo rovno 1000, předpokládáme že už jsou centy (z EditEventForm)
+      // (1000 = 10 Kč, což je rozumná hranice)
+      if (priceNum < 1000) {
+        priceInCents = Math.round(priceNum * 100);
+      } else {
+        priceInCents = Math.round(priceNum);
+      }
+
       await prisma.ticketType.create({
         data: {
-          name: ticketType.name,
-          price: parseInt(ticketType.price) * 100, // Převést na centy
-          stock: parseInt(ticketType.quantity),
-          total: parseInt(ticketType.quantity),
+          name: ticketType.name || "",
+          price: priceInCents,
+          stock: stockNum,
+          total: stockNum,
           eventid: existingEvent.id,
         },
       });

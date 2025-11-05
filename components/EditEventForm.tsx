@@ -60,7 +60,7 @@ export default function EditEventForm({ event }: EditEventFormProps) {
     event.ticketTypes.map((tt) => ({
       id: tt.id,
       name: tt.name,
-      price: tt.price,
+      price: tt.price / 100, // Převést z centů na koruny pro zobrazení
       stock: tt.stock,
       total: tt.total,
       eventid: tt.eventid,
@@ -87,7 +87,13 @@ export default function EditEventForm({ event }: EditEventFormProps) {
   ];
 
   const addTicketType = () => {
-    const newId = Math.max(...ticketTypes.map((t) => parseInt(t.id)), 0) + 1;
+    // Najít maximální ID z existujících ticket types
+    const maxId = ticketTypes.reduce((max, t) => {
+      const id = typeof t.id === "string" ? parseInt(t.id) : Number(t.id);
+      return !isNaN(id) && id > max ? id : max;
+    }, 0);
+
+    const newId = maxId + 1;
     setTicketTypes([
       ...ticketTypes,
       {
@@ -96,7 +102,7 @@ export default function EditEventForm({ event }: EditEventFormProps) {
         price: 0,
         stock: 0,
         total: 0,
-        eventid: "",
+        eventid: event.id, // Použít event.id místo prázdného stringu
       },
     ]);
   };
@@ -190,8 +196,16 @@ export default function EditEventForm({ event }: EditEventFormProps) {
         }
       });
 
-      // Přidat ticket types
-      formDataToSend.append("ticketTypes", JSON.stringify(ticketTypes));
+      // Přidat ticket types - převést cenu z korun na centy pro API
+      const ticketTypesForApi = ticketTypes.map((tt) => ({
+        id: tt.id,
+        name: tt.name,
+        price: Math.round(parseFloat(String(tt.price)) * 100), // Převést z korun na centy
+        stock: tt.stock,
+        total: tt.total,
+        eventid: tt.eventid,
+      }));
+      formDataToSend.append("ticketTypes", JSON.stringify(ticketTypesForApi));
 
       // Přidat URL obrázku z blob storage (pokud byl nahrán nový)
       // Pokud nebyl nahrán nový, použije se původní obrázek z eventu
@@ -487,63 +501,74 @@ export default function EditEventForm({ event }: EditEventFormProps) {
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-6">
-          {ticketTypes.map((ticketType, index) => (
-            <div
-              key={ticketType.id}
-              className="grid grid-cols-1 md:grid-cols-4 gap-4 p-4 glass-effect border-border/30 rounded-lg"
-            >
-              <div className="space-y-2">
-                <Label>Název</Label>
-                <Input
-                  value={ticketType.name}
-                  onChange={(e) =>
-                    updateTicketType(ticketType.id, "name", e.target.value)
-                  }
-                  placeholder="VIP, Standard, atd."
-                  className="glass-effect border-border/30"
-                />
-              </div>
+          {ticketTypes.map((ticketType, index) => {
+            // Zajistit, že každý ticket type má platné ID pro React key
+            // Použít index jako fallback pouze pokud ID není platné
+            const keyId =
+              ticketType.id &&
+              String(ticketType.id) !== "NaN" &&
+              !isNaN(Number(ticketType.id))
+                ? String(ticketType.id)
+                : `ticket-${index}`;
 
-              <div className="space-y-2">
-                <Label>Cena (Kč)</Label>
-                <Input
-                  type="number"
-                  value={ticketType.price}
-                  onChange={(e) =>
-                    updateTicketType(ticketType.id, "price", e.target.value)
-                  }
-                  placeholder="0"
-                  className="glass-effect border-border/30"
-                />
-              </div>
+            return (
+              <div
+                key={keyId}
+                className="grid grid-cols-1 md:grid-cols-4 gap-4 p-4 glass-effect border-border/30 rounded-lg"
+              >
+                <div className="space-y-2">
+                  <Label>Název</Label>
+                  <Input
+                    value={ticketType.name}
+                    onChange={(e) =>
+                      updateTicketType(ticketType.id, "name", e.target.value)
+                    }
+                    placeholder="VIP, Standard, atd."
+                    className="glass-effect border-border/30"
+                  />
+                </div>
 
-              <div className="space-y-2">
-                <Label>Množství</Label>
-                <Input
-                  type="number"
-                  value={ticketType.stock}
-                  onChange={(e) =>
-                    updateTicketType(ticketType.id, "stock", e.target.value)
-                  }
-                  placeholder="0"
-                  className="glass-effect border-border/30"
-                />
-              </div>
+                <div className="space-y-2">
+                  <Label>Cena (Kč)</Label>
+                  <Input
+                    type="number"
+                    value={ticketType.price}
+                    onChange={(e) =>
+                      updateTicketType(ticketType.id, "price", e.target.value)
+                    }
+                    placeholder="0"
+                    className="glass-effect border-border/30"
+                  />
+                </div>
 
-              <div className="flex items-end">
-                <Button
-                  type="button"
-                  variant="outline"
-                  size="sm"
-                  onClick={() => removeTicketType(ticketType.id)}
-                  disabled={ticketTypes.length === 1}
-                  className="glass-button border-destructive/30 text-destructive hover:border-destructive/50"
-                >
-                  <Trash2 className="w-4 h-4" />
-                </Button>
+                <div className="space-y-2">
+                  <Label>Množství</Label>
+                  <Input
+                    type="number"
+                    value={ticketType.stock}
+                    onChange={(e) =>
+                      updateTicketType(ticketType.id, "stock", e.target.value)
+                    }
+                    placeholder="0"
+                    className="glass-effect border-border/30"
+                  />
+                </div>
+
+                <div className="flex items-end">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    onClick={() => removeTicketType(ticketType.id)}
+                    disabled={ticketTypes.length === 1}
+                    className="glass-button border-destructive/30 text-destructive hover:border-destructive/50"
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </Button>
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
 
           <Button
             type="button"
