@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import categories from "@/config/constants/categories.json";
 import {
   Search,
   Filter,
@@ -35,6 +36,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
+import SearchBox from "@/components/SearchBox";
 
 export default function MarketplacePage() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -126,16 +128,6 @@ export default function MarketplacePage() {
     },
   ];
 
-  const categories = [
-    { name: "Všechny", key: "all", icon: "✨" },
-    { name: "Hudba", key: "music", icon: "🎵" },
-    { name: "Sport", key: "sports", icon: "⚽" },
-    { name: "Divadlo", key: "theater", icon: "🎭" },
-    { name: "Komedie", key: "comedy", icon: "😂" },
-    { name: "Jídlo", key: "food", icon: "🍷" },
-    { name: "Technologie", key: "technology", icon: "💻" },
-  ];
-
   const filteredListings = resaleListings.filter((listing) => {
     const matchesSearch =
       listing.eventTitle.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -180,48 +172,14 @@ export default function MarketplacePage() {
         </div>
 
         {/* Search and Filters */}
-        <div className="mb-8 space-y-4">
-          <div className="flex flex-col md:flex-row gap-4">
-            <div className="flex-1 relative">
-              <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-foreground-muted" />
-              <Input
-                placeholder="Hledat události nebo lokace..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-12 pr-4 py-3 glass-effect border-border/30 focus:border-primary/50"
-              />
-            </div>
-
-            <Select
-              value={selectedCategory}
-              onValueChange={setSelectedCategory}
-            >
-              <SelectTrigger className="w-full md:w-48 glass-effect border-border/30">
-                <SelectValue placeholder="Kategorie" />
-              </SelectTrigger>
-              <SelectContent className="glass-effect border-border/30">
-                {categories.map((category) => (
-                  <SelectItem key={category.key} value={category.key}>
-                    <span className="mr-2">{category.icon}</span>
-                    {category.name}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-
-            <Select value={sortBy} onValueChange={setSortBy}>
-              <SelectTrigger className="w-full md:w-48 glass-effect border-border/30">
-                <SelectValue placeholder="Řadit podle" />
-              </SelectTrigger>
-              <SelectContent className="glass-effect border-border/30">
-                <SelectItem value="newest">Nejnovější</SelectItem>
-                <SelectItem value="oldest">Nejstarší</SelectItem>
-                <SelectItem value="price-low">Cena: od nejnižší</SelectItem>
-                <SelectItem value="price-high">Cena: od nejvyšší</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-        </div>
+        <SearchBox
+          searchQuery={searchQuery}
+          setSearchQuery={setSearchQuery}
+          selectedCategory={selectedCategory}
+          setSelectedCategory={setSelectedCategory}
+          sortBy={sortBy}
+          setSortBy={setSortBy}
+        />
 
         {/* Main Content */}
         <Tabs defaultValue="buy" className="space-y-8">

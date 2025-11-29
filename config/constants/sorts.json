@@ -1,0 +1,18 @@
+{
+  "newest": {
+    "label": "Nejnovější",
+    "value": "newest"
+  },
+  "oldest": {
+    "label": "Nejstarší",
+    "value": "oldest"
+  },
+  "price-low": {
+    "label": "Cena: od nejnižší",
+    "value": "price-low"
+  },
+  "price-high": {
+    "label": "Cena: od nejvyšší",
+    "value": "price-high"
+  }
+}

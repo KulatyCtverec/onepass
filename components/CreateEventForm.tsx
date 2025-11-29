@@ -2,6 +2,7 @@
 import { useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import categories from "@/config/constants/categories.json";
 import OnepassCalendar from "@/components/OnepassCalendar";
 import {
   Upload,
@@ -65,16 +66,6 @@ export default function CreateEventForm() {
   const [loading, setLoading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
-
-  const categories = [
-    { value: "music", label: "Hudba", icon: "🎵" },
-    { value: "sports", label: "Sport", icon: "⚽" },
-    { value: "theater", label: "Divadlo", icon: "🎭" },
-    { value: "comedy", label: "Komedie", icon: "😂" },
-    { value: "food", label: "Jídlo & Nápoje", icon: "🍷" },
-    { value: "technology", label: "Technologie", icon: "💻" },
-    { value: "other", label: "Jiné", icon: "✨" },
-  ];
 
   const addTicketType = () => {
     const newId = Math.max(...ticketTypes.map((t) => t.id)) + 1;

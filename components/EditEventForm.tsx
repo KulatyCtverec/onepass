@@ -21,13 +21,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
 import { Event, TicketType } from "@/lib/generated/prisma/client";
 import { PutBlobResult } from "@vercel/blob";
-
-interface TicketTypeForm {
-  id: number;
-  name: string;
-  price: string;
-  quantity: string;
-}
+import categories from "@/config/constants/categories.json";
 
 interface EditEventFormProps {
   event: Event & { ticketTypes: TicketType[] };
@@ -75,16 +69,6 @@ export default function EditEventForm({ event }: EditEventFormProps) {
   const [uploadingImage, setUploadingImage] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
-
-  const categories = [
-    { value: "music", label: "Hudba", icon: "🎵" },
-    { value: "sports", label: "Sport", icon: "⚽" },
-    { value: "theater", label: "Divadlo", icon: "🎭" },
-    { value: "comedy", label: "Komedie", icon: "😂" },
-    { value: "food", label: "Jídlo & Nápoje", icon: "🍷" },
-    { value: "technology", label: "Technologie", icon: "💻" },
-    { value: "other", label: "Jiné", icon: "✨" },
-  ];
 
   const addTicketType = () => {
     // Najít maximální ID z existujících ticket types

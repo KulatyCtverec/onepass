@@ -1,0 +1,9 @@
+[
+  { "value": "music", "label": "Hudba", "icon": "🎵" },
+  { "value": "sports", "label": "Sport", "icon": "⚽" },
+  { "value": "theater", "label": "Divadlo", "icon": "🎭" },
+  { "value": "comedy", "label": "Komedie", "icon": "😂" },
+  { "value": "food", "label": "Jídlo & Nápoje", "icon": "🍷" },
+  { "value": "technology", "label": "Technologie", "icon": "💻" },
+  { "value": "other", "label": "Jiné", "icon": "✨" }
+]

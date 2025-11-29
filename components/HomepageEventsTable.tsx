@@ -1,12 +1,20 @@
 "use client";
 
-import { useState, useEffect, useRef, useCallback } from "react";
+import {
+  useState,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useCallback,
+  useMemo,
+} from "react";
 import { Button } from "./ui/button";
 import { Event, TicketType } from "@/lib/generated/prisma/client";
 import Link from "next/link";
-import { Calendar, MapPin, Ticket, Clock, Loader2, Filter } from "lucide-react";
+import { Calendar, MapPin, Ticket, Clock, Loader2 } from "lucide-react";
 import { useSSE } from "@/lib/hooks/useSSE";
-
+import categories from "@/config/constants/categories.json";
+import SearchBox from "./SearchBox";
 const EVENTS_PER_PAGE = 12;
 
 export default function HomepageEventsTable() {
@@ -19,7 +27,6 @@ export default function HomepageEventsTable() {
   const [hasMore, setHasMore] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [initialLoading, setInitialLoading] = useState(true);
-  const observerTarget = useRef<HTMLDivElement>(null);
 
   // Načítání počátečních událostí
   useEffect(() => {
@@ -76,83 +83,22 @@ export default function HomepageEventsTable() {
     }
   }, [events.length, loadingMore, hasMore]);
 
-  // Intersection Observer pro automatické načítání při scrollu
-  useEffect(() => {
-    if (!showAll || !hasMore || loadingMore) return;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0].isIntersecting && hasMore && !loadingMore) {
-          loadMoreEvents();
-        }
-      },
-      { threshold: 0.1 }
-    );
-
-    const currentTarget = observerTarget.current;
-    if (currentTarget) {
-      observer.observe(currentTarget);
+  const filteredEvents = useMemo(() => {
+    if (selectedCategory === "all") {
+      return events;
     }
+    return events?.filter((event) => event.category === selectedCategory) || [];
+  }, [events, selectedCategory]);
 
-    return () => {
-      if (currentTarget) {
-        observer.unobserve(currentTarget);
-      }
-    };
-  }, [showAll, hasMore, loadingMore, loadMoreEvents]);
-
-  // Kategorie pro filtrování
-  const categories = [
-    { name: "Všechny", key: "all", icon: "✨", count: events?.length || 0 },
-    {
-      name: "Hudba",
-      key: "music",
-      icon: "🎵",
-      count: events?.filter((e) => e.category === "music").length || 0,
-    },
-    {
-      name: "Sport",
-      key: "sports",
-      icon: "⚽",
-      count: events?.filter((e) => e.category === "sports").length || 0,
-    },
-    {
-      name: "Divadlo",
-      key: "theater",
-      icon: "🎭",
-      count: events?.filter((e) => e.category === "theater").length || 0,
-    },
-    {
-      name: "Komedie",
-      key: "comedy",
-      icon: "😂",
-      count: events?.filter((e) => e.category === "comedy").length || 0,
-    },
-    {
-      name: "Jídlo",
-      key: "food",
-      icon: "🍷",
-      count: events?.filter((e) => e.category === "food").length || 0,
-    },
-    {
-      name: "Technologie",
-      key: "technology",
-      icon: "💻",
-      count: events?.filter((e) => e.category === "technology").length || 0,
-    },
-    {
-      name: "Jiné",
-      key: "other",
-      icon: "✨",
-      count: events?.filter((e) => e.category === "other").length || 0,
-    },
-  ];
-
-  // Filtrované events podle kategorie
-  const filteredEvents =
-    selectedCategory === "all"
-      ? events
-      : events?.filter((event) => event.category === selectedCategory) || [];
+  // Počty událostí v kategoriích - memoizováno pro optimalizaci
+  const categoryCounts = useMemo(() => {
+    const counts: Record<string, number> = {};
+    categories.forEach((category) => {
+      counts[category.value] =
+        events?.filter((e) => e.category === category.value).length || 0;
+    });
+    return counts;
+  }, [events]);
 
   if (error) {
     return (
@@ -217,30 +163,15 @@ export default function HomepageEventsTable() {
             Najděte události, které vás zajímají
           </p>
         </div>
-
-        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-4">
-          {categories.map((category) => (
-            <div
-              key={category.key}
-              className={`group cursor-pointer transition-all duration-300 hover:scale-105 text-center p-4 rounded-lg border border-border/30 ${
-                selectedCategory === category.key
-                  ? "bg-primary/20 text-primary border-primary/50"
-                  : "bg-background/50 hover:bg-primary/10 hover:border-primary/30"
-              }`}
-              onClick={() => setSelectedCategory(category.key)}
-            >
-              <div className="text-2xl mb-2 filter drop-shadow-lg">
-                {category.icon}
-              </div>
-              <h3 className="font-medium mb-1 text-foreground text-sm">
-                {category.name}
-              </h3>
-              <p className="text-xs text-foreground-muted">
-                {category.count} událostí
-              </p>
-            </div>
-          ))}
-        </div>
+        {/* Dynamicky nastavíme počet sloupců podle počtu kategorií */}
+        <SearchBox
+          searchQuery={""}
+          setSearchQuery={() => {}}
+          selectedCategory={selectedCategory}
+          setSelectedCategory={setSelectedCategory}
+          sortBy={""}
+          setSortBy={() => {}}
+        />
       </section>
 
       {/* Filtrované události */}
@@ -251,23 +182,13 @@ export default function HomepageEventsTable() {
               {selectedCategory === "all"
                 ? "Všechny události"
                 : `${
-                    categories.find((c) => c.key === selectedCategory)?.name
+                    categories.find((c) => c.value === selectedCategory)?.label
                   } události`}
             </h2>
             <p className="text-foreground-muted">
               Nenechte si ujít tyto skvělé nadcházející události
             </p>
           </div>
-          {selectedCategory !== "all" && (
-            <Button
-              variant="outline"
-              onClick={() => setSelectedCategory("all")}
-              className="glass-effect border-border/30 hover:border-primary/50 transition-all duration-300"
-            >
-              <Filter className="h-4 w-4 mr-2" />
-              Zobrazit všechny události
-            </Button>
-          )}
         </div>
 
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
@@ -384,7 +305,7 @@ export default function HomepageEventsTable() {
         </div>
 
         {/* Tlačítka pro zobrazení více */}
-        <div className="text-center pt-6 space-y-3">
+        <div className="text-center pt-6 space-y-3 min-h-60">
           {!showAll && filteredEvents && filteredEvents.length > 4 && (
             <Button
               onClick={() => setShowAll(true)}
@@ -399,7 +320,6 @@ export default function HomepageEventsTable() {
             <div className="space-y-3">
               {hasMore && (
                 <>
-                  <div ref={observerTarget} className="h-10" />
                   {loadingMore && (
                     <div className="flex items-center justify-center">
                       <Loader2 className="w-6 h-6 animate-spin text-primary" />
