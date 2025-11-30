@@ -18,6 +18,7 @@ import LoginForm from "./login-form";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { Role } from "@/lib/generated/prisma";
+import { User, Ticket, LayoutDashboard, Plus, LogOut } from "lucide-react";
 
 export default function SignIn() {
   const { data: session } = useSession();
@@ -50,24 +51,40 @@ export default function SignIn() {
           align="end"
         >
           <DropdownMenuItem asChild>
-            <Link href="/profile" className="cursor-pointer">
+            <Link
+              href="/profile"
+              className="cursor-pointer flex items-center gap-2"
+            >
+              <User className="h-4 w-4" />
               Profil
             </Link>
           </DropdownMenuItem>
           <DropdownMenuItem asChild>
-            <Link href="/my-tickets" className="cursor-pointer">
+            <Link
+              href="/my-tickets"
+              className="cursor-pointer flex items-center gap-2"
+            >
+              <Ticket className="h-4 w-4" />
               Moje lístky
             </Link>
           </DropdownMenuItem>
           {(userRole === Role.ADMIN || userRole === Role.ORGANIZER) && (
             <>
               <DropdownMenuItem asChild>
-                <Link href="/admin" className="cursor-pointer">
+                <Link
+                  href="/admin"
+                  className="cursor-pointer flex items-center gap-2"
+                >
+                  <LayoutDashboard className="h-4 w-4" />
                   Admin Dashboard
                 </Link>
               </DropdownMenuItem>
               <DropdownMenuItem asChild>
-                <Link href="/create-event" className="cursor-pointer">
+                <Link
+                  href="/create-event"
+                  className="cursor-pointer flex items-center gap-2"
+                >
+                  <Plus className="h-4 w-4" />
                   Vytvořit událost
                 </Link>
               </DropdownMenuItem>
@@ -75,8 +92,9 @@ export default function SignIn() {
           )}
           <DropdownMenuItem
             onClick={() => signOut()}
-            className="cursor-pointer text-red-400 hover:text-red-300"
+            className="cursor-pointer text-red-400 hover:text-red-300 flex items-center gap-2"
           >
+            <LogOut className="h-4 w-4" />
             Odhlásit se
           </DropdownMenuItem>
         </DropdownMenuContent>

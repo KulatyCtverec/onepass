@@ -27,7 +27,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import Link from "next/link";
 import {
   Dialog,
   DialogContent,
@@ -40,41 +40,17 @@ import SearchBox from "@/components/SearchBox";
 
 export default function MarketplacePage() {
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState("all");
+  const [selectedCategory, setSelectedCategory] = useState("");
   const [priceRange, setPriceRange] = useState("all");
   const [sortBy, setSortBy] = useState("newest");
   const [selectedListing, setSelectedListing] = useState<any>(null);
-  const [resalePrice, setResalePrice] = useState("");
-
-  const userStats = {
-    totalTicketsOwned: 12,
-    ticketsSold: 8,
-    totalEarned: 1250,
-    averageRating: 4.9,
+  // Funkce pro převod anglického názvu kategorie na český
+  const getCategoryLabel = (category: string) => {
+    const categoryObj = categories.find(
+      (c) => c.value.toLowerCase() === category.toLowerCase()
+    );
+    return categoryObj ? categoryObj.label : category;
   };
-
-  const userOwnedEvents = [
-    {
-      id: "1",
-      title: "Tech Conference 2024",
-      date: "2024-08-20",
-      location: "San Francisco",
-      ticketsOwned: 2,
-      originalPrice: 299,
-      image:
-        "https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=300&h=200&fit=crop",
-    },
-    {
-      id: "2",
-      title: "Summer Music Festival 2024",
-      date: "2024-07-15",
-      location: "Central Park, New York",
-      ticketsOwned: 1,
-      originalPrice: 189,
-      image:
-        "https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?w=300&h=200&fit=crop",
-    },
-  ];
 
   const resaleListings = [
     {
@@ -114,7 +90,7 @@ export default function MarketplacePage() {
       venue: "Richard Rodgers Theatre",
       category: "Theater",
       ticketType: "Orchestra",
-      quantity: 2,
+      quantity: 6,
       seller: {
         name: "Mike R.",
         rating: 4.7,
@@ -133,7 +109,8 @@ export default function MarketplacePage() {
       listing.eventTitle.toLowerCase().includes(searchQuery.toLowerCase()) ||
       listing.location.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesCategory =
-      selectedCategory === "all" ||
+      !selectedCategory ||
+      selectedCategory === "" ||
       listing.category.toLowerCase() === selectedCategory;
     return matchesSearch && matchesCategory;
   });
@@ -161,14 +138,24 @@ export default function MarketplacePage() {
     <div className="min-h-screen bg-background">
       <div className="container mx-auto px-6 py-8">
         {/* Header */}
-        <div className="text-center mb-12">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-            Marketplace
-          </h1>
-          <p className="text-foreground-muted text-lg max-w-2xl mx-auto">
-            Nakupujte a prodávejte lístky na události v bezpečném a důvěryhodném
-            prostředí
-          </p>
+        <div className="flex items-center justify-between mb-8">
+          <div className="text-left">
+            <h1 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-foreground">
+              Marketplace
+            </h1>
+            <p className="text-foreground-muted text-sm md:text-base mt-2 max-w-xl">
+              Nakupujte přeprodávané lístky v bezpečném a důvěryhodném
+              prostředí.
+            </p>
+          </div>
+
+          <Link
+            href="/marketplace/sell"
+            className="px-6 py-3 rounded-xl text-base font-medium bg-gradient-primary text-white hover:-translate-y-1 transition-all duration-300 neon-glow"
+          >
+            <Plus className="h-4 w-4 mr-2 inline" />
+            Prodat svůj lístek
+          </Link>
         </div>
 
         {/* Search and Filters */}
@@ -182,290 +169,149 @@ export default function MarketplacePage() {
         />
 
         {/* Main Content */}
-        <Tabs defaultValue="buy" className="space-y-8">
-          <TabsList className="grid w-full grid-cols-2 glass-effect border-border/30">
-            <TabsTrigger
-              value="buy"
-              className="data-[state=active]:bg-primary/20 data-[state=active]:text-primary"
-            >
-              <Ticket className="h-4 w-4 mr-2" />
-              Nakupovat lístky
-            </TabsTrigger>
-            <TabsTrigger
-              value="sell"
-              className="data-[state=active]:bg-primary/20 data-[state=active]:text-primary"
-            >
-              <Plus className="h-4 w-4 mr-2" />
-              Prodávat lístky
-            </TabsTrigger>
-          </TabsList>
+        <div className="space-y-6">
+          <h2 className="text-xl font-semibold text-foreground">
+            Dostupné nabídky
+          </h2>
+          <div className="flex items-center gap-2 justify-between">
+            <p className="text-sm text-foreground-muted mb-4 opacity-70">
+              Přeprodávané lístky od ověřených uživatelů
+            </p>
+            <p className="text-sm text-foreground-muted mb-4 opacity-70">
+              {sortedListings.length} nabídek • přeprodávané lístky od ověřených
+              uživatelů
+            </p>
+          </div>
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            {sortedListings.map((listing) => (
+              <Card
+                key={listing.id}
+                className="group cursor-pointer transition-all duration-300 hover:-translate-y-1 glass-effect border-border/30 hover:border-primary/50 overflow-hidden"
+                onClick={() => setSelectedListing(listing)}
+              >
+                <div className="aspect-video relative overflow-hidden">
+                  <img
+                    src={listing.image}
+                    alt={listing.eventTitle}
+                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
 
-          {/* Buy Tab */}
-          <TabsContent value="buy" className="space-y-6">
-            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-              {sortedListings.map((listing) => (
-                <Card
-                  key={listing.id}
-                  className="group cursor-pointer transition-all duration-300 hover:scale-105 glass-effect border-border/30 hover:border-primary/50 overflow-hidden"
-                >
-                  <div className="aspect-video relative overflow-hidden">
-                    <img
-                      src={listing.image}
-                      alt={listing.eventTitle}
-                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
-
-                    <div className="absolute top-4 left-4">
-                      <div className="px-2 py-1 bg-primary/20 backdrop-blur-sm rounded text-xs text-white border border-primary/30">
-                        {listing.category}
-                      </div>
-                    </div>
-
-                    <div className="absolute top-4 right-4">
-                      {listing.trending ? (
-                        <div className="px-2 py-1 bg-gradient-to-r from-primary to-secondary rounded text-xs text-white flex items-center">
-                          <TrendingUp className="h-3 w-3 mr-1" />
-                          Trending
-                        </div>
-                      ) : listing.savings > 0 ? (
-                        <div className="px-2 py-1 bg-green-500/20 backdrop-blur-sm rounded text-xs text-green-400 border border-green-500/30">
-                          Ušetříte {listing.savings} Kč
-                        </div>
-                      ) : null}
+                  <div className="absolute top-4 left-4">
+                    <div className="px-2 py-1 bg-primary/20 backdrop-blur-sm rounded text-xs text-white border border-primary/30">
+                      {getCategoryLabel(listing.category)}
                     </div>
                   </div>
 
-                  <CardContent className="p-4 space-y-4">
+                  <div className="absolute top-4 right-4 space-y-1">
+                    {listing.savings > 0 && (
+                      <div className="px-2 py-1 bg-emerald-500/15 border border-emerald-500/40 rounded text-xs text-emerald-300">
+                        Ušetříte {listing.savings} Kč
+                      </div>
+                    )}
+                    {listing.savings < 0 && (
+                      <div className="px-2 py-1 bg-amber-500/10 border border-amber-500/30 rounded text-xs text-amber-300">
+                        Vysoká poptávka
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                <CardContent className="p-4 space-y-4">
+                  <div>
+                    <h3 className="font-semibold text-foreground line-clamp-2 mb-2 group-hover:text-primary transition-colors">
+                      {listing.eventTitle}
+                    </h3>
+
+                    <div className="space-y-2 text-sm text-foreground-muted">
+                      <div className="flex items-center">
+                        <Calendar className="h-4 w-4 mr-2 text-primary" />
+                        {new Date(listing.date).toLocaleDateString("cs-CZ")}
+                      </div>
+                      <div className="flex items-center">
+                        <Clock className="h-4 w-4 mr-2 text-primary" />
+                        {listing.time}
+                      </div>
+                      <div className="flex items-center">
+                        <MapPin className="h-4 w-4 mr-2 text-primary" />
+                        <span className="truncate">{listing.location}</span>
+                      </div>
+                      {listing.venue && (
+                        <div className="flex items-center">
+                          <Users className="h-4 w-4 mr-2 text-primary" />
+                          <span className="truncate">{listing.venue}</span>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="flex justify-between items-center pt-4 border-t border-border/30">
                     <div>
-                      <h3 className="font-semibold text-foreground line-clamp-2 mb-2 group-hover:text-primary transition-colors">
-                        {listing.eventTitle}
-                      </h3>
-
-                      <div className="space-y-2 text-sm text-foreground-muted">
-                        <div className="flex items-center">
-                          <Calendar className="h-4 w-4 mr-2 text-primary" />
-                          {new Date(listing.date).toLocaleDateString("cs-CZ")}
-                        </div>
-                        <div className="flex items-center">
-                          <Clock className="h-4 w-4 mr-2 text-primary" />
-                          {listing.time}
-                        </div>
-                        <div className="flex items-center">
-                          <MapPin className="h-4 w-4 mr-2 text-primary" />
-                          <span className="truncate">{listing.location}</span>
-                        </div>
-                        {listing.venue && (
-                          <div className="flex items-center">
-                            <Users className="h-4 w-4 mr-2 text-primary" />
-                            <span className="truncate">{listing.venue}</span>
-                          </div>
-                        )}
+                      <div className="text-xs text-foreground-muted">
+                        Původní cena
+                      </div>
+                      <div className="text-lg font-bold text-foreground">
+                        {listing.originalPrice} Kč
                       </div>
                     </div>
-
-                    <div className="flex justify-between items-center pt-4 border-t border-border/30">
-                      <div>
-                        <div className="text-xs text-foreground-muted">
-                          Původní cena
-                        </div>
-                        <div className="text-lg font-bold text-foreground">
-                          {listing.originalPrice} Kč
-                        </div>
+                    <div className="text-right">
+                      <div className="text-xs text-foreground-muted">
+                        Prodejní cena
                       </div>
-                      <div className="text-right">
-                        <div className="text-xs text-foreground-muted">
-                          Prodejní cena
-                        </div>
-                        <div className="text-2xl font-bold text-primary">
-                          {listing.resalePrice} Kč
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="flex justify-between items-center">
-                      <div className="flex items-center space-x-2">
-                        <div className="flex items-center">
-                          <Star className="h-4 w-4 text-yellow-500 fill-current" />
-                          <span className="text-sm text-foreground-muted ml-1">
-                            {listing.seller.rating}
-                          </span>
-                        </div>
-                        <span className="text-xs text-foreground-muted">•</span>
-                        <span className="text-xs text-foreground-muted">
-                          {listing.seller.sales} prodejů
-                        </span>
-                        {listing.seller.verified && (
-                          <>
-                            <span className="text-xs text-foreground-muted">
-                              •
-                            </span>
-                            <Shield className="h-3 w-3 text-green-500" />
-                          </>
-                        )}
-                      </div>
-                      <Button
-                        size="sm"
-                        className="glass-button hover:glass-button"
-                        onClick={() => setSelectedListing(listing)}
-                      >
-                        <Ticket className="h-4 w-4 mr-2" />
-                        Koupit
-                      </Button>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-
-            {sortedListings.length === 0 && (
-              <div className="text-center py-12">
-                <Ticket className="h-16 w-16 text-foreground-muted mx-auto mb-4" />
-                <h3 className="text-lg font-semibold text-foreground mb-2">
-                  Žádné lístky nenalezeny
-                </h3>
-                <p className="text-foreground-muted">
-                  Zkuste změnit filtry nebo hledaný výraz
-                </p>
-              </div>
-            )}
-          </TabsContent>
-
-          {/* Sell Tab */}
-          <TabsContent value="sell" className="space-y-6">
-            <div className="grid gap-6 md:grid-cols-2">
-              {/* User Stats */}
-              <Card className="glass-effect border-border/30">
-                <CardHeader>
-                  <CardTitle className="flex items-center">
-                    <ChartBar className="h-5 w-5 mr-2 text-primary" />
-                    Moje statistiky
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="text-center p-4 glass-effect border-border/30 rounded-lg">
                       <div className="text-2xl font-bold text-primary">
-                        {userStats.totalTicketsOwned}
-                      </div>
-                      <div className="text-sm text-foreground-muted">
-                        Vlastním lístků
-                      </div>
-                    </div>
-                    <div className="text-center p-4 glass-effect border-border/30 rounded-lg">
-                      <div className="text-2xl font-bold text-green-500">
-                        {userStats.ticketsSold}
-                      </div>
-                      <div className="text-sm text-foreground-muted">
-                        Prodaných lístků
-                      </div>
-                    </div>
-                    <div className="text-center p-4 glass-effect border-border/30 rounded-lg">
-                      <div className="text-2xl font-bold text-primary">
-                        {userStats.totalEarned} Kč
-                      </div>
-                      <div className="text-sm text-foreground-muted">
-                        Celkový výdělek
-                      </div>
-                    </div>
-                    <div className="text-center p-4 glass-effect border-border/30 rounded-lg">
-                      <div className="text-2xl font-bold text-yellow-500">
-                        {userStats.averageRating}
-                      </div>
-                      <div className="text-sm text-foreground-muted">
-                        Průměrné hodnocení
+                        {listing.resalePrice} Kč
                       </div>
                     </div>
                   </div>
-                </CardContent>
-              </Card>
 
-              {/* Quick Sell */}
-              <Card className="glass-effect border-border/30">
-                <CardHeader>
-                  <CardTitle className="flex items-center">
-                    <Plus className="h-5 w-5 mr-2 text-primary" />
-                    Rychlý prodej
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <p className="text-foreground-muted text-sm">
-                    Máte lístky na událost, kterou se nemůžete zúčastnit?
-                    Prodejte je rychle a bezpečně!
-                  </p>
-                  <Button className="w-full glass-button hover:glass-button">
-                    <Plus className="h-4 w-4 mr-2" />
-                    Přidat lístek k prodeji
-                  </Button>
-                </CardContent>
-              </Card>
-            </div>
-
-            {/* User's Owned Events */}
-            <div>
-              <h3 className="text-xl font-semibold text-foreground mb-4">
-                Moje události s lístky
-              </h3>
-              <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-                {userOwnedEvents.map((event) => (
-                  <Card
-                    key={event.id}
-                    className="glass-effect border-border/30 hover:border-primary/50 transition-all duration-300"
-                  >
-                    <div className="aspect-video relative overflow-hidden">
-                      <img
-                        src={event.image}
-                        alt={event.title}
-                        className="w-full h-full object-cover"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+                  <div className="flex justify-between items-center">
+                    <div className="flex items-center space-x-2">
+                      <div className="flex items-center">
+                        <Star className="h-4 w-4 text-yellow-500 fill-current" />
+                        <span className="text-sm text-foreground-muted ml-1">
+                          {listing.seller.rating}
+                        </span>
+                      </div>
+                      <span className="text-xs text-foreground-muted">•</span>
+                      {listing.quantity && (
+                        <div className="text-sm text-foreground-muted">
+                          {listing.quantity === 1
+                            ? "1 lístek k dispozici"
+                            : listing.quantity > 1 && listing.quantity < 5
+                            ? `${listing.quantity} lístky k dispozici`
+                            : `${listing.quantity} lístků k dispozici`}
+                        </div>
+                      )}
                     </div>
-                    <CardContent className="p-4">
-                      <h4 className="font-semibold text-foreground mb-2">
-                        {event.title}
-                      </h4>
-                      <div className="space-y-1 text-sm text-foreground-muted mb-4">
-                        <div className="flex items-center">
-                          <Calendar className="h-4 w-4 mr-2 text-primary" />
-                          {new Date(event.date).toLocaleDateString("cs-CZ")}
-                        </div>
-                        <div className="flex items-center">
-                          <MapPin className="h-4 w-4 mr-2 text-primary" />
-                          {event.location}
-                        </div>
-                      </div>
-                      <div className="flex justify-between items-center">
-                        <div>
-                          <div className="text-xs text-foreground-muted">
-                            Vlastním lístků
-                          </div>
-                          <div className="text-lg font-bold text-primary">
-                            {event.ticketsOwned}
-                          </div>
-                        </div>
-                        <div className="text-right">
-                          <div className="text-xs text-foreground-muted">
-                            Původní cena
-                          </div>
-                          <div className="text-lg font-bold text-foreground">
-                            {event.originalPrice} Kč
-                          </div>
-                        </div>
-                      </div>
-                      <Button
-                        size="sm"
-                        variant="outline"
-                        className="w-full mt-4 glass-effect border-border/30 hover:border-primary/50"
-                      >
-                        Prodat lístky
-                      </Button>
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
+                    <Button
+                      size="sm"
+                      className="glass-button hover:glass-button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setSelectedListing(listing);
+                      }}
+                    >
+                      <Ticket className="h-4 w-4 mr-2" />
+                      Koupit
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+
+          {sortedListings.length === 0 && (
+            <div className="text-center py-12">
+              <Ticket className="h-16 w-16 text-foreground-muted mx-auto mb-4" />
+              <h3 className="text-lg font-semibold text-foreground mb-2">
+                Žádné lístky nenalezeny
+              </h3>
+              <p className="text-foreground-muted">
+                Zkuste změnit filtry nebo hledaný výraz
+              </p>
             </div>
-          </TabsContent>
-        </Tabs>
+          )}
+        </div>
 
         {/* Trust Indicators */}
         <div className="mt-16 text-center">

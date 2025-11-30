@@ -69,7 +69,7 @@ export default function HeroSection() {
 
           <p className="text-xl md:text-2xl mb-12 text-foreground-muted max-w-2xl mx-auto leading-relaxed">
             Nejlepší platforma pro správu a prodej vstupenek na události.
-            Objevte koncerty, festivaly, sportovní události a mnohem více.
+            Objevte koncerty, festivaly, sportovní akce a mnohem více.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center">

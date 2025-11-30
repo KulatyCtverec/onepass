@@ -25,7 +25,7 @@ export default function HomepageEventsTable() {
   const [showAll, setShowAll] = useState(false);
   const [loadingMore, setLoadingMore] = useState(false);
   const [hasMore, setHasMore] = useState(true);
-  const [selectedCategory, setSelectedCategory] = useState("all");
+  const [selectedCategory, setSelectedCategory] = useState("");
   const [initialLoading, setInitialLoading] = useState(true);
 
   // Načítání počátečních událostí
@@ -84,7 +84,7 @@ export default function HomepageEventsTable() {
   }, [events.length, loadingMore, hasMore]);
 
   const filteredEvents = useMemo(() => {
-    if (selectedCategory === "all") {
+    if (!selectedCategory || selectedCategory === "") {
       return events;
     }
     return events?.filter((event) => event.category === selectedCategory) || [];
@@ -179,7 +179,7 @@ export default function HomepageEventsTable() {
         <div className="flex justify-between items-center mb-12">
           <div>
             <h2 className="text-3xl md:text-4xl font-bold mb-2 text-foreground">
-              {selectedCategory === "all"
+              {!selectedCategory || selectedCategory === ""
                 ? "Všechny události"
                 : `${
                     categories.find((c) => c.value === selectedCategory)?.label
@@ -224,7 +224,7 @@ export default function HomepageEventsTable() {
               {/* Event Info - positioned over image, expands on hover */}
               <div className="relative -mt-20 transition-all duration-300 group-hover:-mt-16">
                 {/* Background strip for better text readability */}
-                <div className="bg-black/90 p-3 rounded-b-lg">
+                <div className="glass-effect p-3 rounded-b-lg">
                   {/* Basic info always visible - only name and price */}
                   <div className="flex items-center justify-between mb-1">
                     <div className="w-2 h-2 bg-primary rounded-full"></div>

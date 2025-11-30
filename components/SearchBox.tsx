@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useRef } from "react";
 import { Input } from "@/components/ui/input";
 import { Search } from "lucide-react";
 import categories from "@/config/constants/categories.json";
@@ -28,6 +28,10 @@ function SearchBox({
   sortBy,
   setSortBy,
 }: SearchBoxProps) {
+  const [categoryBeforeOpen, setCategoryBeforeOpen] = useState<string>("");
+  const shouldClearRef = useRef(false);
+  const [selectKey, setSelectKey] = useState(0);
+
   return (
     <div className="mb-8 space-y-4">
       <div className="flex flex-col md:flex-row gap-4">
@@ -41,7 +45,35 @@ function SearchBox({
           <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-foreground-muted" />
         </div>
 
-        <Select value={selectedCategory} onValueChange={setSelectedCategory}>
+        <Select
+          key={`category-${selectKey}`}
+          value={selectedCategory === "" ? undefined : selectedCategory}
+          onOpenChange={(open) => {
+            if (open) {
+              // Když se select otevře, uložíme aktuální hodnotu
+              setCategoryBeforeOpen(selectedCategory);
+              shouldClearRef.current = false;
+            } else {
+              // Když se select zavře, zkontrolujeme, jestli máme vyčistit hodnotu
+              if (shouldClearRef.current) {
+                // Použijeme queueMicrotask pro asynchronní aktualizaci po dokončení renderu
+                queueMicrotask(() => {
+                  setSelectedCategory("");
+                  setSelectKey((prev) => prev + 1);
+                  shouldClearRef.current = false;
+                });
+              }
+            }
+          }}
+          onValueChange={(value) => {
+            // Pokud vybere stejnou kategorii, označíme, že ji máme vyčistit
+            if (selectedCategory === value) {
+              shouldClearRef.current = true;
+            } else {
+              setSelectedCategory(value);
+            }
+          }}
+        >
           <SelectTrigger className="w-full md:w-48 glass-effect border-border/30">
             <SelectValue placeholder="Kategorie" />
           </SelectTrigger>
@@ -50,16 +82,27 @@ function SearchBox({
               <SelectLabel className="text-foreground-muted font-semibold text-xs uppercase tracking-wider px-2 py-2">
                 Kategorie události
               </SelectLabel>
-              {categories.map((category) => (
-                <SelectItem
-                  key={category.value}
-                  value={category.value}
-                  className="cursor-pointer transition-all duration-200 hover:bg-blue-500/10 focus:bg-blue-500/20 focus:text-foreground rounded-md my-0.5 text-foreground"
-                >
-                  <span className="mr-2">{category.icon}</span>
-                  {category.label}
-                </SelectItem>
-              ))}
+              {categories.map((category) => {
+                const isSelected = selectedCategory === category.value;
+                return (
+                  <SelectItem
+                    key={category.value}
+                    value={category.value}
+                    onPointerDown={(e) => {
+                      // Pokud klikne na už vybranou kategorii, označíme, že ji máme vyčistit
+                      if (isSelected) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        shouldClearRef.current = true;
+                      }
+                    }}
+                    className="cursor-pointer transition-all duration-200 hover:bg-blue-500/10 focus:bg-blue-500/20 focus:text-foreground rounded-md my-0.5 text-foreground"
+                  >
+                    <span className="mr-2">{category.icon}</span>
+                    {category.label}
+                  </SelectItem>
+                );
+              })}
             </SelectGroup>
           </SelectContent>
         </Select>

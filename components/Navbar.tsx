@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/navigation";
 import SignIn from "@/components/sign-in";
 import { Role } from "@/lib/generated/prisma";
+import NavbarSearchBox from "./NavbarSearchBox";
 
 export default function Navbar() {
   const { data: session } = useSession();
@@ -125,6 +126,7 @@ export default function Navbar() {
 
           {/* User menu */}
           <div className="flex items-center space-x-4">
+            <NavbarSearchBox />
             <SignIn />
           </div>
         </div>
