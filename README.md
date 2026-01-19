@@ -1,20 +1,26 @@
 # OnePass - Event Ticket Management Platform
 
-OnePass je moderní platforma pro správu a prodej vstupenek na události, postavená na Next.js 14 s TypeScript a Prisma ORM.
+OnePass je moderní platforma pro správu a prodej vstupenek na události, postavená na Next.js 14 s TypeScript a Prisma ORM. 
 
-## 🎨 Design System
+## Hlavní myšlenky OnePass
 
-Aplikace používá moderní design systém inspirovaný hyper-moderním dark theme s:
+OnePass má dvě hlavní myšlenky:
+- **Zajistit 100% bezpečí při přeprodeji lístků** - Má myšlenka s touto aplikací je ve své podstatě jednoduchá. Když lístek nebude pouze PDFko s jedním QR-kódem, ale záznam v databázi, jsem jako admin aplikace schopný zajistit 100% bezpečný přeprodej mezi uživateli (prostě změním ownera záznamu v db).
+- **Umožnění prodejci získat podíl z přeprodeje lístků** - Problém, se kterým by se aplikace mohla potýkat je ten, že lístky musím generovat já, jako admin OnePass. Abych motivoval organizátory generovat aplikace, napadlo mě, že bych mohl poskytnout organizátorům pár procent z každého přeprodeje, a tím odemknout organizátorům úplně nový příjem, ke kterému by se jinak nedostali. Zkrátka uživatel platí premium za bezpečnost, které dostane organizátor, a část samozřejmě i já, jako majitel aplikace.
+ 
+## 🎨 Design
 
-- **Glass efekty** - Průhledné pozadí s backdrop-filter blur
+Cíl mého designu je, aby aplikace působila co nejjednodušeji a nejmoderněji, co to jde. Proto používám v mém UI následující:
+
+- **Glass efekt** - Průhledné pozadí s backdrop-filter blur
 - **Gradient pozadí** - Animované gradient pozadí s blur efektem
 - **Neon glow** - Světelné efekty kolem prvků
-- **Moderní typografie** - Čisté fonty s optimální čitelností
-- **Responsivní design** - Optimalizováno pro všechny zařízení
+- **Moderní typografie** - Používám jeden konkrétní font, nechci mít aplikaci přeplácanou.
+- **Responsivní design** - Optimalizováno pro všechna zařízení
 
 ### Barvy
 
-- **Primary**: Modrá (#3b82f6) - hlavní akční barva
+- **Primary**: Modrá (#3b82f6) - hlavní barva
 - **Background**: Tmavé pozadí s gradientem
 - **Foreground**: Světlý text pro maximální kontrast
 - **Glass**: Průhledné prvky s blur efektem
@@ -37,17 +43,17 @@ Aplikace používá moderní design systém inspirovaný hyper-moderním dark th
 
 ### Pro ověřovatele
 
-- Ověřování vstupenek pomocí QR kódů
-- Mobilní rozhraní pro terénní použití
+- Ověřování vstupenek pomocí čtečky QR kódů integrované ve OnePass
+- Možnost ověřovat lístky z každého mobilu 
 
 ## 🛠️ Technologie
 
 - **Frontend**: Next.js 14, React 18, TypeScript
-- **Styling**: Tailwind CSS s custom design systémem
-- **UI Komponenty**: shadcn/ui
+- **Styling**: Tailwind CSS
+- **UI Komponenty**: shadcn/ui a velká část mých vlastních
 - **Backend**: Next.js API Routes
 - **Databáze**: PostgreSQL s Prisma ORM
-- **Autentifikace**: NextAuth.js
+- **Autentifikace**: Auth.js
 - **Deployment**: Vercel
 
 ## 🎯 Instalace
@@ -55,7 +61,7 @@ Aplikace používá moderní design systém inspirovaný hyper-moderním dark th
 1. **Klonování repozitáře**
 
 ```bash
-git clone https://github.com/yourusername/onepass.git
+git clone https://github.com/KulatyCtverec/onepass.git
 cd onepass
 ```
 
@@ -98,11 +104,7 @@ npm run dev
 - Credentials autentifikace
 - Role-based access control (Admin, Authenticator)
 
-### Design
 
-- Dark mode jako výchozí
-- Responsivní breakpointy
-- Custom CSS proměnné pro konzistentní design
 
 ## 📊 Struktura projektu
 
@@ -121,13 +123,6 @@ onepass/
 └── public/                # Statické soubory
 ```
 
-## 🎨 Design principy
-
-1. **Glass morphism** - Průhledné prvky s blur efektem
-2. **Gradient pozadí** - Animované pozadí pro dynamický vzhled
-3. **Neon efekty** - Světelné obrysy pro zvýraznění
-4. **Konzistentní spacing** - Jednotný systém mezer a padding
-5. **Moderní typografie** - Čisté fonty s optimální čitelností
 
 ## 🚀 Deployment
 
