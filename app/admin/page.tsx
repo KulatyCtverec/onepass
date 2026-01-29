@@ -39,7 +39,7 @@ export default async function AdminPage() {
     <main className="min-h-screen text-white py-8">
       <div className="max-w-7xl mx-auto px-4">
         <h1 className="text-3xl font-bold mb-8 text-center">
-          👑 Admin Dashboard
+          Admin Dashboard
         </h1>
 
         <AdminDashboard events={events} />

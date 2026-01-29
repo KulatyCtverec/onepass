@@ -1,11 +1,16 @@
 import NextAuth from "next-auth";
+import { PrismaAdapter } from "@auth/prisma-adapter";
 import Google from "next-auth/providers/google";
 import Credentials from "next-auth/providers/credentials";
-import { prisma } from "./lib/prisma";
 import bcrypt from "bcryptjs";
+import { prisma } from "./lib/prisma";
 import { Role } from "@/lib/generated/prisma";
+import { authConfig } from "./auth.config";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
+  ...authConfig,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- @auth/prisma-adapter vs next-auth adapter type mismatch
+  adapter: PrismaAdapter(prisma) as any,
   providers: [
     Google({
       clientId: process.env.GOOGLE_CLIENT_ID!,
@@ -18,26 +23,18 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         password: { label: "Heslo", type: "password" },
       },
       async authorize(credentials) {
-        if (!credentials?.email || !credentials?.password) {
-          return null;
-        }
+        if (!credentials?.email || !credentials?.password) return null;
 
         const user = await prisma.user.findUnique({
           where: { email: credentials.email as string },
         });
+        if (!user || !user.password) return null;
 
-        if (!user || !user.password) {
-          return null;
-        }
-
-        const isPasswordValid = await bcrypt.compare(
+        const ok = await bcrypt.compare(
           credentials.password as string,
           user.password
         );
-
-        if (!isPasswordValid) {
-          return null;
-        }
+        if (!ok) return null;
 
         return {
           id: user.id,
@@ -49,44 +46,31 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       },
     }),
   ],
-  session: {
-    strategy: "jwt",
-  },
-  pages: {
-    signIn: "/auth/signin",
-    error: "/auth/signin",
-  },
   callbacks: {
-    async signIn({ user, account, profile }) {
-      // Pro Google login načti roli z databáze
-      console.log("signIn callback");
-      console.log("user", user);
+    ...authConfig.callbacks,
+    async signIn({ user, account }) {
       if (account?.provider === "google" && user.email) {
         const dbUser = await prisma.user.findUnique({
           where: { email: user.email },
           select: { id: true, role: true },
         });
-
         if (dbUser) {
           user.id = dbUser.id;
-          user.role = dbUser.role;
+          (user as { role?: Role }).role = dbUser.role;
         }
       }
       return true;
     },
-    async jwt({ token, user, account }) {
+    async jwt({ token, user }) {
       if (user) {
-        console.log("jwt callback");
-        console.log("user", user);
-        console.log("token", token);
         token.id = user.id;
         token.emailVerified = user.emailVerified;
-        token.role = user.role;
+        token.role = (user as { role?: Role }).role;
       }
       return token;
     },
     async session({ session, token }) {
-      if (token) {
+      if (token && session.user) {
         session.user.id = token.id as string;
         session.user.emailVerified = token.emailVerified as Date | null;
         session.user.role = token.role as Role;

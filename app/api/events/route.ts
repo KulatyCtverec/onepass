@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
-import { generateEventSlug, checkEventNameExists } from "@/lib/utils";
+import { generateEventSlug } from "@/lib/utils";
+import { checkEventNameExists } from "@/lib/utils-server";
 import { Role } from "@/lib/generated/prisma";
 
 export async function POST(request: NextRequest) {
@@ -19,8 +20,16 @@ export async function POST(request: NextRequest) {
       session.user.role !== Role.ADMIN &&
       session.user.role !== Role.ORGANIZER
     ) {
+      console.warn(
+        "[POST /api/events] 403: uživatel nemá roli ORGANIZER/ADMIN. role=",
+        session.user.role
+      );
       return NextResponse.json(
-        { error: "Nedostatečná oprávnění" },
+        {
+          error: "Nedostatečná oprávnění",
+          message:
+            "Vytvářet události mohou pouze uživatelé s rolí Organizátor nebo Admin. Požádejte správce o změnu role.",
+        },
         { status: 403 }
       );
     }

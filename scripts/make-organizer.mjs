@@ -3,14 +3,14 @@ import { PrismaClient, Role } from "../lib/generated/prisma/client/index.js";
 
 const prisma = new PrismaClient();
 
-async function makeAdmin(email) {
+async function makeOrganizer(email) {
   try {
     const user = await prisma.user.update({
       where: { email },
-      data: { role: Role.ADMIN },
+      data: { role: Role.ORGANIZER },
     });
 
-    console.log(`✅ Uživatel ${email} je nyní admin`);
+    console.log(`✅ Uživatel ${email} je nyní organizátor`);
     console.log(`ID: ${user.id}`);
     console.log(`Jméno: ${user.name}`);
     console.log(`Email: ${user.email}`);
@@ -26,13 +26,12 @@ async function makeAdmin(email) {
   }
 }
 
-// Získat email z argumentů
 const email = process.argv[2];
 
 if (!email) {
   console.error("❌ Prosím zadejte email uživatele");
-  console.log("Použití: node scripts/make-admin.mjs user@example.com");
+  console.log("Použití: node scripts/make-organizer.mjs user@example.com");
   process.exit(1);
 }
 
-makeAdmin(email);
+makeOrganizer(email);

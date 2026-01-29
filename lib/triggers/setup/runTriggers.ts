@@ -1,3 +1,4 @@
+import "dotenv/config";
 import { setupEventInsertTrigger } from "../events";
 import { setupTicketTriggers } from "../tickets";
 

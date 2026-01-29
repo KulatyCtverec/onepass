@@ -30,30 +30,3 @@ export function generateEventSlug(name: string, date: Date): string {
   return `${normalizedName}-${year}-${month}-${day}`;
 }
 
-/**
- * Kontroluje, zda už existuje event se stejným názvem v daný den
- * @param name - název eventu
- * @param date - datum konání
- * @param excludeId - ID eventu k vyloučení (pro editaci)
- * @returns true pokud už existuje, false pokud ne
- */
-export async function checkEventNameExists(
-  name: string,
-  date: Date,
-  excludeId?: string
-): Promise<boolean> {
-  const { prisma } = await import("./prisma");
-
-  const existingEvent = await prisma.event.findFirst({
-    where: {
-      name: name,
-      date: {
-        gte: new Date(date.getFullYear(), date.getMonth(), date.getDate()),
-        lt: new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1),
-      },
-      ...(excludeId && { id: { not: excludeId } }),
-    },
-  });
-
-  return !!existingEvent;
-}

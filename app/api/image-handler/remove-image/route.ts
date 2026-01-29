@@ -1,27 +1,28 @@
-//Remove image from blob storage
-import { del } from "@vercel/blob";
 import { NextResponse } from "next/server";
+import { deleteBlobFromStorage } from "@/lib/blob";
 
 export async function POST(request: Request): Promise<NextResponse> {
   const { searchParams } = new URL(request.url);
-  const filename = searchParams.get("filename");
+  const imageUrl = searchParams.get("image_url");
 
-  if (!filename) {
-    return NextResponse.json({ error: "No image provided" }, { status: 400 });
-  }
-
-  if (!filename) {
+  if (!imageUrl) {
     return NextResponse.json(
-      { error: "No filename provided" },
+      { error: "No image url provided" },
       { status: 400 }
     );
   }
 
-  const result = await del(filename).then(() => {
-    return NextResponse.json({ message: "Image removed successfully" }, { status: 200 });
-  }).catch((error) => {
-    return NextResponse.json({ error: error }, { status: 500 });
-  });
-
-  return result;
+  try {
+    await deleteBlobFromStorage(imageUrl);
+    return NextResponse.json(
+      { message: "Image removed successfully" },
+      { status: 200 }
+    );
+  } catch (error) {
+    console.error("[remove-image]", error);
+    return NextResponse.json(
+      { error: "Failed to remove image" },
+      { status: 500 }
+    );
+  }
 }

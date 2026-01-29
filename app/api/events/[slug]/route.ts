@@ -1,8 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/auth";
+import { deleteBlobFromStorage } from "@/lib/blob";
 import { prisma } from "@/lib/prisma";
 import { Role } from "@/lib/generated/prisma";
-import { generateEventSlug, checkEventNameExists } from "@/lib/utils";
+import { generateEventSlug } from "@/lib/utils";
+import { checkEventNameExists } from "@/lib/utils-server";
 
 export async function GET(
   request: NextRequest,
@@ -272,12 +274,15 @@ export async function DELETE(
     await prisma.event.delete({
       where: { slug: slug },
     });
-    //Smazat obrázek z blob storage
+
     if (existingEvent.image) {
-      await fetch(`/api/image-handler/remove-image?filename=${existingEvent.image}`, {
-        method: "POST",
-      });
+      try {
+        await deleteBlobFromStorage(existingEvent.image);
+      } catch (e) {
+        console.warn("[DELETE event] deleteBlobFromStorage failed:", e);
+      }
     }
+
     return NextResponse.json({ message: "Událost byla úspěšně smazána" });
   } catch (error) {
     console.error("Chyba při mazání události:", error);
