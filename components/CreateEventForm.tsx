@@ -113,7 +113,7 @@ export default function CreateEventForm() {
         console.log("File:", fileInputRef.current?.files);
         const file = fileInputRef.current?.files?.[0];
         const fileUploadResponse = await fetch(
-          `/api/events/image-upload?filename=${file?.name}`,
+          `/api/image-handler/add-image?filename=${file?.name}`,
           {
             method: "POST",
             body: file,

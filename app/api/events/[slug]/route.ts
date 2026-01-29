@@ -272,7 +272,12 @@ export async function DELETE(
     await prisma.event.delete({
       where: { slug: slug },
     });
-
+    //Smazat obrázek z blob storage
+    if (existingEvent.image) {
+      await fetch(`/api/image-handler/remove-image?filename=${existingEvent.image}`, {
+        method: "POST",
+      });
+    }
     return NextResponse.json({ message: "Událost byla úspěšně smazána" });
   } catch (error) {
     console.error("Chyba při mazání události:", error);
