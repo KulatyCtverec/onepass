@@ -5,7 +5,6 @@
 /.pnp
 
 # generated (Prisma client – vytvoří se přes prisma generate / postinstall)
-/lib/generated
 /prisma/lib
 .pnp.*
 .yarn/*
