@@ -2,6 +2,17 @@ import "server-only";
 import { prisma } from "./prisma";
 
 /**
+ * Vrací základní URL aplikace (bez koncového lomítka).
+ * Použij vždy tuto funkci místo natvrdo zadané domény při volání vlastního API z backendu.
+ */
+export function getAppBaseUrl(): string {
+  if (process.env.NEXTAUTH_URL)
+    return process.env.NEXTAUTH_URL.replace(/\/$/, "");
+  if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}`;
+  return "http://localhost:3000";
+}
+
+/**
  * Kontroluje, zda už existuje event se stejným názvem v daný den
  */
 export async function checkEventNameExists(

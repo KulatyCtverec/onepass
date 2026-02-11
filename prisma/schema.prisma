@@ -20,7 +20,7 @@ model Event {
   description     String
   date            DateTime
   location        String
-  createdById     String?
+  ownerId         String?
   address         String?
   allowResale     Boolean      @default(false)
   capacity        Int?
@@ -35,7 +35,7 @@ model Event {
   startTime       String?
   updatedAt       DateTime?
   venue           String?
-  createdBy       User?        @relation("EventCreator", fields: [createdById], references: [id])
+  owner           User?        @relation("EventOwner", fields: [ownerId], references: [id])
   tickets         Ticket[]
   ticketTypes     TicketType[]
   status          EventStatus  @default(DRAFT)
@@ -46,7 +46,7 @@ model Event {
 model Ticket {
   id           String     @id @default(cuid())
   eventid      String
-  userid       String
+  ownerId      String?
   createtime   DateTime   @default(now())
   used         Boolean    @default(false)
   accesscode   String     @unique
@@ -54,9 +54,9 @@ model Ticket {
   lastScanned  DateTime?
   qrGenerated  DateTime   @default(now())
   scanCount    Int        @default(0)
-  event        Event      @relation(fields: [eventid], references: [id])
-  tickettype   TicketType @relation(fields: [tickettypeid], references: [id])
-  user         User       @relation(fields: [userid], references: [id])
+  event        Event      @relation(fields: [eventid], references: [id], onDelete: Cascade)
+  tickettype   TicketType @relation(fields: [tickettypeid], references: [id], onDelete: Cascade)
+  owner        User?      @relation(fields: [ownerId], references: [id])
 }
 
 enum Role {
@@ -76,9 +76,9 @@ model User {
   password      String?
   role          Role      @default(USER)
   accounts      Account[]
-  createdEvents Event[]   @relation("EventCreator")
+  ownedEvents   Event[]   @relation("EventOwner")
   sessions      Session[]
-  tickets       Ticket[]
+  ownedTickets  Ticket[]
 }
 
 model Account {

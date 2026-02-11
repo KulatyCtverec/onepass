@@ -4,35 +4,37 @@ export async function setupTicketTriggers() {
   console.log("🔧 Vytvářím triggery pro tickets...");
 
   try {
-    // Trigger pro INSERT - generuje QR kód při vytvoření
+    // digest() v triggeru vyžaduje rozšíření pgcrypto
+    await prisma.$executeRawUnsafe(`CREATE EXTENSION IF NOT EXISTS pgcrypto;`);
+    console.log("✅ Rozšíření pgcrypto zapnuto");
+
+    // Trigger pro INSERT - generuje QR kód při vytvoření (uvozovky u camelCase sloupců)
     await prisma.$executeRawUnsafe(`
       CREATE OR REPLACE FUNCTION generate_ticket_qr_insert()
       RETURNS trigger AS $$
       BEGIN
-        -- Generujeme QR kód s aktuálním vlastníkem
-        NEW.accesscode := encode(
-          digest(NEW.id || ':' || NEW.eventid || ':' || NEW.userid || ':' || extract(epoch from NOW())::text, 'sha256'),
+        NEW."accesscode" := encode(
+          digest(NEW."id" || ':' || NEW."eventid" || ':' || COALESCE(NEW."ownerId", '') || ':' || extract(epoch from NOW())::text, 'sha256'),
           'hex'
         );
-        NEW.qrGenerated := NOW();
+        NEW."qrGenerated" := NOW();
         RETURN NEW;
       END;
       $$ LANGUAGE plpgsql;
     `);
     console.log("✅ Funkce generate_ticket_qr_insert vytvořena");
 
-    // Trigger pro UPDATE - přegeneruje QR kód při změně vlastníka
+    // Trigger pro UPDATE - přegeneruje QR kód při změně vlastníka (uvozovky u camelCase sloupců)
     await prisma.$executeRawUnsafe(`
       CREATE OR REPLACE FUNCTION generate_ticket_qr_update()
       RETURNS trigger AS $$
       BEGIN
-        -- Pokud se změnil vlastník, přegenerujeme QR kód
-        IF OLD.userid != NEW.userid THEN
-          NEW.accesscode := encode(
-            digest(NEW.id || ':' || NEW.eventid || ':' || NEW.userid || ':' || extract(epoch from NOW())::text, 'sha256'),
+        IF (OLD."ownerId" IS DISTINCT FROM NEW."ownerId") THEN
+          NEW."accesscode" := encode(
+            digest(NEW."id" || ':' || NEW."eventid" || ':' || COALESCE(NEW."ownerId", '') || ':' || extract(epoch from NOW())::text, 'sha256'),
             'hex'
           );
-          NEW.qrGenerated := NOW();
+          NEW."qrGenerated" := NOW();
         END IF;
         RETURN NEW;
       END;

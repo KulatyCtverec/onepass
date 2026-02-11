@@ -207,9 +207,9 @@ export type UserWhereInput = {
   password?: Prisma.StringNullableFilter<"User"> | string | null
   role?: Prisma.EnumRoleFilter<"User"> | $Enums.Role
   accounts?: Prisma.AccountListRelationFilter
-  createdEvents?: Prisma.EventListRelationFilter
+  ownedEvents?: Prisma.EventListRelationFilter
   sessions?: Prisma.SessionListRelationFilter
-  tickets?: Prisma.TicketListRelationFilter
+  ownedTickets?: Prisma.TicketListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
@@ -222,9 +222,9 @@ export type UserOrderByWithRelationInput = {
   password?: Prisma.SortOrderInput | Prisma.SortOrder
   role?: Prisma.SortOrder
   accounts?: Prisma.AccountOrderByRelationAggregateInput
-  createdEvents?: Prisma.EventOrderByRelationAggregateInput
+  ownedEvents?: Prisma.EventOrderByRelationAggregateInput
   sessions?: Prisma.SessionOrderByRelationAggregateInput
-  tickets?: Prisma.TicketOrderByRelationAggregateInput
+  ownedTickets?: Prisma.TicketOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -240,9 +240,9 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   password?: Prisma.StringNullableFilter<"User"> | string | null
   role?: Prisma.EnumRoleFilter<"User"> | $Enums.Role
   accounts?: Prisma.AccountListRelationFilter
-  createdEvents?: Prisma.EventListRelationFilter
+  ownedEvents?: Prisma.EventListRelationFilter
   sessions?: Prisma.SessionListRelationFilter
-  tickets?: Prisma.TicketListRelationFilter
+  ownedTickets?: Prisma.TicketListRelationFilter
 }, "id" | "email">
 
 export type UserOrderByWithAggregationInput = {
@@ -283,9 +283,9 @@ export type UserCreateInput = {
   password?: string | null
   role?: $Enums.Role
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
-  createdEvents?: Prisma.EventCreateNestedManyWithoutCreatedByInput
+  ownedEvents?: Prisma.EventCreateNestedManyWithoutOwnerInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
-  tickets?: Prisma.TicketCreateNestedManyWithoutUserInput
+  ownedTickets?: Prisma.TicketCreateNestedManyWithoutOwnerInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -298,9 +298,9 @@ export type UserUncheckedCreateInput = {
   password?: string | null
   role?: $Enums.Role
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
-  createdEvents?: Prisma.EventUncheckedCreateNestedManyWithoutCreatedByInput
+  ownedEvents?: Prisma.EventUncheckedCreateNestedManyWithoutOwnerInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
-  tickets?: Prisma.TicketUncheckedCreateNestedManyWithoutUserInput
+  ownedTickets?: Prisma.TicketUncheckedCreateNestedManyWithoutOwnerInput
 }
 
 export type UserUpdateInput = {
@@ -313,9 +313,9 @@ export type UserUpdateInput = {
   password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
-  createdEvents?: Prisma.EventUpdateManyWithoutCreatedByNestedInput
+  ownedEvents?: Prisma.EventUpdateManyWithoutOwnerNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
-  tickets?: Prisma.TicketUpdateManyWithoutUserNestedInput
+  ownedTickets?: Prisma.TicketUpdateManyWithoutOwnerNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -328,9 +328,9 @@ export type UserUncheckedUpdateInput = {
   password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
-  createdEvents?: Prisma.EventUncheckedUpdateManyWithoutCreatedByNestedInput
+  ownedEvents?: Prisma.EventUncheckedUpdateManyWithoutOwnerNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
-  tickets?: Prisma.TicketUncheckedUpdateManyWithoutUserNestedInput
+  ownedTickets?: Prisma.TicketUncheckedUpdateManyWithoutOwnerNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -371,11 +371,6 @@ export type UserNullableScalarRelationFilter = {
   isNot?: Prisma.UserWhereInput | null
 }
 
-export type UserScalarRelationFilter = {
-  is?: Prisma.UserWhereInput
-  isNot?: Prisma.UserWhereInput
-}
-
 export type UserCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   email?: Prisma.SortOrder
@@ -409,34 +404,41 @@ export type UserMinOrderByAggregateInput = {
   role?: Prisma.SortOrder
 }
 
-export type UserCreateNestedOneWithoutCreatedEventsInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutCreatedEventsInput, Prisma.UserUncheckedCreateWithoutCreatedEventsInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCreatedEventsInput
+export type UserScalarRelationFilter = {
+  is?: Prisma.UserWhereInput
+  isNot?: Prisma.UserWhereInput
+}
+
+export type UserCreateNestedOneWithoutOwnedEventsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutOwnedEventsInput, Prisma.UserUncheckedCreateWithoutOwnedEventsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutOwnedEventsInput
   connect?: Prisma.UserWhereUniqueInput
 }
 
-export type UserUpdateOneWithoutCreatedEventsNestedInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutCreatedEventsInput, Prisma.UserUncheckedCreateWithoutCreatedEventsInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCreatedEventsInput
-  upsert?: Prisma.UserUpsertWithoutCreatedEventsInput
+export type UserUpdateOneWithoutOwnedEventsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutOwnedEventsInput, Prisma.UserUncheckedCreateWithoutOwnedEventsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutOwnedEventsInput
+  upsert?: Prisma.UserUpsertWithoutOwnedEventsInput
   disconnect?: Prisma.UserWhereInput | boolean
   delete?: Prisma.UserWhereInput | boolean
   connect?: Prisma.UserWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutCreatedEventsInput, Prisma.UserUpdateWithoutCreatedEventsInput>, Prisma.UserUncheckedUpdateWithoutCreatedEventsInput>
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutOwnedEventsInput, Prisma.UserUpdateWithoutOwnedEventsInput>, Prisma.UserUncheckedUpdateWithoutOwnedEventsInput>
 }
 
-export type UserCreateNestedOneWithoutTicketsInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutTicketsInput, Prisma.UserUncheckedCreateWithoutTicketsInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutTicketsInput
+export type UserCreateNestedOneWithoutOwnedTicketsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutOwnedTicketsInput, Prisma.UserUncheckedCreateWithoutOwnedTicketsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutOwnedTicketsInput
   connect?: Prisma.UserWhereUniqueInput
 }
 
-export type UserUpdateOneRequiredWithoutTicketsNestedInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutTicketsInput, Prisma.UserUncheckedCreateWithoutTicketsInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutTicketsInput
-  upsert?: Prisma.UserUpsertWithoutTicketsInput
+export type UserUpdateOneWithoutOwnedTicketsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutOwnedTicketsInput, Prisma.UserUncheckedCreateWithoutOwnedTicketsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutOwnedTicketsInput
+  upsert?: Prisma.UserUpsertWithoutOwnedTicketsInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
   connect?: Prisma.UserWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutTicketsInput, Prisma.UserUpdateWithoutTicketsInput>, Prisma.UserUncheckedUpdateWithoutTicketsInput>
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutOwnedTicketsInput, Prisma.UserUpdateWithoutOwnedTicketsInput>, Prisma.UserUncheckedUpdateWithoutOwnedTicketsInput>
 }
 
 export type EnumRoleFieldUpdateOperationsInput = {
@@ -471,7 +473,7 @@ export type UserUpdateOneRequiredWithoutSessionsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutSessionsInput, Prisma.UserUpdateWithoutSessionsInput>, Prisma.UserUncheckedUpdateWithoutSessionsInput>
 }
 
-export type UserCreateWithoutCreatedEventsInput = {
+export type UserCreateWithoutOwnedEventsInput = {
   id?: string
   email: string
   name?: string | null
@@ -482,10 +484,10 @@ export type UserCreateWithoutCreatedEventsInput = {
   role?: $Enums.Role
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
-  tickets?: Prisma.TicketCreateNestedManyWithoutUserInput
+  ownedTickets?: Prisma.TicketCreateNestedManyWithoutOwnerInput
 }
 
-export type UserUncheckedCreateWithoutCreatedEventsInput = {
+export type UserUncheckedCreateWithoutOwnedEventsInput = {
   id?: string
   email: string
   name?: string | null
@@ -496,26 +498,26 @@ export type UserUncheckedCreateWithoutCreatedEventsInput = {
   role?: $Enums.Role
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
-  tickets?: Prisma.TicketUncheckedCreateNestedManyWithoutUserInput
+  ownedTickets?: Prisma.TicketUncheckedCreateNestedManyWithoutOwnerInput
 }
 
-export type UserCreateOrConnectWithoutCreatedEventsInput = {
+export type UserCreateOrConnectWithoutOwnedEventsInput = {
   where: Prisma.UserWhereUniqueInput
-  create: Prisma.XOR<Prisma.UserCreateWithoutCreatedEventsInput, Prisma.UserUncheckedCreateWithoutCreatedEventsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutOwnedEventsInput, Prisma.UserUncheckedCreateWithoutOwnedEventsInput>
 }
 
-export type UserUpsertWithoutCreatedEventsInput = {
-  update: Prisma.XOR<Prisma.UserUpdateWithoutCreatedEventsInput, Prisma.UserUncheckedUpdateWithoutCreatedEventsInput>
-  create: Prisma.XOR<Prisma.UserCreateWithoutCreatedEventsInput, Prisma.UserUncheckedCreateWithoutCreatedEventsInput>
+export type UserUpsertWithoutOwnedEventsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutOwnedEventsInput, Prisma.UserUncheckedUpdateWithoutOwnedEventsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutOwnedEventsInput, Prisma.UserUncheckedCreateWithoutOwnedEventsInput>
   where?: Prisma.UserWhereInput
 }
 
-export type UserUpdateToOneWithWhereWithoutCreatedEventsInput = {
+export type UserUpdateToOneWithWhereWithoutOwnedEventsInput = {
   where?: Prisma.UserWhereInput
-  data: Prisma.XOR<Prisma.UserUpdateWithoutCreatedEventsInput, Prisma.UserUncheckedUpdateWithoutCreatedEventsInput>
+  data: Prisma.XOR<Prisma.UserUpdateWithoutOwnedEventsInput, Prisma.UserUncheckedUpdateWithoutOwnedEventsInput>
 }
 
-export type UserUpdateWithoutCreatedEventsInput = {
+export type UserUpdateWithoutOwnedEventsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -526,10 +528,10 @@ export type UserUpdateWithoutCreatedEventsInput = {
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
-  tickets?: Prisma.TicketUpdateManyWithoutUserNestedInput
+  ownedTickets?: Prisma.TicketUpdateManyWithoutOwnerNestedInput
 }
 
-export type UserUncheckedUpdateWithoutCreatedEventsInput = {
+export type UserUncheckedUpdateWithoutOwnedEventsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -540,10 +542,10 @@ export type UserUncheckedUpdateWithoutCreatedEventsInput = {
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
-  tickets?: Prisma.TicketUncheckedUpdateManyWithoutUserNestedInput
+  ownedTickets?: Prisma.TicketUncheckedUpdateManyWithoutOwnerNestedInput
 }
 
-export type UserCreateWithoutTicketsInput = {
+export type UserCreateWithoutOwnedTicketsInput = {
   id?: string
   email: string
   name?: string | null
@@ -553,11 +555,11 @@ export type UserCreateWithoutTicketsInput = {
   password?: string | null
   role?: $Enums.Role
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
-  createdEvents?: Prisma.EventCreateNestedManyWithoutCreatedByInput
+  ownedEvents?: Prisma.EventCreateNestedManyWithoutOwnerInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
 }
 
-export type UserUncheckedCreateWithoutTicketsInput = {
+export type UserUncheckedCreateWithoutOwnedTicketsInput = {
   id?: string
   email: string
   name?: string | null
@@ -567,27 +569,27 @@ export type UserUncheckedCreateWithoutTicketsInput = {
   password?: string | null
   role?: $Enums.Role
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
-  createdEvents?: Prisma.EventUncheckedCreateNestedManyWithoutCreatedByInput
+  ownedEvents?: Prisma.EventUncheckedCreateNestedManyWithoutOwnerInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
 }
 
-export type UserCreateOrConnectWithoutTicketsInput = {
+export type UserCreateOrConnectWithoutOwnedTicketsInput = {
   where: Prisma.UserWhereUniqueInput
-  create: Prisma.XOR<Prisma.UserCreateWithoutTicketsInput, Prisma.UserUncheckedCreateWithoutTicketsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutOwnedTicketsInput, Prisma.UserUncheckedCreateWithoutOwnedTicketsInput>
 }
 
-export type UserUpsertWithoutTicketsInput = {
-  update: Prisma.XOR<Prisma.UserUpdateWithoutTicketsInput, Prisma.UserUncheckedUpdateWithoutTicketsInput>
-  create: Prisma.XOR<Prisma.UserCreateWithoutTicketsInput, Prisma.UserUncheckedCreateWithoutTicketsInput>
+export type UserUpsertWithoutOwnedTicketsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutOwnedTicketsInput, Prisma.UserUncheckedUpdateWithoutOwnedTicketsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutOwnedTicketsInput, Prisma.UserUncheckedCreateWithoutOwnedTicketsInput>
   where?: Prisma.UserWhereInput
 }
 
-export type UserUpdateToOneWithWhereWithoutTicketsInput = {
+export type UserUpdateToOneWithWhereWithoutOwnedTicketsInput = {
   where?: Prisma.UserWhereInput
-  data: Prisma.XOR<Prisma.UserUpdateWithoutTicketsInput, Prisma.UserUncheckedUpdateWithoutTicketsInput>
+  data: Prisma.XOR<Prisma.UserUpdateWithoutOwnedTicketsInput, Prisma.UserUncheckedUpdateWithoutOwnedTicketsInput>
 }
 
-export type UserUpdateWithoutTicketsInput = {
+export type UserUpdateWithoutOwnedTicketsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -597,11 +599,11 @@ export type UserUpdateWithoutTicketsInput = {
   password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
-  createdEvents?: Prisma.EventUpdateManyWithoutCreatedByNestedInput
+  ownedEvents?: Prisma.EventUpdateManyWithoutOwnerNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
 }
 
-export type UserUncheckedUpdateWithoutTicketsInput = {
+export type UserUncheckedUpdateWithoutOwnedTicketsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -611,7 +613,7 @@ export type UserUncheckedUpdateWithoutTicketsInput = {
   password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
-  createdEvents?: Prisma.EventUncheckedUpdateManyWithoutCreatedByNestedInput
+  ownedEvents?: Prisma.EventUncheckedUpdateManyWithoutOwnerNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
 }
 
@@ -624,9 +626,9 @@ export type UserCreateWithoutAccountsInput = {
   image?: string | null
   password?: string | null
   role?: $Enums.Role
-  createdEvents?: Prisma.EventCreateNestedManyWithoutCreatedByInput
+  ownedEvents?: Prisma.EventCreateNestedManyWithoutOwnerInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
-  tickets?: Prisma.TicketCreateNestedManyWithoutUserInput
+  ownedTickets?: Prisma.TicketCreateNestedManyWithoutOwnerInput
 }
 
 export type UserUncheckedCreateWithoutAccountsInput = {
@@ -638,9 +640,9 @@ export type UserUncheckedCreateWithoutAccountsInput = {
   image?: string | null
   password?: string | null
   role?: $Enums.Role
-  createdEvents?: Prisma.EventUncheckedCreateNestedManyWithoutCreatedByInput
+  ownedEvents?: Prisma.EventUncheckedCreateNestedManyWithoutOwnerInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
-  tickets?: Prisma.TicketUncheckedCreateNestedManyWithoutUserInput
+  ownedTickets?: Prisma.TicketUncheckedCreateNestedManyWithoutOwnerInput
 }
 
 export type UserCreateOrConnectWithoutAccountsInput = {
@@ -668,9 +670,9 @@ export type UserUpdateWithoutAccountsInput = {
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
-  createdEvents?: Prisma.EventUpdateManyWithoutCreatedByNestedInput
+  ownedEvents?: Prisma.EventUpdateManyWithoutOwnerNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
-  tickets?: Prisma.TicketUpdateManyWithoutUserNestedInput
+  ownedTickets?: Prisma.TicketUpdateManyWithoutOwnerNestedInput
 }
 
 export type UserUncheckedUpdateWithoutAccountsInput = {
@@ -682,9 +684,9 @@ export type UserUncheckedUpdateWithoutAccountsInput = {
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
-  createdEvents?: Prisma.EventUncheckedUpdateManyWithoutCreatedByNestedInput
+  ownedEvents?: Prisma.EventUncheckedUpdateManyWithoutOwnerNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
-  tickets?: Prisma.TicketUncheckedUpdateManyWithoutUserNestedInput
+  ownedTickets?: Prisma.TicketUncheckedUpdateManyWithoutOwnerNestedInput
 }
 
 export type UserCreateWithoutSessionsInput = {
@@ -697,8 +699,8 @@ export type UserCreateWithoutSessionsInput = {
   password?: string | null
   role?: $Enums.Role
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
-  createdEvents?: Prisma.EventCreateNestedManyWithoutCreatedByInput
-  tickets?: Prisma.TicketCreateNestedManyWithoutUserInput
+  ownedEvents?: Prisma.EventCreateNestedManyWithoutOwnerInput
+  ownedTickets?: Prisma.TicketCreateNestedManyWithoutOwnerInput
 }
 
 export type UserUncheckedCreateWithoutSessionsInput = {
@@ -711,8 +713,8 @@ export type UserUncheckedCreateWithoutSessionsInput = {
   password?: string | null
   role?: $Enums.Role
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
-  createdEvents?: Prisma.EventUncheckedCreateNestedManyWithoutCreatedByInput
-  tickets?: Prisma.TicketUncheckedCreateNestedManyWithoutUserInput
+  ownedEvents?: Prisma.EventUncheckedCreateNestedManyWithoutOwnerInput
+  ownedTickets?: Prisma.TicketUncheckedCreateNestedManyWithoutOwnerInput
 }
 
 export type UserCreateOrConnectWithoutSessionsInput = {
@@ -741,8 +743,8 @@ export type UserUpdateWithoutSessionsInput = {
   password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
-  createdEvents?: Prisma.EventUpdateManyWithoutCreatedByNestedInput
-  tickets?: Prisma.TicketUpdateManyWithoutUserNestedInput
+  ownedEvents?: Prisma.EventUpdateManyWithoutOwnerNestedInput
+  ownedTickets?: Prisma.TicketUpdateManyWithoutOwnerNestedInput
 }
 
 export type UserUncheckedUpdateWithoutSessionsInput = {
@@ -755,8 +757,8 @@ export type UserUncheckedUpdateWithoutSessionsInput = {
   password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
-  createdEvents?: Prisma.EventUncheckedUpdateManyWithoutCreatedByNestedInput
-  tickets?: Prisma.TicketUncheckedUpdateManyWithoutUserNestedInput
+  ownedEvents?: Prisma.EventUncheckedUpdateManyWithoutOwnerNestedInput
+  ownedTickets?: Prisma.TicketUncheckedUpdateManyWithoutOwnerNestedInput
 }
 
 
@@ -766,16 +768,16 @@ export type UserUncheckedUpdateWithoutSessionsInput = {
 
 export type UserCountOutputType = {
   accounts: number
-  createdEvents: number
+  ownedEvents: number
   sessions: number
-  tickets: number
+  ownedTickets: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   accounts?: boolean | UserCountOutputTypeCountAccountsArgs
-  createdEvents?: boolean | UserCountOutputTypeCountCreatedEventsArgs
+  ownedEvents?: boolean | UserCountOutputTypeCountOwnedEventsArgs
   sessions?: boolean | UserCountOutputTypeCountSessionsArgs
-  tickets?: boolean | UserCountOutputTypeCountTicketsArgs
+  ownedTickets?: boolean | UserCountOutputTypeCountOwnedTicketsArgs
 }
 
 /**
@@ -798,7 +800,7 @@ export type UserCountOutputTypeCountAccountsArgs<ExtArgs extends runtime.Types.E
 /**
  * UserCountOutputType without action
  */
-export type UserCountOutputTypeCountCreatedEventsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type UserCountOutputTypeCountOwnedEventsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.EventWhereInput
 }
 
@@ -812,7 +814,7 @@ export type UserCountOutputTypeCountSessionsArgs<ExtArgs extends runtime.Types.E
 /**
  * UserCountOutputType without action
  */
-export type UserCountOutputTypeCountTicketsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type UserCountOutputTypeCountOwnedTicketsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.TicketWhereInput
 }
 
@@ -827,9 +829,9 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   password?: boolean
   role?: boolean
   accounts?: boolean | Prisma.User$accountsArgs<ExtArgs>
-  createdEvents?: boolean | Prisma.User$createdEventsArgs<ExtArgs>
+  ownedEvents?: boolean | Prisma.User$ownedEventsArgs<ExtArgs>
   sessions?: boolean | Prisma.User$sessionsArgs<ExtArgs>
-  tickets?: boolean | Prisma.User$ticketsArgs<ExtArgs>
+  ownedTickets?: boolean | Prisma.User$ownedTicketsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -869,9 +871,9 @@ export type UserSelectScalar = {
 export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "name" | "createtime" | "emailVerified" | "image" | "password" | "role", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   accounts?: boolean | Prisma.User$accountsArgs<ExtArgs>
-  createdEvents?: boolean | Prisma.User$createdEventsArgs<ExtArgs>
+  ownedEvents?: boolean | Prisma.User$ownedEventsArgs<ExtArgs>
   sessions?: boolean | Prisma.User$sessionsArgs<ExtArgs>
-  tickets?: boolean | Prisma.User$ticketsArgs<ExtArgs>
+  ownedTickets?: boolean | Prisma.User$ownedTicketsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -881,9 +883,9 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   name: "User"
   objects: {
     accounts: Prisma.$AccountPayload<ExtArgs>[]
-    createdEvents: Prisma.$EventPayload<ExtArgs>[]
+    ownedEvents: Prisma.$EventPayload<ExtArgs>[]
     sessions: Prisma.$SessionPayload<ExtArgs>[]
-    tickets: Prisma.$TicketPayload<ExtArgs>[]
+    ownedTickets: Prisma.$TicketPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1289,9 +1291,9 @@ readonly fields: UserFieldRefs;
 export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   accounts<T extends Prisma.User$accountsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$accountsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AccountPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  createdEvents<T extends Prisma.User$createdEventsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$createdEventsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$EventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  ownedEvents<T extends Prisma.User$ownedEventsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$ownedEventsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$EventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   sessions<T extends Prisma.User$sessionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$sessionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  tickets<T extends Prisma.User$ticketsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$ticketsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TicketPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  ownedTickets<T extends Prisma.User$ownedTicketsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$ownedTicketsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TicketPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1741,9 +1743,9 @@ export type User$accountsArgs<ExtArgs extends runtime.Types.Extensions.InternalA
 }
 
 /**
- * User.createdEvents
+ * User.ownedEvents
  */
-export type User$createdEventsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type User$ownedEventsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
    * Select specific fields to fetch from the Event
    */
@@ -1789,9 +1791,9 @@ export type User$sessionsArgs<ExtArgs extends runtime.Types.Extensions.InternalA
 }
 
 /**
- * User.tickets
+ * User.ownedTickets
  */
-export type User$ticketsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type User$ownedTicketsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
    * Select specific fields to fetch from the Ticket
    */

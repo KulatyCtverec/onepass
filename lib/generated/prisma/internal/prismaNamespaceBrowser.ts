@@ -83,7 +83,7 @@ export const EventScalarFieldEnum = {
   description: 'description',
   date: 'date',
   location: 'location',
-  createdById: 'createdById',
+  ownerId: 'ownerId',
   address: 'address',
   allowResale: 'allowResale',
   capacity: 'capacity',
@@ -107,7 +107,7 @@ export type EventScalarFieldEnum = (typeof EventScalarFieldEnum)[keyof typeof Ev
 export const TicketScalarFieldEnum = {
   id: 'id',
   eventid: 'eventid',
-  userid: 'userid',
+  ownerId: 'ownerId',
   createtime: 'createtime',
   used: 'used',
   accesscode: 'accesscode',

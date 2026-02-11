@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from "next/server";
-import { Ticket } from "@/lib/generated/prisma";
 import { prisma } from "@/lib/prisma";
 import { auth } from "@/auth";
 
@@ -19,11 +18,11 @@ export async function GET(request: NextRequest) {
     const tickets = await prisma.ticket.findMany({
       include: {
         event: true,
-        user: true,
+        owner: true,
         tickettype: true,
       },
       where: {
-        userid: session.user.id,
+        ownerId: session.user.id,
       },
       orderBy: {
         createtime: "desc",
@@ -37,12 +36,12 @@ export async function GET(request: NextRequest) {
   const tickets = await prisma.ticket.findMany({
     include: {
       event: true,
-      user: true,
+      owner: true,
       tickettype: true,
     },
     where: {
       eventid: eventID,
-      userid: session.user.id,
+      ownerId: session.user.id,
     },
   });
 
@@ -59,7 +58,7 @@ export async function POST(request: NextRequest) {
   }
 
   const body = await request.json();
-  const { eventid, userid, tickettypeid } = body;
+  const { eventid, tickettypeid } = body;
 
   if (!eventid || !tickettypeid) {
     return NextResponse.json(
@@ -68,18 +67,32 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  const ticket = await prisma.ticket.create({
-    data: {
-      eventid,
-      userid: userid || session.user.id,
-      tickettypeid,
-      accesscode: crypto.randomUUID(),
-      used: false,
-      createtime: new Date(),
-      lastScanned: null,
-      qrGenerated: new Date(),
-      scanCount: 0,
-    },
+  const ticket = await prisma.$transaction(async (tx) => {
+    const poolTicket = await tx.ticket.findFirst({
+      where: {
+        eventid,
+        tickettypeid,
+        ownerId: null,
+      },
+    });
+    if (!poolTicket) {
+      return null;
+    }
+    return tx.ticket.update({
+      where: { id: poolTicket.id },
+      data: { ownerId: session.user.id },
+    });
   });
+
+  if (!ticket) {
+    return NextResponse.json(
+      {
+        message:
+          "Žádný volný lístek v poolu. Vstupenky se možná ještě generují, nebo jsou vyprodány.",
+      },
+      { status: 409 }
+    );
+  }
+
   return NextResponse.json(ticket);
 }

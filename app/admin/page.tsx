@@ -22,12 +22,12 @@ export default async function AdminPage() {
 
   // Načíst události vytvořené tímto adminem
   const events = await prisma.event.findMany({
-    where: { createdById: session.user.id },
+    where: { ownerId: session.user.id },
     include: {
       ticketTypes: true,
       tickets: {
         include: {
-          user: true,
+          owner: true,
           tickettype: true,
         },
       },
@@ -38,9 +38,7 @@ export default async function AdminPage() {
   return (
     <main className="min-h-screen text-white py-8">
       <div className="max-w-7xl mx-auto px-4">
-        <h1 className="text-3xl font-bold mb-8 text-center">
-          Admin Dashboard
-        </h1>
+        <h1 className="text-3xl font-bold mb-8 text-center">Admin Dashboard</h1>
 
         <AdminDashboard events={events} />
       </div>

@@ -23,12 +23,12 @@ export default async function AdminEventsPage() {
 
   // Načíst události vytvořené tímto adminem
   const events = await prisma.event.findMany({
-    where: { createdById: session.user.id },
+    where: { ownerId: session.user.id },
     include: {
       ticketTypes: true,
       tickets: {
         include: {
-          user: true,
+          owner: true,
           tickettype: true,
         },
       },
@@ -45,7 +45,7 @@ export default async function AdminEventsPage() {
             href="/create-event"
             className="bg-accent-600 hover:bg-accent-700 text-white px-4 py-2 rounded-lg transition-colors"
           >
-             Vytvořit novou událost
+            Vytvořit novou událost
           </a>
         </div>
 

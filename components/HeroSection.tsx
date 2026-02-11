@@ -59,10 +59,10 @@ export default function HeroSection() {
             </div>
           </div>
 
-          <h1 className="text-5xl md:text-7xl font-bold mb-8 bg-gradient-to-r from-white via-blue-100 to-blue-200 bg-clip-text text-transparent leading-tight">
+          <h1 className="text-5xl md:text-7xl font-bold mb-8 bg-linear-to-r from-white via-blue-100 to-blue-200 bg-clip-text text-transparent leading-tight">
             OnePass
             <br />
-            <span className="bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent neon-text">
+            <span className="bg-linear-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent neon-text">
               Platforma
             </span>
           </h1>

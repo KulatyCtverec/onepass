@@ -15,7 +15,7 @@ export async function POST(request: NextRequest) {
     // Najdeme ticket podle access code
     const ticket = await prisma.ticket.findUnique({
       where: { accesscode: accessCode },
-      include: { event: true, user: true, tickettype: true },
+      include: { event: true, owner: true, tickettype: true },
     });
 
     if (!ticket) {
@@ -71,7 +71,7 @@ export async function POST(request: NextRequest) {
       ticket: {
         id: ticket.id,
         eventName: ticket.event.name,
-        userName: ticket.user.name,
+        userName: ticket.owner?.name ?? undefined,
         ticketType: ticket.tickettype.name,
         verifiedAt: new Date(),
       },

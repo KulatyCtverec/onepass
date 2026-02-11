@@ -55,7 +55,7 @@ export default function EditEventPage() {
 
       // Kontrola, zda je uživatel tvůrcem události (nebo je admin)
       if (
-        data.createdById !== session?.user?.id &&
+        data.ownerId !== session?.user?.id &&
         session?.user?.role !== Role.ADMIN
       ) {
         throw new Error("Nemáte oprávnění upravovat tuto událost");

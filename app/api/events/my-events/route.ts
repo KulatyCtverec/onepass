@@ -27,7 +27,7 @@ export async function GET(request: NextRequest) {
     // Načíst události vytvořené aktuálním uživatelem
     const events = await prisma.event.findMany({
       where: {
-        createdById: session.user.id,
+        ownerId: session.user.id,
       },
       include: {
         ticketTypes: true,

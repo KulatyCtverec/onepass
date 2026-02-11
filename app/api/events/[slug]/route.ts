@@ -5,6 +5,7 @@ import { prisma } from "@/lib/prisma";
 import { Role } from "@/lib/generated/prisma";
 import { generateEventSlug } from "@/lib/utils";
 import { checkEventNameExists } from "@/lib/utils-server";
+import { syncTicketPoolForEvent } from "@/lib/events/handleEventWithTickets";
 
 export async function GET(
   request: NextRequest,
@@ -74,7 +75,7 @@ export async function PUT(
     }
 
     if (
-      existingEvent.createdById !== session.user.id &&
+      existingEvent.ownerId !== session.user.id &&
       session.user.role !== Role.ADMIN
     ) {
       return NextResponse.json(
@@ -213,6 +214,8 @@ export async function PUT(
       });
     }
 
+    await syncTicketPoolForEvent(updatedEvent.id);
+
     return NextResponse.json(updatedEvent);
   } catch (error) {
     console.error("Chyba při úpravě události:", error);
@@ -261,7 +264,7 @@ export async function DELETE(
     }
 
     if (
-      existingEvent.createdById !== session.user.id &&
+      existingEvent.ownerId !== session.user.id &&
       session.user.role !== Role.ADMIN
     ) {
       return NextResponse.json(

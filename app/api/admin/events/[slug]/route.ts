@@ -32,7 +32,7 @@ export async function PUT(
     const existingEvent = await prisma.event.findFirst({
       where: {
         slug: slug,
-        createdById: session.user.id,
+        ownerId: session.user.id,
       },
     });
 
@@ -106,7 +106,7 @@ export async function DELETE(
     const existingEvent = await prisma.event.findFirst({
       where: {
         slug: slug,
-        createdById: session.user.id,
+        ownerId: session.user.id,
       },
     });
 

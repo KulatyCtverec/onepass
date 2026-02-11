@@ -44,7 +44,7 @@ export async function POST(request: NextRequest) {
         description,
         date: new Date(date),
         location,
-        createdById: session.user.id!,
+        ownerId: session.user.id!,
       },
     });
 

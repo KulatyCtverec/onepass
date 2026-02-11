@@ -9,7 +9,7 @@ export default function TicketsTable(props: { caption: string }) {
   const [tickets, setTickets] = useState<
     (Ticket & {
       event: Event;
-      user: User;
+      owner: User | null;
       tickettype: TicketType;
     })[]
   >([]);
@@ -18,7 +18,7 @@ export default function TicketsTable(props: { caption: string }) {
   useInitialFetch<
     (Ticket & {
       event: Event;
-      user: User;
+      owner: User | null;
       tickettype: TicketType;
     })[]
   >(
@@ -30,7 +30,7 @@ export default function TicketsTable(props: { caption: string }) {
   useSSE<
     Ticket & {
       event: Event;
-      user: User;
+      owner: User | null;
       tickettype: TicketType;
     }
   >(

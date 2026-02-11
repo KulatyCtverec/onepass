@@ -52,7 +52,7 @@ export async function POST(request: NextRequest) {
     const event = await prisma.event.findFirst({
       where: {
         id: eventId,
-        createdById: session.user.id,
+        ownerId: session.user.id,
       },
     });
 

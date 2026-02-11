@@ -64,6 +64,9 @@ export default function CreateEventForm() {
   const [blob, setBlob] = useState<PutBlobResult | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [loadingPhase, setLoadingPhase] = useState<"idle" | "image" | "event">(
+    "idle"
+  );
   const fileInputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
 
@@ -100,32 +103,30 @@ export default function CreateEventForm() {
     setLoading(true);
 
     try {
-      // Vytvoření FormData pro odeslání souboru
       const submitData = new FormData();
 
-      // Přidání základních dat
       Object.entries(formData).forEach(([key, value]) => {
         if (value !== "") {
           submitData.append(key, value.toString());
         }
       });
+
       if (fileInputRef.current?.files?.[0]) {
-        console.log("File:", fileInputRef.current?.files);
+        setLoadingPhase("image");
         const file = fileInputRef.current?.files?.[0];
         const fileUploadResponse = await fetch(
           `/api/image-handler/add-image?filename=${file?.name}`,
-          {
-            method: "POST",
-            body: file,
-          }
+          { method: "POST", body: file }
         );
-        console.log("File Upload Response:", fileUploadResponse);
         const newBlob = (await fileUploadResponse.json()) as PutBlobResult;
         setBlob(newBlob);
         submitData.append("image", newBlob.url);
+
+        // Vercel Blob potřebuje chvíli na propagaci – bez čekání občas 404
+        await new Promise((r) => setTimeout(r, 2000));
+        setLoadingPhase("event");
       }
 
-      // Přidání ticket types
       submitData.append("ticketTypes", JSON.stringify(ticketTypes));
 
       const response = await fetch("/api/events", {
@@ -144,6 +145,7 @@ export default function CreateEventForm() {
       alert("Chyba při vytváření události");
     } finally {
       setLoading(false);
+      setLoadingPhase("idle");
     }
   };
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -629,7 +631,11 @@ export default function CreateEventForm() {
                 disabled={loading}
                 className="bg-gradient-primary hover:scale-105 transition-all duration-300 neon-glow px-8 py-3 text-lg"
               >
-                {loading ? "Vytvářím..." : "Publikovat událost"}
+                {loading
+                  ? loadingPhase === "image"
+                    ? "Připravujeme obrázek…"
+                    : "Vytvářím událost…"
+                  : "Publikovat událost"}
               </Button>
             </div>
           </form>

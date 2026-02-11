@@ -4,6 +4,10 @@ import { prisma } from "@/lib/prisma";
 import { generateEventSlug } from "@/lib/utils";
 import { checkEventNameExists } from "@/lib/utils-server";
 import { Role } from "@/lib/generated/prisma";
+import {
+  createEventWithTicketTypes,
+  scheduleTicketPoolGeneration,
+} from "@/lib/events/handleEventWithTickets";
 
 export async function POST(request: NextRequest) {
   try {
@@ -86,44 +90,38 @@ export async function POST(request: NextRequest) {
     // Generate unique slug
     const slug = generateEventSlug(name, eventDate);
 
-    // Create event with slug and image path
-    const event = await prisma.event.create({
-      data: {
-        name,
-        slug,
-        description,
-        date: eventDate,
-        location: `${venue}, ${address}`, // Combine venue and address for backward compatibility
-        image: image, // Store file path, not binary data
-        category,
-        venue,
-        capacity: parseInt(capacity),
-        address,
-        startTime,
-        endTime,
-        salesStart: salesStart ? new Date(salesStart) : null,
-        salesEnd: salesEnd ? new Date(salesEnd) : null,
-        allowResale,
-        requireApproval,
-        sendEmails,
-        createdById: session.user.id,
-      },
+    const { event } = await createEventWithTicketTypes({
+      name,
+      slug,
+      description,
+      date: eventDate,
+      location: `${venue}, ${address}`,
+      image: image ?? null,
+      category: category || null,
+      venue: venue || null,
+      capacity: parseInt(capacity),
+      address: address || null,
+      startTime: startTime || null,
+      endTime: endTime || null,
+      salesStart: salesStart ? new Date(salesStart) : null,
+      salesEnd: salesEnd ? new Date(salesEnd) : null,
+      allowResale,
+      requireApproval,
+      sendEmails,
+      ownerId: session.user.id,
+      ticketTypes: ticketTypes
+        .filter(
+          (tt: { name?: string; price?: string; quantity?: string }) =>
+            tt.name && tt.price != null && tt.quantity != null
+        )
+        .map((tt: { name: string; price: string; quantity: string }) => ({
+          name: tt.name,
+          price: Math.round(parseFloat(tt.price) * 100),
+          quantity: parseInt(tt.quantity),
+        })),
     });
 
-    // Create ticket types for this event
-    for (const ticketType of ticketTypes) {
-      if (ticketType.name && ticketType.price && ticketType.quantity) {
-        await prisma.ticketType.create({
-          data: {
-            name: ticketType.name,
-            price: Math.round(parseFloat(ticketType.price) * 100), // Convert to cents
-            stock: parseInt(ticketType.quantity),
-            total: parseInt(ticketType.quantity),
-            eventid: event.id,
-          },
-        });
-      }
-    }
+    scheduleTicketPoolGeneration(event.id);
 
     return NextResponse.json(
       {

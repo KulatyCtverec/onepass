@@ -24,7 +24,7 @@ export default function TicketCard({
 }: {
   ticket: Ticket & {
     event: Event;
-    user: UserType;
+    owner: UserType | null;
     tickettype: TicketType;
   };
 }) {
@@ -100,7 +100,7 @@ export default function TicketCard({
     }).format(price / 100); // price je v haléřích
   };
 
-  if (!ticket.event || !ticket.user || !ticket.tickettype) {
+  if (!ticket.event || !ticket.tickettype) {
     return (
       <Card className="h-full glass-effect border-border/30">
         <CardContent className="p-4">
@@ -145,7 +145,7 @@ export default function TicketCard({
           <div className="flex items-center gap-3 text-sm text-foreground-muted">
             <User className="w-4 h-4 shrink-0" />
             <span className="truncate">
-              {ticket.user.name || ticket.user.email}
+              {(ticket.owner?.name || ticket.owner?.email) ?? "—"}
             </span>
           </div>
 
