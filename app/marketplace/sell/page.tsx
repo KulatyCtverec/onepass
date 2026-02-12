@@ -1,50 +1,143 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { MapPin, Calendar, Plus, ChartBar, Ticket } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+} from "@/components/ui/dialog";
+import Image from "next/image";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+
+type TicketForSale = {
+  id: string;
+  event: {
+    id: string;
+    name: string;
+    date: string;
+    startTime: string | null;
+    location: string;
+    image: string | null;
+    allowResale: boolean;
+  };
+  tickettype: { id: string; name: string; price: number };
+};
+
+type Group = {
+  key: string;
+  eventId: string;
+  eventName: string;
+  eventDate: string;
+  ticketTypeName: string;
+  ticketTypeId: string;
+  tickets: TicketForSale[];
+};
+
+function groupTickets(tickets: TicketForSale[]): Group[] {
+  const map = new Map<string, TicketForSale[]>();
+  for (const t of tickets) {
+    const key = `${t.event.id}:${t.tickettype.id}`;
+    if (!map.has(key)) map.set(key, []);
+    map.get(key)!.push(t);
+  }
+  const groups: Group[] = [];
+  map.forEach((tickets, key) => {
+    const t = tickets[0];
+    groups.push({
+      key,
+      eventId: t.event.id,
+      eventName: t.event.name,
+      eventDate: t.event.date,
+      ticketTypeName: t.tickettype.name,
+      ticketTypeId: t.tickettype.id,
+      tickets,
+    });
+  });
+  return groups.sort(
+    (a, b) => new Date(a.eventDate).getTime() - new Date(b.eventDate).getTime()
+  );
+}
 
 export default function MarketplaceSellPage() {
-  const userStats = {
-    totalTicketsOwned: 12,
-    ticketsSold: 8,
-    totalEarned: 1250,
-    averageRating: 4.9,
+  const router = useRouter();
+  const [stats, setStats] = useState<{
+    ticketsInSale: number;
+    moneyToReceive: number;
+    moneySold: number;
+  } | null>(null);
+  const [myListings, setMyListings] = useState<any[]>([]);
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [ticketsForSale, setTicketsForSale] = useState<TicketForSale[]>([]);
+  const [selectedCountByKey, setSelectedCountByKey] = useState<Record<string, number>>({});
+
+  useEffect(() => {
+    fetch("/api/sell/stats")
+      .then((r) => r.json())
+      .then((data) => {
+        if (data.ticketsInSale !== undefined) setStats(data);
+      })
+      .catch(() => {});
+  }, []);
+
+  useEffect(() => {
+    fetch("/api/sell/listings")
+      .then((r) => r.json())
+      .then(setMyListings)
+      .catch(() => setMyListings([]));
+  }, []);
+
+  const openDialog = () => {
+    setDialogOpen(true);
+    setSelectedCountByKey({});
+    fetch("/api/tickets/for-sale")
+      .then((r) => r.json())
+      .then((list: TicketForSale[]) => {
+        setTicketsForSale(list);
+        const initial: Record<string, number> = {};
+        groupTickets(list).forEach((g) => {
+          initial[g.key] = 1;
+        });
+        setSelectedCountByKey(initial);
+      })
+      .catch(() => setTicketsForSale([]));
   };
 
-  const userOwnedEvents = [
-    {
-      id: "1",
-      title: "Tech Conference 2024",
-      date: "2024-08-20",
-      location: "San Francisco",
-      ticketsOwned: 2,
-      originalPrice: 299,
-      resalePrice: 500,
-      image:
-        "https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=300&h=200&fit=crop",
-    },
-    {
-      id: "2",
-      title: "Summer Music Festival 2024",
-      date: "2024-07-15",
-      location: "Central Park, New York",
-      ticketsOwned: 1,
-      originalPrice: 189,
-      resalePrice: 150,
-      image:
-        "https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?w=300&h=200&fit=crop",
-    },
-  ];
+  const groups = groupTickets(ticketsForSale);
+  const onlyResale = groups.filter((g) =>
+    g.tickets.every((t) => t.event.allowResale)
+  );
 
-  const sortedUserOwnedEvents = [...userOwnedEvents].sort((a, b) => {
-    return new Date(b.date).getTime() - new Date(a.date).getTime();
-  });
+  const goToCreateListing = () => {
+    const ids: string[] = [];
+    onlyResale.forEach((g) => {
+      const count = Math.min(
+        selectedCountByKey[g.key] ?? 0,
+        g.tickets.length
+      );
+      for (let i = 0; i < count; i++) ids.push(g.tickets[i].id);
+    });
+    if (ids.length === 0) return;
+    setDialogOpen(false);
+    router.push(
+      `/marketplace/create-listing?tickets=${encodeURIComponent(ids.join(","))}`
+    );
+  };
+
+  const totalSelected = onlyResale.reduce(
+    (acc, g) => acc + Math.min(selectedCountByKey[g.key] ?? 0, g.tickets.length),
+    0
+  );
 
   return (
     <div className="min-h-screen bg-background">
       <div className="container mx-auto px-6 py-8">
-        {/* Header */}
         <div className="text-center mb-12">
           <h1 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-primary to-secondary bg-clip-text text-foreground">
             Prodávat lístky
@@ -54,12 +147,8 @@ export default function MarketplaceSellPage() {
           </p>
         </div>
 
-        {/* Search and Filters */}
-
-        {/* Main Content */}
         <div className="space-y-6">
           <div className="flex gap-6 items-stretch">
-            {/* User Stats */}
             <Card className="glass-effect border-border/30 flex-1">
               <CardHeader className="pt-6">
                 <CardTitle className="flex items-center">
@@ -68,44 +157,35 @@ export default function MarketplaceSellPage() {
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                   <div className="text-center p-4 glass-effect border-border/30 rounded-lg">
                     <div className="text-2xl font-bold text-primary">
-                      {userStats.totalTicketsOwned}
+                      {stats?.ticketsInSale ?? "—"}
                     </div>
                     <div className="text-sm text-foreground-muted">
-                      Vlastním lístků
+                      Lístků v prodeji
+                    </div>
+                  </div>
+                  <div className="text-center p-4 glass-effect border-border/30 rounded-lg">
+                    <div className="text-2xl font-bold text-primary">
+                      {stats?.moneyToReceive != null ? `${stats.moneyToReceive} Kč` : "—"}
+                    </div>
+                    <div className="text-sm text-foreground-muted">
+                      Získáte při prodeji
                     </div>
                   </div>
                   <div className="text-center p-4 glass-effect border-border/30 rounded-lg">
                     <div className="text-2xl font-bold text-green-500">
-                      {userStats.ticketsSold}
+                      {stats?.moneySold != null ? `${stats.moneySold} Kč` : "—"}
                     </div>
                     <div className="text-sm text-foreground-muted">
-                      Prodaných lístků
-                    </div>
-                  </div>
-                  <div className="text-center p-4 glass-effect border-border/30 rounded-lg">
-                    <div className="text-2xl font-bold text-primary">
-                      {userStats.totalEarned} Kč
-                    </div>
-                    <div className="text-sm text-foreground-muted">
-                      Celkový výdělek
-                    </div>
-                  </div>
-                  <div className="text-center p-4 glass-effect border-border/30 rounded-lg">
-                    <div className="text-2xl font-bold text-yellow-500">
-                      {userStats.averageRating}
-                    </div>
-                    <div className="text-sm text-foreground-muted">
-                      Průměrné hodnocení
+                      Peníze prodané (po eventu)
                     </div>
                   </div>
                 </div>
               </CardContent>
             </Card>
 
-            {/* Quick Sell */}
             <Card className="glass-effect border-border/30 flex-1">
               <CardHeader className="pt-6">
                 <CardTitle className="flex items-center">
@@ -115,10 +195,13 @@ export default function MarketplaceSellPage() {
               </CardHeader>
               <CardContent className="space-y-4">
                 <p className="text-foreground-muted text-sm">
-                  Vyberte událost z vašeho seznamu nebo přidejte lístek ručně,
-                  pokud událost v systému ještě není.
+                  Vyberte lístky, které chcete nabídnout k přeprodeji. Na další
+                  stránce nastavíte cenu.
                 </p>
-                <Button className="w-full glass-button hover:glass-button">
+                <Button
+                  className="w-full glass-button hover:glass-button"
+                  onClick={openDialog}
+                >
                   <Ticket className="h-4 w-4 mr-2" />
                   Přidat lístek k prodeji
                 </Button>
@@ -126,87 +209,183 @@ export default function MarketplaceSellPage() {
             </Card>
           </div>
 
-          {/* User's Owned Events */}
           <div>
             <h3 className="text-xl font-semibold text-foreground">
               Moje prodávané lístky
             </h3>
             <p className="text-sm text-foreground-muted mb-4 opacity-70 py-2">
-              Přehled všech aktivních nabídek, které jste dali na marketplace.
+              Přehled všech aktivních nabídek na marketplace.
             </p>
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-              {sortedUserOwnedEvents.map((event) => (
-                <Card
-                  key={event.id}
-                  className="glass-effect border-border/30 hover:border-primary/50 transition-all duration-300"
-                >
-                  <div className="aspect-video relative overflow-hidden">
-                    <img
-                      src={event.image}
-                      alt={event.title}
-                      className="w-full h-full object-cover"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
-                  </div>
-                  <CardContent className="p-4">
-                    <h4 className="font-semibold text-foreground mb-2">
-                      {event.title}
-                    </h4>
-                    <div className="space-y-1 text-sm text-foreground-muted mb-4">
-                      <div className="flex items-center">
-                        <Calendar className="h-4 w-4 mr-2 text-primary" />
-                        {new Date(event.date).toLocaleDateString("cs-CZ")}
-                      </div>
-                      <div className="flex items-center">
-                        <MapPin className="h-4 w-4 mr-2 text-primary" />
-                        {event.location}
-                      </div>
+              {myListings.map((item) => (
+                <Link href={`/marketplace/listings/${item.id}`} key={item.id}>
+                  <Card
+                    className="glass-effect border-border/30 hover:border-primary/50 transition-all duration-300 cursor-pointer h-full"
+                  >
+                    <div className="aspect-video relative overflow-hidden">
+                      {item.image ? (
+                        <Image
+                          src={item.image}
+                          alt={item.title}
+                          fill
+                          className="object-cover"
+                        />
+                      ) : (
+                        <div className="w-full h-full bg-muted/20 flex items-center justify-center">
+                          <Ticket className="h-12 w-12 text-muted-foreground" />
+                        </div>
+                      )}
+                      <div className="absolute inset-0 bg-linear-to-t from-black/60 via-transparent to-transparent" />
                     </div>
-                    <div className="flex justify-between items-center">
-                      <div>
-                        <div className="text-xs text-foreground-muted">
-                          Celkem prodávám
+                    <CardContent className="p-4">
+                      <h4 className="font-semibold text-foreground mb-2">
+                        {item.title}
+                      </h4>
+                      <div className="space-y-1 text-sm text-foreground-muted mb-4">
+                        <div className="flex items-center">
+                          <Calendar className="h-4 w-4 mr-2 text-primary" />
+                          {item.date
+                            ? new Date(item.date).toLocaleDateString("cs-CZ")
+                            : "—"}
                         </div>
-                        <div className="text-lg font-bold text-primary">
-                          {event.ticketsOwned}
-                        </div>
-                      </div>
-                      <div className="text-right">
-                        <div className="text-xs text-foreground-muted">
-                          Původní cena
-                        </div>
-                        <div className="text-lg font-bold text-foreground">
-                          {event.originalPrice} Kč
-                        </div>
-                      </div>
-                      <div className="text-right">
-                        <div className="text-xs text-foreground-muted">
-                          Prodejní cena
-                        </div>
-                        <div className="text-lg font-bold text-primary">
-                          {event.resalePrice} Kč
+                        <div className="flex items-center">
+                          <MapPin className="h-4 w-4 mr-2 text-primary" />
+                          {item.location}
                         </div>
                       </div>
-                    </div>
-                  </CardContent>
-                </Card>
+                      <div className="flex justify-between items-center gap-2 flex-wrap">
+                        <div>
+                          <div className="text-xs text-foreground-muted">
+                            V prodeji
+                          </div>
+                          <div className="text-lg font-bold text-primary">
+                            {item.ticketsOwned} {item.ticketsOwned === 1 ? "lístek" : "lístků"}
+                          </div>
+                        </div>
+                        <div>
+                          <div className="text-xs text-foreground-muted">
+                            Vaše cena
+                          </div>
+                          <div className="text-lg font-bold text-foreground">
+                            {item.resalePrice} Kč
+                          </div>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </Link>
               ))}
             </div>
 
-            {sortedUserOwnedEvents.length === 0 && (
+            {myListings.length === 0 && (
               <div className="text-center py-12">
                 <Ticket className="h-16 w-16 text-foreground-muted mx-auto mb-4" />
                 <h3 className="text-lg font-semibold text-foreground mb-2">
-                  Žádné události nenalezeny
+                  Žádné aktivní nabídky
                 </h3>
                 <p className="text-foreground-muted">
-                  Zkuste změnit filtry nebo hledaný výraz
+                  Klikněte na „Přidat lístek k prodeji“ a vyberte lístky.
                 </p>
               </div>
             )}
           </div>
         </div>
       </div>
+
+      <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+        <DialogContent className="max-w-lg max-h-[85vh] overflow-y-auto bg-gradient-card border border-border/50 shadow-xl">
+          <DialogHeader>
+            <DialogTitle>Vyberte lístky k prodeji</DialogTitle>
+            <DialogDescription>
+              Seskupeno podle události a typu. Zvolte, kolik lístků z každé
+              skupiny chcete v této nabídce přeprodat.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4 py-2">
+            {onlyResale.length === 0 && ticketsForSale.length > 0 && (
+              <p className="text-sm text-amber-600">
+                U vašich událostí není povolen přeprodej.
+              </p>
+            )}
+            {ticketsForSale.length === 0 && (
+              <p className="text-sm text-foreground-muted">
+                Nemáte žádné lístky k dispozici k prodeji (všechny mohou být již
+                v nabídce).
+              </p>
+            )}
+            {onlyResale.map((g) => (
+              <div
+                key={g.key}
+                className="p-4 rounded-lg border border-border/30 bg-muted/5"
+              >
+                <div className="font-medium text-foreground">{g.eventName}</div>
+                <div className="text-sm text-foreground-muted mb-2">
+                  {g.ticketTypeName} • {g.tickets.length}{" "}
+                  {g.tickets.length === 1 ? "lístek" : "lístků"}
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="text-sm text-foreground-muted">
+                    Přeprodat:
+                  </span>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="icon"
+                    className="h-8 w-8 rounded"
+                    onClick={() =>
+                      setSelectedCountByKey((prev) => ({
+                        ...prev,
+                        [g.key]: Math.max(
+                          1,
+                          (prev[g.key] ?? 1) - 1
+                        ),
+                      }))
+                    }
+                    disabled={(selectedCountByKey[g.key] ?? 1) <= 1}
+                  >
+                    −
+                  </Button>
+                  <span className="w-8 text-center text-sm font-medium">
+                    {selectedCountByKey[g.key] ?? 1}
+                  </span>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="icon"
+                    className="h-8 w-8 rounded"
+                    onClick={() =>
+                      setSelectedCountByKey((prev) => ({
+                        ...prev,
+                        [g.key]: Math.min(
+                          g.tickets.length,
+                          (prev[g.key] ?? 1) + 1
+                        ),
+                      }))
+                    }
+                    disabled={
+                      (selectedCountByKey[g.key] ?? 1) >= g.tickets.length
+                    }
+                  >
+                    +
+                  </Button>
+                </div>
+              </div>
+            ))}
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setDialogOpen(false)}>
+              Zrušit
+            </Button>
+            <Button
+              onClick={goToCreateListing}
+              disabled={totalSelected === 0}
+              className="bg-gradient-primary text-white neon-glow"
+            >
+              Prodat
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

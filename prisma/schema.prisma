@@ -47,6 +47,7 @@ model Ticket {
   id           String     @id @default(cuid())
   eventid      String
   ownerId      String?
+  listingId    String?
   createtime   DateTime   @default(now())
   used         Boolean    @default(false)
   accesscode   String     @unique
@@ -57,6 +58,7 @@ model Ticket {
   event        Event      @relation(fields: [eventid], references: [id], onDelete: Cascade)
   tickettype   TicketType @relation(fields: [tickettypeid], references: [id], onDelete: Cascade)
   owner        User?      @relation(fields: [ownerId], references: [id])
+  listing      Listing?   @relation("ListingTickets", fields: [listingId], references: [id], onDelete: SetNull)
 }
 
 enum Role {
@@ -79,6 +81,7 @@ model User {
   ownedEvents   Event[]   @relation("EventOwner")
   sessions      Session[]
   ownedTickets  Ticket[]
+  listings      Listing[]
 }
 
 model Account {
@@ -124,4 +127,26 @@ model TicketType {
   eventid String
   tickets Ticket[]
   event   Event    @relation(fields: [eventid], references: [id], onDelete: Cascade)
+}
+
+enum ListingStatus {
+  IN_SALE
+  SOLD
+}
+
+enum ListingType {
+  OFFER   // nabídka k prodeji
+  REQUEST // poptávka
+}
+
+model Listing {
+  id        String         @id @default(cuid())
+  tickets   Ticket[]       @relation("ListingTickets")
+  createdAt DateTime       @default(now())
+  updatedAt DateTime       @updatedAt
+  price     Int            // cena za kus (Kč)
+  status    ListingStatus  @default(IN_SALE)
+  type      ListingType    @default(OFFER)
+  ownerId   String
+  owner     User           @relation(fields: [ownerId], references: [id], onDelete: Cascade)
 }

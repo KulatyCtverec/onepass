@@ -26,3 +26,19 @@ export const Role = {
 } as const
 
 export type Role = (typeof Role)[keyof typeof Role]
+
+
+export const ListingStatus = {
+  IN_SALE: 'IN_SALE',
+  SOLD: 'SOLD'
+} as const
+
+export type ListingStatus = (typeof ListingStatus)[keyof typeof ListingStatus]
+
+
+export const ListingType = {
+  OFFER: 'OFFER',
+  REQUEST: 'REQUEST'
+} as const
+
+export type ListingType = (typeof ListingType)[keyof typeof ListingType]

@@ -88,10 +88,10 @@ export default function HeroSection() {
             {(session?.user?.role === Role.ADMIN ||
               session?.user?.role === Role.ORGANIZER) && (
               <Link
-                href="/create-event"
+                href="/marketplace"
                 className="px-8 py-4 rounded-xl text-lg font-medium bg-gradient-primary text-white hover:scale-105 transition-all duration-300 neon-glow"
               >
-                Vytvořit událost
+                Přeprodej lístků
               </Link>
             )}
           </div>

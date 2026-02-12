@@ -74,3 +74,8 @@ export type VerificationToken = Prisma.VerificationTokenModel
  * 
  */
 export type TicketType = Prisma.TicketTypeModel
+/**
+ * Model Listing
+ * 
+ */
+export type Listing = Prisma.ListingModel

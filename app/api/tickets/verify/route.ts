@@ -55,15 +55,25 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Označíme ticket jako použitý
-    await prisma.ticket.update({
-      where: { id: ticket.id },
-      data: {
-        used: true,
-        lastScanned: new Date(),
-        scanCount: { increment: 1 },
-      },
-    });
+    // Označíme ticket jako použitý a případně uzavřeme listing (aby zmizel z marketplace)
+    await prisma.$transaction([
+      prisma.ticket.update({
+        where: { id: ticket.id },
+        data: {
+          used: true,
+          lastScanned: new Date(),
+          scanCount: { increment: 1 },
+        },
+      }),
+      ...(ticket.listingId
+        ? [
+            prisma.listing.update({
+              where: { id: ticket.listingId },
+              data: { status: "SOLD" },
+            }),
+          ]
+        : []),
+    ]);
 
     return NextResponse.json({
       success: true,

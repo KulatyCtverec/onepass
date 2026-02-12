@@ -57,7 +57,8 @@ export const ModelName = {
   Account: 'Account',
   Session: 'Session',
   VerificationToken: 'VerificationToken',
-  TicketType: 'TicketType'
+  TicketType: 'TicketType',
+  Listing: 'Listing'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -108,6 +109,7 @@ export const TicketScalarFieldEnum = {
   id: 'id',
   eventid: 'eventid',
   ownerId: 'ownerId',
+  listingId: 'listingId',
   createtime: 'createtime',
   used: 'used',
   accesscode: 'accesscode',
@@ -181,6 +183,19 @@ export const TicketTypeScalarFieldEnum = {
 } as const
 
 export type TicketTypeScalarFieldEnum = (typeof TicketTypeScalarFieldEnum)[keyof typeof TicketTypeScalarFieldEnum]
+
+
+export const ListingScalarFieldEnum = {
+  id: 'id',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  price: 'price',
+  status: 'status',
+  type: 'type',
+  ownerId: 'ownerId'
+} as const
+
+export type ListingScalarFieldEnum = (typeof ListingScalarFieldEnum)[keyof typeof ListingScalarFieldEnum]
 
 
 export const SortOrder = {
