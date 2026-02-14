@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Loader2, ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import EditEventForm from "@/components/EditEventForm";
-import { Event, TicketType, Role } from "@/lib/generated/prisma/client";
+import { Event, TicketType, Role } from "@prisma/client";
 
 export default function EditEventPage() {
   const { data: session, status } = useSession();

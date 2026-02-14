@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/auth";
 import { deleteBlobFromStorage } from "@/lib/blob";
 import { prisma } from "@/lib/prisma";
-import { Role } from "@/lib/generated/prisma";
+import { Role } from "@prisma/client";
 import { generateEventSlug } from "@/lib/utils";
 import { checkEventNameExists } from "@/lib/utils-server";
 import { syncTicketPoolForEvent } from "@/lib/events/handleEventWithTickets";

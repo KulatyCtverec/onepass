@@ -3,7 +3,7 @@ import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
 import { generateEventSlug } from "@/lib/utils";
 import { checkEventNameExists } from "@/lib/utils-server";
-import { Role } from "@/lib/generated/prisma";
+import { Role } from "@prisma/client";
 import {
   createEventWithTicketTypes,
   scheduleTicketPoolGeneration,

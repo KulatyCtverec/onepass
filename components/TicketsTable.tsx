@@ -1,6 +1,6 @@
 "use client";
 import TicketCard from "./TicketCard";
-import type { Ticket, Event, User, TicketType } from "@/lib/generated/prisma";
+import type { Ticket, Event, User, TicketType } from "@prisma/client";
 import { useInitialFetch } from "@/lib/hooks/useInitialFetch";
 import { useSSE } from "@/lib/hooks/useSSE";
 import { useState } from "react";

@@ -7,7 +7,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "./ui/dialog";
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 import { Textarea } from "./ui/textarea";
-import { Event, Ticket, TicketType } from "@/lib/generated/prisma/client";
+import { Event, Ticket, TicketType } from "@prisma/client";
 
 interface AdminEventsListProps {
   events: (Event & {

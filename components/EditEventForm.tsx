@@ -19,7 +19,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
-import { Event, TicketType } from "@/lib/generated/prisma/client";
+import { Event, TicketType } from "@prisma/client";
 import { PutBlobResult } from "@vercel/blob";
 import categories from "@/config/constants/categories.json";
 

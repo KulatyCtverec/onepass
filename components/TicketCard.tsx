@@ -17,7 +17,7 @@ import {
   TicketType,
   Event,
   User as UserType,
-} from "@/lib/generated/prisma";
+} from "@prisma/client";
 
 export default function TicketCard({
   ticket,

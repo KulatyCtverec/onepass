@@ -2,7 +2,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import { Role } from "@/lib/generated/prisma/client";
+import { Role } from "@prisma/client";
 import { useSession } from "next-auth/react";
 
 export default function HeroSection() {

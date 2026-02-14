@@ -2,7 +2,7 @@ import { auth } from "@/auth";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import AdminDashboard from "@/components/AdminDashboard";
-import { Role } from "@/lib/generated/prisma";
+import { Role } from "@prisma/client";
 export default async function AdminPage() {
   const session = await auth();
 

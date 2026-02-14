@@ -5,7 +5,7 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Event, TicketType, Role } from "@/lib/generated/prisma/client";
+import { Event, TicketType, Role } from "@prisma/client";
 import {
   Edit,
   Trash2,

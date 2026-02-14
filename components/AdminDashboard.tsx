@@ -13,7 +13,7 @@ import {
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Event, Ticket, TicketType } from "@/lib/generated/prisma/client";
+import { Event, Ticket, TicketType } from "@prisma/client";
 import {
   TrendingUp,
   DollarSign,

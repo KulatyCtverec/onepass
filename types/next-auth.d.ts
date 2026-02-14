@@ -1,5 +1,5 @@
-import { User as PrismaUser } from "@/lib/generated/prisma";
-import { Role } from "@/lib/generated/prisma";
+import { User as PrismaUser } from "@prisma/client";
+import { Role } from "@prisma/client";
 declare module "next-auth" {
   interface User extends PrismaUser {
     emailVerified: Date | null;

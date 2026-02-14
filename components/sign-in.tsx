@@ -17,7 +17,7 @@ import {
 import LoginForm from "./login-form";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { Role } from "@/lib/generated/prisma";
+import { Role } from "@prisma/client";
 import { User, Ticket, LayoutDashboard, Plus, LogOut } from "lucide-react";
 
 export default function SignIn() {

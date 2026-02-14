@@ -10,7 +10,7 @@ import {
   NavigationMenuList,
 } from "@/components/ui/navigation";
 import SignIn from "@/components/sign-in";
-import { Role } from "@/lib/generated/prisma";
+import { Role } from "@prisma/client";
 import NavbarSearchBox from "./NavbarSearchBox";
 
 export default function Navbar() {

@@ -1,5 +1,5 @@
 import React from "react";
-import { TicketType } from "@/lib/generated/prisma/client";
+import { TicketType } from "@prisma/client";
 import { Card, CardContent, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Ticket, Clock } from "lucide-react";

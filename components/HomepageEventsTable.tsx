@@ -9,7 +9,7 @@ import {
   useMemo,
 } from "react";
 import { Button } from "./ui/button";
-import { Event, TicketType } from "@/lib/generated/prisma/client";
+import { Event, TicketType } from "@prisma/client";
 import Link from "next/link";
 import { Calendar, MapPin, Ticket, Clock, Loader2 } from "lucide-react";
 import { useSSE } from "@/lib/hooks/useSSE";

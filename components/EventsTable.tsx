@@ -1,6 +1,6 @@
 "use client";
 import EventCard from "./EventCard";
-import type { Event } from "@/lib/generated/prisma/client";
+import type { Event } from "@prisma/client";
 import { useSSE } from "@/lib/hooks/useSSE";
 import { useState, useEffect, useRef, useCallback } from "react";
 import { Button } from "./ui/button";

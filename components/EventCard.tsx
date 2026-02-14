@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import type { Event } from "@/lib/generated/prisma/client";
+import type { Event } from "@prisma/client";
 import { useState } from "react";
 import { MapPin, Calendar, Trash2 } from "lucide-react";
 

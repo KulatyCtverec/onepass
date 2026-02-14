@@ -9,12 +9,12 @@ import {
   Heart,
   Ticket,
 } from "lucide-react";
-import type { Event } from "@/lib/generated/prisma/client";
+import type { Event } from "@prisma/client";
 import { useInitialFetch } from "@/lib/hooks/useInitialFetch";
 import TicketTypes from "@/components/TicketTypes";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { TicketType } from "@/lib/generated/prisma/client";
+import { TicketType } from "@prisma/client";
 import Link from "next/link";
 interface EventWithTypes extends Event {
   ticketTypes: TicketType[];
