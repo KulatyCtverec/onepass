@@ -64,6 +64,7 @@ export async function GET(
       ticketTypeName: first.tickettype.name,
       originalPrice: typeof originalPrice === "number" ? originalPrice : originalPriceCents / 100,
       quantity: listing.tickets.length,
+      ownerId: listing.ownerId,
       seller: {
         name: listing.owner.name || listing.owner.email.split("@")[0],
       },

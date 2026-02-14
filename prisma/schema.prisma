@@ -135,18 +135,18 @@ enum ListingStatus {
 }
 
 enum ListingType {
-  OFFER   // nabídka k prodeji
+  OFFER // nabídka k prodeji
   REQUEST // poptávka
 }
 
 model Listing {
-  id        String         @id @default(cuid())
-  tickets   Ticket[]       @relation("ListingTickets")
-  createdAt DateTime       @default(now())
-  updatedAt DateTime       @updatedAt
-  price     Int            // cena za kus (Kč)
-  status    ListingStatus  @default(IN_SALE)
-  type      ListingType    @default(OFFER)
+  id        String        @id @default(cuid())
+  tickets   Ticket[]      @relation("ListingTickets")
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+  price     Int // cena za kus (Kč)
+  status    ListingStatus @default(IN_SALE)
+  type      ListingType   @default(OFFER)
   ownerId   String
-  owner     User           @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  owner     User          @relation(fields: [ownerId], references: [id], onDelete: Cascade)
 }

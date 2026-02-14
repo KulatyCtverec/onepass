@@ -75,7 +75,10 @@ export default function MarketplaceSellPage() {
   const [myListings, setMyListings] = useState<any[]>([]);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [ticketsForSale, setTicketsForSale] = useState<TicketForSale[]>([]);
-  const [selectedCountByKey, setSelectedCountByKey] = useState<Record<string, number>>({});
+  const [selectedGroupKey, setSelectedGroupKey] = useState<string | null>(null);
+  const [selectedCountByKey, setSelectedCountByKey] = useState<
+    Record<string, number>
+  >({});
 
   useEffect(() => {
     fetch("/api/sell/stats")
@@ -95,16 +98,12 @@ export default function MarketplaceSellPage() {
 
   const openDialog = () => {
     setDialogOpen(true);
+    setSelectedGroupKey(null);
     setSelectedCountByKey({});
     fetch("/api/tickets/for-sale")
       .then((r) => r.json())
       .then((list: TicketForSale[]) => {
         setTicketsForSale(list);
-        const initial: Record<string, number> = {};
-        groupTickets(list).forEach((g) => {
-          initial[g.key] = 1;
-        });
-        setSelectedCountByKey(initial);
       })
       .catch(() => setTicketsForSale([]));
   };
@@ -115,25 +114,44 @@ export default function MarketplaceSellPage() {
   );
 
   const goToCreateListing = () => {
-    const ids: string[] = [];
-    onlyResale.forEach((g) => {
-      const count = Math.min(
-        selectedCountByKey[g.key] ?? 0,
-        g.tickets.length
-      );
-      for (let i = 0; i < count; i++) ids.push(g.tickets[i].id);
-    });
-    if (ids.length === 0) return;
+    if (!selectedGroupKey) return;
+    const g = onlyResale.find((x) => x.key === selectedGroupKey);
+    if (!g) return;
+    const count = Math.min(
+      selectedCountByKey[selectedGroupKey] ?? 0,
+      g.tickets.length
+    );
+    if (count <= 0) return;
+    const ids = g.tickets.slice(0, count).map((t) => t.id);
     setDialogOpen(false);
     router.push(
       `/marketplace/create-listing?tickets=${encodeURIComponent(ids.join(","))}`
     );
   };
 
-  const totalSelected = onlyResale.reduce(
-    (acc, g) => acc + Math.min(selectedCountByKey[g.key] ?? 0, g.tickets.length),
-    0
-  );
+  const totalSelected = selectedGroupKey
+    ? Math.min(
+        selectedCountByKey[selectedGroupKey] ?? 0,
+        onlyResale.find((g) => g.key === selectedGroupKey)?.tickets.length ?? 0
+      )
+    : 0;
+
+  const handlePlus = (g: Group) => {
+    setSelectedGroupKey(g.key);
+    setSelectedCountByKey((prev) => ({
+      ...prev,
+      [g.key]: Math.min(g.tickets.length, (prev[g.key] ?? 0) + 1),
+    }));
+  };
+
+  const handleMinus = (g: Group) => {
+    const current = selectedCountByKey[g.key] ?? 0;
+    if (current <= 1) return;
+    setSelectedCountByKey((prev) => ({
+      ...prev,
+      [g.key]: Math.max(0, current - 1),
+    }));
+  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -148,8 +166,26 @@ export default function MarketplaceSellPage() {
         </div>
 
         <div className="space-y-6">
-          <div className="flex gap-6 items-stretch">
-            <Card className="glass-effect border-border/30 flex-1">
+          <div className="flex flex-col md:flex-row gap-6 items-stretch">
+            <Card className="glass-effect border-border/30 flex-1 order-1">
+              <CardHeader className="pt-6">
+                <CardTitle className="flex items-center">
+                  <Plus className="h-5 w-5 mr-2 text-primary" />
+                  Rychlý prodej
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <Button
+                  className="px-8 py-4 rounded-xl text-lg font-medium bg-gradient-primary text-white hover:-translate-y-0.5 hover:scale-[1.02] transition-all duration-300 neon-glow w-fit"
+                  onClick={openDialog}
+                >
+                  <Ticket className="h-5 w-5 mr-2" />
+                  Přidat lístek k prodeji
+                </Button>
+              </CardContent>
+            </Card>
+
+            <Card className="glass-effect border-border/30 flex-1 order-2">
               <CardHeader className="pt-6">
                 <CardTitle className="flex items-center">
                   <ChartBar className="h-5 w-5 mr-2 text-primary" />
@@ -168,7 +204,9 @@ export default function MarketplaceSellPage() {
                   </div>
                   <div className="text-center p-4 glass-effect border-border/30 rounded-lg">
                     <div className="text-2xl font-bold text-primary">
-                      {stats?.moneyToReceive != null ? `${stats.moneyToReceive} Kč` : "—"}
+                      {stats?.moneyToReceive != null
+                        ? `${stats.moneyToReceive} Kč`
+                        : "—"}
                     </div>
                     <div className="text-sm text-foreground-muted">
                       Získáte při prodeji
@@ -176,35 +214,15 @@ export default function MarketplaceSellPage() {
                   </div>
                   <div className="text-center p-4 glass-effect border-border/30 rounded-lg">
                     <div className="text-2xl font-bold text-green-500">
-                      {stats?.moneySold != null ? `${stats.moneySold} Kč` : "—"}
+                      {stats?.moneySold != null
+                        ? `${stats.moneySold} Kč`
+                        : "—"}
                     </div>
                     <div className="text-sm text-foreground-muted">
                       Peníze prodané (po eventu)
                     </div>
                   </div>
                 </div>
-              </CardContent>
-            </Card>
-
-            <Card className="glass-effect border-border/30 flex-1">
-              <CardHeader className="pt-6">
-                <CardTitle className="flex items-center">
-                  <Plus className="h-5 w-5 mr-2 text-primary" />
-                  Rychlý prodej
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <p className="text-foreground-muted text-sm">
-                  Vyberte lístky, které chcete nabídnout k přeprodeji. Na další
-                  stránce nastavíte cenu.
-                </p>
-                <Button
-                  className="w-full glass-button hover:glass-button"
-                  onClick={openDialog}
-                >
-                  <Ticket className="h-4 w-4 mr-2" />
-                  Přidat lístek k prodeji
-                </Button>
               </CardContent>
             </Card>
           </div>
@@ -259,7 +277,8 @@ export default function MarketplaceSellPage() {
                             V prodeji
                           </div>
                           <div className="text-lg font-bold text-primary">
-                            {item.ticketsOwned} {item.ticketsOwned === 1 ? "lístek" : "lístků"}
+                            {item.ticketsOwned}{" "}
+                            {item.ticketsOwned === 1 ? "lístek" : "lístků"}
                           </div>
                         </div>
                         <div>
@@ -297,8 +316,8 @@ export default function MarketplaceSellPage() {
           <DialogHeader>
             <DialogTitle>Vyberte lístky k prodeji</DialogTitle>
             <DialogDescription>
-              Seskupeno podle události a typu. Zvolte, kolik lístků z každé
-              skupiny chcete v této nabídce přeprodat.
+              Klikněte na skupinu pro výběr. Vyberte právě jednu skupinu a
+              počet lístků. Při kliknutí na + se skupina rovnou vybere.
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-4 py-2">
@@ -313,64 +332,81 @@ export default function MarketplaceSellPage() {
                 v nabídce).
               </p>
             )}
-            {onlyResale.map((g) => (
-              <div
-                key={g.key}
-                className="p-4 rounded-lg border border-border/30 bg-muted/5"
-              >
-                <div className="font-medium text-foreground">{g.eventName}</div>
-                <div className="text-sm text-foreground-muted mb-2">
-                  {g.ticketTypeName} • {g.tickets.length}{" "}
-                  {g.tickets.length === 1 ? "lístek" : "lístků"}
-                </div>
-                <div className="flex items-center gap-2">
-                  <span className="text-sm text-foreground-muted">
-                    Přeprodat:
-                  </span>
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="icon"
-                    className="h-8 w-8 rounded"
-                    onClick={() =>
+            {onlyResale.map((g) => {
+              const isSelected = selectedGroupKey === g.key;
+              const count = selectedCountByKey[g.key] ?? 0;
+              return (
+                <div
+                  key={g.key}
+                  role="button"
+                  tabIndex={0}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" || e.key === " ") {
+                      e.preventDefault();
+                      setSelectedGroupKey(g.key);
+                      if (count === 0)
+                        setSelectedCountByKey((prev) => ({
+                          ...prev,
+                          [g.key]: 1,
+                        }));
+                    }
+                  }}
+                  onClick={() => {
+                    setSelectedGroupKey(g.key);
+                    if (count === 0)
                       setSelectedCountByKey((prev) => ({
                         ...prev,
-                        [g.key]: Math.max(
-                          1,
-                          (prev[g.key] ?? 1) - 1
-                        ),
-                      }))
-                    }
-                    disabled={(selectedCountByKey[g.key] ?? 1) <= 1}
-                  >
-                    −
-                  </Button>
-                  <span className="w-8 text-center text-sm font-medium">
-                    {selectedCountByKey[g.key] ?? 1}
-                  </span>
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="icon"
-                    className="h-8 w-8 rounded"
-                    onClick={() =>
-                      setSelectedCountByKey((prev) => ({
-                        ...prev,
-                        [g.key]: Math.min(
-                          g.tickets.length,
-                          (prev[g.key] ?? 1) + 1
-                        ),
-                      }))
-                    }
-                    disabled={
-                      (selectedCountByKey[g.key] ?? 1) >= g.tickets.length
-                    }
-                  >
-                    +
-                  </Button>
+                        [g.key]: 1,
+                      }));
+                  }}
+                  className={`p-4 rounded-lg border-2 transition-all cursor-pointer ${
+                    isSelected
+                      ? "border-primary bg-primary/5 shadow-[0_0_16px_rgba(59,130,246,0.3)]"
+                      : "border-border/30 bg-muted/5 hover:border-primary/30"
+                  }`}
+                >
+                  <div className="font-medium text-foreground">{g.eventName}</div>
+                  <div className="text-sm text-foreground-muted mb-2">
+                    {g.ticketTypeName} • {g.tickets.length}{" "}
+                    {g.tickets.length === 1 ? "lístek" : "lístků"}
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-sm text-foreground-muted">
+                      Přeprodat:
+                    </span>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="icon"
+                      className="h-8 w-8 rounded"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleMinus(g);
+                      }}
+                      disabled={count <= 0}
+                    >
+                      −
+                    </Button>
+                    <span className="w-8 text-center text-sm font-medium">
+                      {count}
+                    </span>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="icon"
+                      className="h-8 w-8 rounded"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handlePlus(g);
+                      }}
+                      disabled={count >= g.tickets.length}
+                    >
+                      +
+                    </Button>
+                  </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setDialogOpen(false)}>

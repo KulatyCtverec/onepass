@@ -5,7 +5,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft, Ticket } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
@@ -130,19 +130,18 @@ function CreateListingForm() {
         <h1 className="text-2xl font-bold text-foreground mb-2">
           Vytvořit nabídku
         </h1>
-        <p className="text-foreground-muted mb-8">
+        <p className="text-foreground-muted mb-8 text-base">
           {eventName} • {ticketTypeName} • {tickets.length}{" "}
           {tickets.length === 1 ? "lístek" : "lístků"}
         </p>
 
         <Card className="bg-gradient-card border-border/20">
-          <CardHeader>
-            <CardTitle>Cena za kus</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <form onSubmit={handleSubmit} className="space-y-4">
+          <CardContent className="pt-6">
+            <form onSubmit={handleSubmit} className="space-y-6">
               <div className="space-y-2">
-                <Label htmlFor="price">Cena (Kč)</Label>
+                <Label htmlFor="price" className="text-base">
+                  Cena za kus (Kč)
+                </Label>
                 <Input
                   id="price"
                   type="number"
@@ -151,20 +150,21 @@ function CreateListingForm() {
                   value={price}
                   onChange={(e) => setPrice(e.target.value)}
                   placeholder={originalPrice != null ? String(originalPrice) : ""}
+                  className="text-base h-12"
                 />
                 {originalPrice != null && (
-                  <p className="text-sm text-foreground-muted">
+                  <p className="text-base text-foreground-muted">
                     Původní cena: {originalPrice} Kč
                   </p>
                 )}
               </div>
               {error && (
-                <p className="text-sm text-destructive">{error}</p>
+                <p className="text-base text-destructive">{error}</p>
               )}
               <Button
                 type="submit"
                 disabled={submitting}
-                className="w-full bg-gradient-primary text-white neon-glow"
+                className="px-10 py-5 text-lg font-medium bg-gradient-primary text-white neon-glow hover:scale-[1.02] hover:-translate-y-0.5 transition-all duration-200"
               >
                 {submitting ? "Vytvářím..." : "Vytvořit nabídku"}
               </Button>

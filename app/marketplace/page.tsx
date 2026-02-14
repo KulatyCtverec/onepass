@@ -4,14 +4,14 @@ import { useState } from "react";
 import { Star, DollarSign, Shield, Plus } from "lucide-react";
 import Link from "next/link";
 import SearchBox from "@/components/SearchBox";
-import ListingsTable from "@/components/ListingsTable";
+import ListingsByEvent from "@/components/ListingsByEvent";
 import { useInitialFetch } from "@/lib/hooks/useInitialFetch";
 import { Ticket } from "lucide-react";
+
 export default function MarketplacePage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("");
   const [sortBy, setSortBy] = useState("newest");
-  const [selectedListing, setSelectedListing] = useState<any>(null);
 
   const listings = useInitialFetch<any[]>("/api/listings");
 
@@ -54,7 +54,7 @@ export default function MarketplacePage() {
         <div className="flex items-center justify-between mb-8">
           <div className="text-left">
             <h1 className="text-3xl md:text-4xl font-bold bg-linear-to-r from-primary to-secondary bg-clip-text text-foreground">
-              Marketplace
+              Přeprodej lístků
             </h1>
             <p className="text-foreground-muted text-sm md:text-base mt-2 max-w-xl">
               Nakupujte přeprodávané lístky v bezpečném a důvěryhodném
@@ -86,11 +86,7 @@ export default function MarketplacePage() {
             <p className="text-foreground-muted">Načítám nabídky...</p>
           </div>
         ) : (
-          <ListingsTable
-            sortedListings={sortedListings}
-            selectedListing={selectedListing}
-            setSelectedListing={setSelectedListing}
-          />
+          <ListingsByEvent sortedListings={sortedListings} />
         )}
 
         <div className="mt-16 text-center">
