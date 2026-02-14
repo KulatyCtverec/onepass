@@ -317,3 +317,8 @@ html {
   border-color: hsl(var(--primary) / 0.7) !important;
   box-shadow: 0 0 12px hsl(var(--primary) / 0.25);
 }
+
+/* Neprůhledné pozadí dialogu (např. výběr lístků k prodeji) */
+.dialog-solid-bg {
+  background-color: hsl(var(--card)) !important;
+}

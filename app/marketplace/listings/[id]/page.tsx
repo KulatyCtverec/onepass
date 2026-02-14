@@ -152,6 +152,7 @@ export default function ListingDetailPage({
 
             <Card className="bg-gradient-card border-border/20">
               <CardHeader className="px-6 py-4">
+                Typ lístku:
                 {listing.ticketTypeName && (
                   <p className="text-xl font-bold text-foreground">
                     {listing.ticketTypeName}
@@ -187,7 +188,7 @@ export default function ListingDetailPage({
                   )}
                 </div>
 
-                <div className="flex items-center gap-2 pt-4 border-t border-border/30">
+                <div className="flex items-center gap-2 pt-4  border-border/30">
                   <span className="text-sm text-foreground-muted">
                     Prodejce: {listing.seller?.name ?? "—"}
                   </span>
@@ -201,7 +202,7 @@ export default function ListingDetailPage({
               <CardContent className="p-6 space-y-6">
                 <div className="space-y-4">
                   <div className="flex justify-between items-baseline">
-                    <span className="text-md text-foreground-muted">
+                    <span className="text-lg text-foreground-muted">
                       Původní cena
                     </span>
                     <span className="text-lg font-semibold text-foreground">
@@ -211,26 +212,25 @@ export default function ListingDetailPage({
                     </span>
                   </div>
                   <div className="flex justify-between items-baseline">
-                    <span className="text-md text-foreground-muted">
+                    <span className="text-lg text-foreground-muted">
                       Prodejní cena
                     </span>
-                    <span className="text-2xl font-bold text-primary">
+                    <span className="text-lg font-semibold text-primary">
                       {listing.price != null ? `${listing.price} Kč` : "—"}
                     </span>
                   </div>
-                </div>
-
-                <div className="space-y-2">
-                  <div className="text-sm text-foreground-muted">
-                    Celkem:{" "}
-                    <span className="font-semibold text-foreground">
+                  <div className="flex justify-between items-baseline">
+                    <span className="text-lg text-foreground-muted">
+                      Celkem:
+                    </span>
+                    <span className="text-2xl font-bold text-foreground">
                       {(listing.price ?? 0) * effectiveQty} Kč
                     </span>
                   </div>
                   {quantity > 1 && (
-                    <div className="flex items-center gap-2 py-2">
+                    <div className="flex justify-between items-baselin gap-2 py-2">
                       <label className="text-lg font-medium text-foreground">
-                        Počet lístků
+                        Počet lístků:
                       </label>
                       <div className="flex items-center gap-2">
                         <Button
@@ -245,7 +245,7 @@ export default function ListingDetailPage({
                         >
                           −
                         </Button>
-                        <span className="w-10 text-center font-medium">
+                        <span className="w-10 text-center font-medium text-xl pb-1">
                           {effectiveQty}
                         </span>
                         <Button
@@ -260,9 +260,6 @@ export default function ListingDetailPage({
                         >
                           +
                         </Button>
-                        <span className="text-md text-foreground-muted">
-                          max {maxSelect}
-                        </span>
                       </div>
                     </div>
                   )}
@@ -292,7 +289,7 @@ export default function ListingDetailPage({
                       size="lg"
                     >
                       <Ticket className="h-5 w-5 mr-2" />
-                      Koupit lístek{effectiveQty > 1 ? "y" : ""}
+                      {effectiveQty > 1 ? "Koupit lístky" : "Koupit lístek"}
                     </Button>
                   </Link>
                 )}

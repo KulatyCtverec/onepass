@@ -61,14 +61,6 @@ export default function MarketplacePage() {
               prostředí.
             </p>
           </div>
-
-          <Link
-            href="/marketplace/sell"
-            className="px-6 py-3 rounded-xl text-base font-medium bg-gradient-primary text-white hover:-translate-y-1 transition-all duration-300 neon-glow"
-          >
-            <Plus className="h-4 w-4 mr-2 inline" />
-            Prodat svůj lístek
-          </Link>
         </div>
 
         <SearchBox

@@ -61,7 +61,7 @@ function groupTickets(tickets: TicketForSale[]): Group[] {
     });
   });
   return groups.sort(
-    (a, b) => new Date(a.eventDate).getTime() - new Date(b.eventDate).getTime()
+    (a, b) => new Date(a.eventDate).getTime() - new Date(b.eventDate).getTime(),
   );
 }
 
@@ -110,7 +110,7 @@ export default function MarketplaceSellPage() {
 
   const groups = groupTickets(ticketsForSale);
   const onlyResale = groups.filter((g) =>
-    g.tickets.every((t) => t.event.allowResale)
+    g.tickets.every((t) => t.event.allowResale),
   );
 
   const goToCreateListing = () => {
@@ -119,20 +119,20 @@ export default function MarketplaceSellPage() {
     if (!g) return;
     const count = Math.min(
       selectedCountByKey[selectedGroupKey] ?? 0,
-      g.tickets.length
+      g.tickets.length,
     );
     if (count <= 0) return;
     const ids = g.tickets.slice(0, count).map((t) => t.id);
     setDialogOpen(false);
     router.push(
-      `/marketplace/create-listing?tickets=${encodeURIComponent(ids.join(","))}`
+      `/marketplace/create-listing?tickets=${encodeURIComponent(ids.join(","))}`,
     );
   };
 
   const totalSelected = selectedGroupKey
     ? Math.min(
         selectedCountByKey[selectedGroupKey] ?? 0,
-        onlyResale.find((g) => g.key === selectedGroupKey)?.tickets.length ?? 0
+        onlyResale.find((g) => g.key === selectedGroupKey)?.tickets.length ?? 0,
       )
     : 0;
 
@@ -166,32 +166,14 @@ export default function MarketplaceSellPage() {
         </div>
 
         <div className="space-y-6">
+          <div className="flex items-start ">
+            <ChartBar className="h-5 w-5 mr-2 text-primary" />
+            <div className="text-xl font-semibold text-foreground">
+              Moje statistiky
+            </div>
+          </div>
           <div className="flex flex-col md:flex-row gap-6 items-stretch">
-            <Card className="glass-effect border-border/30 flex-1 order-1">
-              <CardHeader className="pt-6">
-                <CardTitle className="flex items-center">
-                  <Plus className="h-5 w-5 mr-2 text-primary" />
-                  Rychlý prodej
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <Button
-                  className="px-8 py-4 rounded-xl text-lg font-medium bg-gradient-primary text-white hover:-translate-y-0.5 hover:scale-[1.02] transition-all duration-300 neon-glow w-fit"
-                  onClick={openDialog}
-                >
-                  <Ticket className="h-5 w-5 mr-2" />
-                  Přidat lístek k prodeji
-                </Button>
-              </CardContent>
-            </Card>
-
             <Card className="glass-effect border-border/30 flex-1 order-2">
-              <CardHeader className="pt-6">
-                <CardTitle className="flex items-center">
-                  <ChartBar className="h-5 w-5 mr-2 text-primary" />
-                  Moje statistiky
-                </CardTitle>
-              </CardHeader>
               <CardContent className="space-y-4">
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                   <div className="text-center p-4 glass-effect border-border/30 rounded-lg">
@@ -214,9 +196,7 @@ export default function MarketplaceSellPage() {
                   </div>
                   <div className="text-center p-4 glass-effect border-border/30 rounded-lg">
                     <div className="text-2xl font-bold text-green-500">
-                      {stats?.moneySold != null
-                        ? `${stats.moneySold} Kč`
-                        : "—"}
+                      {stats?.moneySold != null ? `${stats.moneySold} Kč` : "—"}
                     </div>
                     <div className="text-sm text-foreground-muted">
                       Peníze prodané (po eventu)
@@ -228,19 +208,28 @@ export default function MarketplaceSellPage() {
           </div>
 
           <div>
-            <h3 className="text-xl font-semibold text-foreground">
-              Moje prodávané lístky
-            </h3>
-            <p className="text-sm text-foreground-muted mb-4 opacity-70 py-2">
-              Přehled všech aktivních nabídek na marketplace.
-            </p>
+            <div className="flex items-center justify-between mb-4">
+              <div>
+                <h3 className="text-xl font-semibold text-foreground">
+                  Moje prodávané lístky
+                </h3>
+                <p className="text-sm text-foreground-muted mb-4 opacity-70 py-2">
+                  Přehled všech aktivních nabídek na marketplace.
+                </p>
+              </div>
+              <Button
+                className="py-6 rounded-xl text-xl font-medium bg-gradient-primary text-white hover:-translate-y-0.5 hover:scale-[1.02] transition-all duration-300 neon-glow"
+                onClick={openDialog}
+              >
+                <Ticket className="h-6 w-6 mr-2" />
+                Přidat lístek k prodeji
+              </Button>
+            </div>
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
               {myListings.map((item) => (
                 <Link href={`/marketplace/listings/${item.id}`} key={item.id}>
-                  <Card
-                    className="glass-effect border-border/30 hover:border-primary/50 transition-all duration-300 cursor-pointer h-full"
-                  >
-                    <div className="aspect-video relative overflow-hidden">
+                  <Card className="glass-effect border-border/30 hover:border-primary/50 transition-all duration-300 cursor-pointer h-full overflow-hidden">
+                    <div className="aspect-video relative overflow-hidden rounded-t-lg">
                       {item.image ? (
                         <Image
                           src={item.image}
@@ -312,12 +301,12 @@ export default function MarketplaceSellPage() {
       </div>
 
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent className="max-w-lg max-h-[85vh] overflow-y-auto bg-gradient-card border border-border/50 shadow-xl">
+        <DialogContent className="dialog-solid-bg max-w-lg max-h-[85vh] overflow-y-auto border border-neutral-600/80 shadow-xl">
           <DialogHeader>
             <DialogTitle>Vyberte lístky k prodeji</DialogTitle>
             <DialogDescription>
-              Klikněte na skupinu pro výběr. Vyberte právě jednu skupinu a
-              počet lístků. Při kliknutí na + se skupina rovnou vybere.
+              Klikněte na skupinu pro výběr. Vyberte právě jednu skupinu a počet
+              lístků. Při kliknutí na + se skupina rovnou vybere.
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-4 py-2">
@@ -343,29 +332,45 @@ export default function MarketplaceSellPage() {
                   onKeyDown={(e) => {
                     if (e.key === "Enter" || e.key === " ") {
                       e.preventDefault();
-                      setSelectedGroupKey(g.key);
-                      if (count === 0)
+                      if (count > 0) {
+                        setSelectedGroupKey(null);
+                        setSelectedCountByKey((prev) => ({
+                          ...prev,
+                          [g.key]: 0,
+                        }));
+                      } else {
+                        setSelectedGroupKey(g.key);
                         setSelectedCountByKey((prev) => ({
                           ...prev,
                           [g.key]: 1,
                         }));
+                      }
                     }
                   }}
                   onClick={() => {
-                    setSelectedGroupKey(g.key);
-                    if (count === 0)
+                    if (count > 0) {
+                      setSelectedGroupKey(null);
+                      setSelectedCountByKey((prev) => ({
+                        ...prev,
+                        [g.key]: 0,
+                      }));
+                    } else {
+                      setSelectedGroupKey(g.key);
                       setSelectedCountByKey((prev) => ({
                         ...prev,
                         [g.key]: 1,
                       }));
+                    }
                   }}
-                  className={`p-4 rounded-lg border-2 transition-all cursor-pointer ${
+                  className={`p-4 rounded-lg border transition-all cursor-pointer ${
                     isSelected
-                      ? "border-primary bg-primary/5 shadow-[0_0_16px_rgba(59,130,246,0.3)]"
-                      : "border-border/30 bg-muted/5 hover:border-primary/30"
+                      ? "border-primary bg-primary/10 shadow-[0_0_16px_rgba(59,130,246,0.3)]"
+                      : "border-neutral-600/70 bg-white/[0.06] hover:border-primary/30"
                   }`}
                 >
-                  <div className="font-medium text-foreground">{g.eventName}</div>
+                  <div className="font-medium text-foreground">
+                    {g.eventName}
+                  </div>
                   <div className="text-sm text-foreground-muted mb-2">
                     {g.ticketTypeName} • {g.tickets.length}{" "}
                     {g.tickets.length === 1 ? "lístek" : "lístků"}
@@ -378,7 +383,7 @@ export default function MarketplaceSellPage() {
                       type="button"
                       variant="outline"
                       size="icon"
-                      className="h-8 w-8 rounded"
+                      className="h-8 w-8 rounded !border-neutral-600/80 hover:bg-white/[0.06]"
                       onClick={(e) => {
                         e.stopPropagation();
                         handleMinus(g);
@@ -394,7 +399,7 @@ export default function MarketplaceSellPage() {
                       type="button"
                       variant="outline"
                       size="icon"
-                      className="h-8 w-8 rounded"
+                      className="h-8 w-8 rounded !border-neutral-600/80 hover:bg-white/[0.06]"
                       onClick={(e) => {
                         e.stopPropagation();
                         handlePlus(g);
@@ -409,7 +414,7 @@ export default function MarketplaceSellPage() {
             })}
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setDialogOpen(false)}>
+            <Button variant="outline" onClick={() => setDialogOpen(false)} className="!border-neutral-600/80">
               Zrušit
             </Button>
             <Button

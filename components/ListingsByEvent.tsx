@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Ticket, Calendar, Clock, MapPin, Users } from "lucide-react";
+import { Ticket, Calendar, Clock, MapPin, Users, Plus } from "lucide-react";
 import { Card, CardContent } from "./ui/card";
 import { Button } from "./ui/button";
 import Image from "next/image";
@@ -28,7 +28,7 @@ type Listing = {
 
 function getCategoryLabel(category: string) {
   const c = categories.find(
-    (x: { value: string }) => x.value.toLowerCase() === category?.toLowerCase()
+    (x: { value: string }) => x.value.toLowerCase() === category?.toLowerCase(),
   );
   return c ? (c as { label: string }).label : category;
 }
@@ -66,26 +66,34 @@ function groupByTicketType(listings: Listing[]) {
   return Array.from(map.entries()).map(([ticketType, items]) => ({
     ticketType,
     listings: [...items].sort(
-      (a, b) => (a.resalePrice ?? 0) - (b.resalePrice ?? 0)
+      (a, b) => (a.resalePrice ?? 0) - (b.resalePrice ?? 0),
     ),
   }));
 }
 
-export default function ListingsByEvent(props: {
-  sortedListings: Listing[];
-}) {
+export default function ListingsByEvent(props: { sortedListings: Listing[] }) {
   const [expandedEventId, setExpandedEventId] = useState<string | null>(null);
   const groups = groupByEvent(props.sortedListings);
 
   return (
     <div className="space-y-6">
-      <h2 className="text-xl font-semibold text-foreground">
-        Dostupné nabídky
-      </h2>
-      <p className="text-sm text-foreground-muted opacity-70">
-        Skupiny podle události — klikněte pro zobrazení nabídek
-      </p>
-
+      <div className="flex items-center justify-between">
+        <div>
+          <h2 className="text-xl font-semibold text-foreground">
+            Dostupné nabídky
+          </h2>
+          <p className="text-sm text-foreground-muted opacity-70">
+            Skupiny podle události — klikněte pro zobrazení nabídek
+          </p>
+        </div>
+        <Link
+          href="/marketplace/sell"
+          className="px-6 py-3 rounded-xl text-base font-medium bg-gradient-primary text-white hover:-translate-y-1 transition-all duration-300 neon-glow"
+        >
+          <Plus className="h-4 w-4 mr-2 inline" />
+          Prodej mých lístků
+        </Link>
+      </div>
       <div className="space-y-4">
         {groups.map((group) => {
           const isExpanded = expandedEventId === group.eventId;
@@ -94,7 +102,7 @@ export default function ListingsByEvent(props: {
           return (
             <Card
               key={group.eventId}
-              className="overflow-hidden glass-effect border-border/30"
+              className="overflow-hidden glass-effect border-border/30 gap-0"
             >
               <button
                 type="button"
@@ -152,7 +160,7 @@ export default function ListingsByEvent(props: {
                         {group.listings.length === 1 ? "nabídka" : "nabídek"}
                       </span>
                       <span
-                        className={`transform transition-transform ${
+                        className={`inline-block transition-transform duration-300 ease-out ${
                           isExpanded ? "rotate-180" : ""
                         }`}
                       >
@@ -163,57 +171,68 @@ export default function ListingsByEvent(props: {
                 </div>
               </button>
 
-              {isExpanded && (
-                <div className="border-t border-border/30 p-4 space-y-6">
-                  {byType.map(({ ticketType, listings: typeListings }) => (
-                    <div key={ticketType}>
-                      <h4 className="text-sm font-semibold text-foreground-muted mb-3 uppercase tracking-wider">
-                        {ticketType}
-                      </h4>
-                      <div className="overflow-x-auto">
-                        <table className="w-full text-sm">
-                          <thead>
-                            <tr className="border-b border-border/30 text-left text-foreground-muted">
-                              <th className="py-2 pr-4">Prodejce</th>
-                              <th className="py-2 pr-4">Cena za lístek</th>
-                              <th className="py-2 pr-4">Počet</th>
-                              <th className="py-2"></th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            {typeListings.map((listing) => (
-                              <tr
-                                key={listing.id}
-                                className="border-b border-border/10 hover:bg-muted/10"
-                              >
-                                <td className="py-3 pr-4">
-                                  {listing.seller?.name ?? "—"}
-                                </td>
-                                <td className="py-3 pr-4 font-semibold text-primary">
-                                  {listing.resalePrice} Kč
-                                </td>
-                                <td className="py-3 pr-4">
-                                  {listing.quantity ?? 1}
-                                </td>
-                                <td className="py-3">
-                                  <Link
-                                    href={`/marketplace/listings/${listing.id}`}
-                                  >
-                                    <Button size="sm" variant="outline">
-                                      <Ticket className="h-4 w-4 mr-1" />
-                                      Koupit
-                                    </Button>
-                                  </Link>
-                                </td>
-                              </tr>
-                            ))}
-                          </tbody>
-                        </table>
+              <div
+                className="grid transition-[grid-template-rows] duration-300 ease-out"
+                style={{ gridTemplateRows: isExpanded ? "1fr" : "0fr" }}
+              >
+                <div className="min-h-0 overflow-hidden">
+                  <div className="pt-4 px-4 pb-4 space-y-6 bg-primary/20 border-t border-neutral-500/70">
+                    {byType.map(({ ticketType, listings: typeListings }) => (
+                      <div
+                        key={ticketType}
+                        className="p-4 space-y-3 bg-card/30"
+                      >
+                        <h4 className="text-xl font-semibold text-foreground pb-2 border-b border-neutral-600/80">
+                          {ticketType}
+                        </h4>
+                        <div className="space-y-0 overflow-hidden rounded-xl">
+                          <div className="grid grid-cols-[1fr_120px_70px_100px] gap-0 border-b border-neutral-600/50">
+                            <div className="pl-4 pr-3 py-2 text-sm text-foreground-muted text-left border-r border-neutral-600/40">
+                              Prodejce
+                            </div>
+                            <div className="px-3 py-2 text-sm text-foreground-muted text-center border-r border-neutral-600/40">
+                              Cena za lístek
+                            </div>
+                            <div className="px-3 py-2 text-sm text-foreground-muted text-center border-r border-neutral-600/40">
+                              Počet
+                            </div>
+                            <div className="px-3 py-2 text-sm text-foreground-muted text-center">
+                              Koupit
+                            </div>
+                          </div>
+                          {typeListings.map((listing, index) => (
+                            <Link
+                              key={listing.id}
+                              href={`/marketplace/listings/${listing.id}`}
+                              className={`grid grid-cols-[1fr_120px_70px_100px] gap-0 items-center py-3.5 transition-colors no-underline ${
+                                index % 2 === 0
+                                  ? "bg-white/[0.04] hover:bg-white/[0.07]"
+                                  : "bg-white/[0.08] hover:bg-white/[0.11]"
+                              }`}
+                            >
+                              <div className="pl-4 pr-3 text-left text-foreground font-medium truncate" title={listing.seller?.name ?? "—"}>
+                                {listing.seller?.name ?? "—"}
+                              </div>
+                              <div className="px-3 text-center font-semibold text-primary">
+                                {listing.resalePrice} Kč
+                              </div>
+                              <div className="px-3 text-center text-foreground-muted text-sm">
+                                {listing.quantity ?? 1}×
+                              </div>
+                              <div className="px-3 flex justify-center">
+                                <span className="inline-flex items-center justify-center rounded-lg bg-primary/20 text-primary px-3 py-1.5 text-sm font-medium">
+                                  <Ticket className="h-4 w-4 mr-1.5" />
+                                  Koupit
+                                </span>
+                              </div>
+                            </Link>
+                          ))}
+                        </div>
                       </div>
-                    </div>
-                  ))}
+                    ))}
+                  </div>
                 </div>
-              )}
+              </div>
             </Card>
           );
         })}
