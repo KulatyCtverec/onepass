@@ -6,6 +6,7 @@ import { Search, Loader2, Calendar, MapPin } from "lucide-react";
 import { useDebounce } from "@/lib/hooks/useDebounce";
 import { Event, TicketType } from "@prisma/client";
 import Link from "next/link";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 
 export default function HeroSearch(props: React.ComponentProps<"div">) {
@@ -115,11 +116,13 @@ export default function HeroSearch(props: React.ComponentProps<"div">) {
                     className="flex items-center gap-4 p-3 hover:bg-white/5 rounded-xl transition-colors group"
                     onClick={() => setIsOpen(false)}
                   >
-                    <div className="relative w-16 h-16 rounded-lg overflow-hidden flex-shrink-0 border border-border/40">
+                    <div className="relative w-16 h-16 rounded-lg overflow-hidden shrink-0 border border-border/40">
                       {event.image ? (
-                        <img
+                        <Image
                           src={event.image}
                           alt={event.name}
+                          width={64}
+                          height={64}
                           className="w-full h-full object-cover"
                         />
                       ) : (

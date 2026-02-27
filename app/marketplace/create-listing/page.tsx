@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, Suspense } from "react";
+import { useState, useEffect, useMemo, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft, Ticket } from "lucide-react";
@@ -13,10 +13,14 @@ function CreateListingForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const ticketsParam = searchParams.get("tickets") ?? "";
-  const ticketIds = ticketsParam
-    .split(",")
-    .map((s) => s.trim())
-    .filter(Boolean);
+  const ticketIds = useMemo(
+    () =>
+      ticketsParam
+        .split(",")
+        .map((s) => s.trim())
+        .filter(Boolean),
+    [ticketsParam]
+  );
 
   const [tickets, setTickets] = useState<any[]>([]);
   const [loaded, setLoaded] = useState(false);
@@ -39,7 +43,7 @@ function CreateListingForm() {
         setLoaded(true);
       })
       .catch(() => setLoaded(true));
-  }, [ticketIds.join(",")]);
+  }, [ticketIds]);
 
   const first = tickets[0];
   const eventName = first?.event?.name ?? "—";

@@ -11,6 +11,7 @@ import {
 import { Button } from "./ui/button";
 import { Event, TicketType } from "@prisma/client";
 import Link from "next/link";
+import Image from "next/image";
 import { useSearchParams } from "next/navigation";
 import { Calendar, MapPin, Ticket, Clock, Loader2 } from "lucide-react";
 import { useSSE } from "@/lib/hooks/useSSE";
@@ -40,7 +41,7 @@ export default function HomepageEventsTable() {
     if (qParam !== searchQuery) {
       setSearchQuery(qParam);
     }
-  }, [qParam]);
+  }, [qParam, searchQuery]);
 
   const debouncedSearchQuery = useDebounce(searchQuery, 500);
 
@@ -268,18 +269,20 @@ export default function HomepageEventsTable() {
               {/* Event Image - dynamically sized to fit card */}
               <div className="relative w-full h-72 overflow-hidden rounded-lg">
                 {event.image ? (
-                  <img
+                  <Image
                     src={event.image}
                     alt={event.name}
-                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                    fill
+                    sizes="(min-width: 1024px) 25vw, (min-width: 768px) 50vw, 100vw"
+                    className="object-cover transition-transform duration-500 group-hover:scale-110"
                   />
                 ) : (
-                  <div className="w-full h-full bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center">
+                  <div className="w-full h-full bg-linear-to-br from-primary/20 to-secondary/20 flex items-center justify-center">
                     <Ticket className="w-16 h-16 text-primary/40" />
                   </div>
                 )}
                 {/* Gradient overlay for better text readability */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
+                <div className="absolute inset-0 bg-linear-to-t from-black/80 via-black/40 to-transparent" />
               </div>
 
               {/* Event Info - positioned over image, expands on hover */}

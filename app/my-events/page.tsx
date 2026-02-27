@@ -16,6 +16,7 @@ import {
   Loader2,
 } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 
 export default function MyEventsPage() {
   const { data: session, status } = useSession();
@@ -118,7 +119,7 @@ export default function MyEventsPage() {
   return (
     <div className="container mx-auto px-6 py-12">
       <div className="mb-8">
-        <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-400 to-blue-600 bg-clip-text text-transparent mb-4">
+        <h1 className="text-4xl font-bold bg-linear-to-r from-blue-400 to-blue-600 bg-clip-text text-transparent mb-4">
           Mé události
         </h1>
         <p className="text-muted text-lg">
@@ -143,17 +144,19 @@ export default function MyEventsPage() {
             {/* Event Image */}
             <div className="relative w-full h-48 overflow-hidden">
               {event.image ? (
-                <img
+                <Image
                   src={event.image}
                   alt={event.name}
-                  className="w-full h-full object-cover"
+                  fill
+                  sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
+                  className="object-cover"
                 />
               ) : (
-                <div className="w-full h-full bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center">
+                <div className="w-full h-full bg-linear-to-br from-primary/20 to-secondary/20 flex items-center justify-center">
                   <Calendar className="w-16 h-16 text-primary/40" />
                 </div>
               )}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+              <div className="absolute inset-0 bg-linear-to-t from-black/60 to-transparent" />
             </div>
 
             <CardHeader className="pb-3 text-main">

@@ -9,6 +9,7 @@ import { signIn } from "next-auth/react";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Ticket, Mail, Lock, User, Eye, EyeOff, Loader2 } from "lucide-react";
+import Image from "next/image";
 
 export default function LoginForm({
   className,
@@ -215,7 +216,7 @@ export default function LoginForm({
               variant="outline"
               className="w-full glass-effect border-border/30 hover:border-primary/50 text-main hover:text-primary transition-all duration-300 py-3"
             >
-              <img src="/google.png" alt="Google" className="h-5 w-5 mr-3" />
+              <Image src="/google.png" alt="Google" width={20} height={20} className="h-5 w-5 mr-3" />
               Pokračovat s Google
             </Button>
 

@@ -6,6 +6,7 @@ import { Search, Loader2, Calendar, MapPin } from "lucide-react";
 import { useDebounce } from "@/lib/hooks/useDebounce";
 import { Event, TicketType } from "@prisma/client";
 import Link from "next/link";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 
 const NavbarSearchBox = () => {
@@ -86,7 +87,7 @@ const NavbarSearchBox = () => {
       </form>
 
       {isOpen && (
-        <div className="absolute top-full right-0 mt-2 w-[320px] bg-background border border-border/40 rounded-xl shadow-2xl overflow-hidden z-[60]">
+        <div className="absolute top-full right-0 mt-2 w-[320px] bg-background border border-border/40 rounded-xl shadow-2xl overflow-hidden z-60">
           <div className="p-2">
             <h3 className="px-3 py-2 text-xs font-semibold text-muted uppercase tracking-wider">
               Výsledky hledání
@@ -100,11 +101,13 @@ const NavbarSearchBox = () => {
                     className="flex items-center gap-3 p-2 hover:bg-foreground/5 rounded-lg transition-colors group"
                     onClick={() => setIsOpen(false)}
                   >
-                    <div className="relative w-10 h-10 rounded-md overflow-hidden flex-shrink-0 border border-border/40">
+                    <div className="relative w-10 h-10 rounded-md overflow-hidden shrink-0 border border-border/40">
                       {event.image ? (
-                        <img
+                        <Image
                           src={event.image}
                           alt={event.name}
+                          width={40}
+                          height={40}
                           className="w-full h-full object-cover"
                         />
                       ) : (
