@@ -1,6 +1,7 @@
 import React, { useState, useRef } from "react";
 import categories from "@/config/constants/categories.json";
 import sorts from "@/config/constants/sorts.json";
+import { Input } from "@/components/ui/input";
 import {
   Select,
   SelectTrigger,
@@ -11,12 +12,16 @@ import {
   SelectLabel,
 } from "@/components/ui/select";
 interface SearchBoxProps {
+  searchQuery?: string;
+  setSearchQuery?: (value: string) => void;
   selectedCategory: string;
   setSelectedCategory: (value: string) => void;
   sortBy: string;
   setSortBy: (value: string) => void;
 }
 function SearchBox({
+  searchQuery,
+  setSearchQuery,
   selectedCategory,
   setSelectedCategory,
   sortBy,
@@ -29,6 +34,14 @@ function SearchBox({
   return (
     <div className="mb-8 space-y-4">
       <div className="flex flex-col md:flex-row gap-4 justify-start">
+        {typeof searchQuery === "string" && typeof setSearchQuery === "function" && (
+          <Input
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            placeholder="Hledat události..."
+            className="w-full md:w-72 glass-effect border-border/30"
+          />
+        )}
         <Select
           key={`category-${selectKey}`}
           value={selectedCategory === "" ? undefined : selectedCategory}
