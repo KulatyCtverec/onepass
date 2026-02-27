@@ -96,16 +96,16 @@ export default function AdminDashboard({ events }: AdminDashboardProps) {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <Card className="glass-effect border-border/30">
           <CardHeader className="flex flex-row items-center justify-between pb-2 p-6">
-            <CardTitle className="text-sm font-medium text-foreground-muted">
+            <CardTitle className="text-sm font-medium text-muted">
               Celkový obrat
             </CardTitle>
             <DollarSign className="h-4 w-4 text-primary" />
           </CardHeader>
           <CardContent className="p-6 pt-0">
-            <div className="text-2xl font-bold text-foreground">
+            <div className="text-2xl font-bold text-main">
               {formatPrice(stats.totalRevenue)}
             </div>
-            <p className="text-xs text-foreground-muted mt-1">
+            <p className="text-xs text-muted mt-1">
               Z {stats.totalTickets} prodaných lístků
             </p>
           </CardContent>
@@ -113,16 +113,16 @@ export default function AdminDashboard({ events }: AdminDashboardProps) {
 
         <Card className="glass-effect border-border/30">
           <CardHeader className="flex flex-row items-center justify-between pb-2 p-6">
-            <CardTitle className="text-sm font-medium text-foreground-muted">
+            <CardTitle className="text-sm font-medium text-muted">
               Lístky v oběhu
             </CardTitle>
             <Activity className="h-4 w-4 text-primary" />
           </CardHeader>
           <CardContent className="p-6 pt-0">
-            <div className="text-2xl font-bold text-foreground">
+            <div className="text-2xl font-bold text-main">
               {stats.ticketsInCirculation}
             </div>
-            <p className="text-xs text-foreground-muted mt-1">
+            <p className="text-xs text-muted mt-1">
               {stats.usedTickets} použito
             </p>
           </CardContent>
@@ -130,16 +130,16 @@ export default function AdminDashboard({ events }: AdminDashboardProps) {
 
         <Card className="glass-effect border-border/30">
           <CardHeader className="flex flex-row items-center justify-between pb-2 p-6">
-            <CardTitle className="text-sm font-medium text-foreground-muted">
+            <CardTitle className="text-sm font-medium text-muted">
               Prodeje (tento měsíc)
             </CardTitle>
             <ShoppingCart className="h-4 w-4 text-primary" />
           </CardHeader>
           <CardContent className="p-6 pt-0">
-            <div className="text-2xl font-bold text-foreground">
+            <div className="text-2xl font-bold text-main">
               {stats.salesLastMonth}
             </div>
-            <p className="text-xs text-foreground-muted mt-1 flex items-center gap-1">
+            <p className="text-xs text-muted mt-1 flex items-center gap-1">
               <TrendingUp className="h-3 w-3 text-green-500" />+
               {stats.salesGrowth}% oproti minulému měsíci
             </p>
@@ -148,16 +148,16 @@ export default function AdminDashboard({ events }: AdminDashboardProps) {
 
         <Card className="glass-effect border-border/30">
           <CardHeader className="flex flex-row items-center justify-between pb-2 p-6">
-            <CardTitle className="text-sm font-medium text-foreground-muted">
+            <CardTitle className="text-sm font-medium text-muted">
               Průměrná hodnota
             </CardTitle>
             <TicketIcon className="h-4 w-4 text-primary" />
           </CardHeader>
           <CardContent className="p-6 pt-0">
-            <div className="text-2xl font-bold text-foreground">
+            <div className="text-2xl font-bold text-main">
               {formatPrice(stats.averageTicketValue)}
             </div>
-            <p className="text-xs text-foreground-muted mt-1">Na lístek</p>
+            <p className="text-xs text-muted mt-1">Na lístek</p>
           </CardContent>
         </Card>
       </div>
@@ -166,13 +166,13 @@ export default function AdminDashboard({ events }: AdminDashboardProps) {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <Card className="glass-effect border-border/30">
           <CardHeader className="p-6">
-            <CardTitle className="text-primary">Celkem událostí</CardTitle>
+            <CardTitle className="text-main">Celkem událostí</CardTitle>
           </CardHeader>
           <CardContent className="p-6 pt-0">
-            <p className="text-3xl font-bold text-foreground">
+            <p className="text-3xl font-bold text-main">
               {events.length}
             </p>
-            <p className="text-xs text-foreground-muted mt-1">
+            <p className="text-xs text-muted mt-1">
               {events.filter((e) => new Date(e.date) > new Date()).length}{" "}
               nadcházejících
             </p>
@@ -181,13 +181,13 @@ export default function AdminDashboard({ events }: AdminDashboardProps) {
 
         <Card className="glass-effect border-border/30">
           <CardHeader className="p-6">
-            <CardTitle className="text-primary">Celkem prodáno</CardTitle>
+            <CardTitle className="text-main">Celkem prodáno</CardTitle>
           </CardHeader>
           <CardContent className="p-6 pt-0">
-            <p className="text-3xl font-bold text-foreground">
+            <p className="text-3xl font-bold text-main">
               {stats.totalTickets}
             </p>
-            <p className="text-xs text-foreground-muted mt-1">
+            <p className="text-xs text-muted mt-1">
               {stats.salesLastWeek} za poslední týden
             </p>
           </CardContent>
@@ -195,13 +195,13 @@ export default function AdminDashboard({ events }: AdminDashboardProps) {
 
         <Card className="glass-effect border-border/30">
           <CardHeader className="p-6">
-            <CardTitle className="text-primary">Obrat (tento měsíc)</CardTitle>
+            <CardTitle className="text-main">Obrat (tento měsíc)</CardTitle>
           </CardHeader>
           <CardContent className="p-6 pt-0">
-            <p className="text-3xl font-bold text-foreground">
+            <p className="text-3xl font-bold text-main">
               {formatPrice(stats.revenueLastMonth)}
             </p>
-            <p className="text-xs text-foreground-muted mt-1">
+            <p className="text-xs text-muted mt-1">
               {formatPrice(stats.revenueLastWeek)} za poslední týden
             </p>
           </CardContent>
@@ -213,7 +213,7 @@ export default function AdminDashboard({ events }: AdminDashboardProps) {
         {/* Graf prodejů za posledních 7 dní */}
         <Card className="glass-effect border-border/30">
           <CardHeader className="p-6">
-            <CardTitle className="text-primary">
+            <CardTitle className="text-main">
               Prodeje za posledních 7 dní
             </CardTitle>
           </CardHeader>
@@ -238,11 +238,11 @@ export default function AdminDashboard({ events }: AdminDashboardProps) {
                       }}
                       title={`${value} lístků`}
                     >
-                      <span className="absolute -top-7 left-1/2 transform -translate-x-1/2 text-xs font-semibold text-foreground opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
+                      <span className="absolute -top-7 left-1/2 transform -translate-x-1/2 text-xs font-semibold text-main opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
                         {value}
                       </span>
                     </div>
-                    <span className="text-xs text-foreground-muted font-medium">
+                    <span className="text-xs text-muted font-medium">
                       {["Po", "Út", "St", "Čt", "Pá", "So", "Ne"][index]}
                     </span>
                   </div>
@@ -251,14 +251,14 @@ export default function AdminDashboard({ events }: AdminDashboardProps) {
             </div>
             <div className="mt-6 pt-4 border-t border-border/20">
               <div className="flex justify-between text-sm">
-                <span className="text-foreground-muted">Průměr:</span>
-                <span className="text-foreground font-semibold">
+                <span className="text-muted">Průměr:</span>
+                <span className="text-main font-semibold">
                   132 lístků/den
                 </span>
               </div>
               <div className="mt-2 flex justify-between text-sm">
-                <span className="text-foreground-muted">Celkem za týden:</span>
-                <span className="text-foreground font-semibold">
+                <span className="text-muted">Celkem za týden:</span>
+                <span className="text-main font-semibold">
                   925 lístků
                 </span>
               </div>
@@ -269,7 +269,7 @@ export default function AdminDashboard({ events }: AdminDashboardProps) {
         {/* Graf obratu za posledních 6 měsíců */}
         <Card className="glass-effect border-border/30">
           <CardHeader className="p-6">
-            <CardTitle className="text-primary">
+            <CardTitle className="text-main">
               Obrat za posledních 6 měsíců
             </CardTitle>
           </CardHeader>
@@ -334,7 +334,7 @@ export default function AdminDashboard({ events }: AdminDashboardProps) {
                 ))}
               </svg>
               {/* Měsíce */}
-              <div className="absolute bottom-0 left-0 right-0 flex justify-between text-xs text-foreground-muted px-2">
+              <div className="absolute bottom-0 left-0 right-0 flex justify-between text-xs text-muted px-2">
                 {["Leden", "Únor", "Březen", "Duben", "Květen", "Červen"].map(
                   (month, index) => (
                     <span key={index}>{month}</span>
@@ -344,8 +344,8 @@ export default function AdminDashboard({ events }: AdminDashboardProps) {
             </div>
             <div className="mt-4 pt-4 border-t border-border/20">
               <div className="flex justify-between text-sm">
-                <span className="text-foreground-muted">Celkem:</span>
-                <span className="text-foreground font-semibold">
+                <span className="text-muted">Celkem:</span>
+                <span className="text-main font-semibold">
                   {formatPrice(4500000)}
                 </span>
               </div>
@@ -356,7 +356,7 @@ export default function AdminDashboard({ events }: AdminDashboardProps) {
         {/* Graf rozdělení lístků podle typu */}
         <Card className="glass-effect border-border/30">
           <CardHeader className="p-6">
-            <CardTitle className="text-primary">
+            <CardTitle className="text-main">
               Rozdělení lístků podle typu
             </CardTitle>
           </CardHeader>
@@ -370,8 +370,8 @@ export default function AdminDashboard({ events }: AdminDashboardProps) {
               ].map((item, index) => (
                 <div key={index} className="space-y-2">
                   <div className="flex justify-between text-sm">
-                    <span className="text-foreground">{item.name}</span>
-                    <span className="text-foreground-muted">{item.value}%</span>
+                    <span className="text-main">{item.name}</span>
+                    <span className="text-muted">{item.value}%</span>
                   </div>
                   <div className="w-full bg-muted/20 rounded-full h-2.5 overflow-hidden">
                     <div
@@ -385,18 +385,18 @@ export default function AdminDashboard({ events }: AdminDashboardProps) {
             <div className="mt-6 pt-4 border-t border-border/20">
               <div className="grid grid-cols-2 gap-4 text-sm">
                 <div>
-                  <span className="text-foreground-muted">
+                  <span className="text-muted">
                     Nejprodávanější:
                   </span>
-                  <span className="text-foreground font-semibold ml-2">
+                  <span className="text-main font-semibold ml-2">
                     Standard
                   </span>
                 </div>
                 <div>
-                  <span className="text-foreground-muted">
+                  <span className="text-muted">
                     Nejvyšší hodnota:
                   </span>
-                  <span className="text-foreground font-semibold ml-2">
+                  <span className="text-main font-semibold ml-2">
                     VIP
                   </span>
                 </div>
@@ -408,7 +408,7 @@ export default function AdminDashboard({ events }: AdminDashboardProps) {
         {/* Graf prodejů vs použité lístky */}
         <Card className="glass-effect border-border/30">
           <CardHeader className="p-6">
-            <CardTitle className="text-primary">
+            <CardTitle className="text-main">
               Prodeje vs použité lístky
             </CardTitle>
           </CardHeader>
@@ -449,45 +449,45 @@ export default function AdminDashboard({ events }: AdminDashboardProps) {
                 />
               </svg>
               <div className="absolute inset-0 flex flex-col items-center justify-center gap-1">
-                <span className="text-2xl font-bold text-foreground">
+                <span className="text-2xl font-bold text-main">
                   {Math.round((1885 / (1885 + 1470)) * 100)}%
                 </span>
-                <span className="text-xs text-foreground-muted">Prodané</span>
+                <span className="text-xs text-muted">Prodané</span>
               </div>
             </div>
             <div className="mt-6 pt-4 border-t border-border/20 space-y-3">
               <div className="flex gap-4 justify-center">
                 <div className="flex items-center gap-2">
                   <div className="w-4 h-4 bg-primary rounded"></div>
-                  <span className="text-sm text-foreground font-medium">
+                  <span className="text-sm text-main font-medium">
                     Prodané
                   </span>
                 </div>
                 <div className="flex items-center gap-2">
                   <div className="w-4 h-4 bg-green-500 rounded"></div>
-                  <span className="text-sm text-foreground font-medium">
+                  <span className="text-sm text-main font-medium">
                     Použité
                   </span>
                 </div>
               </div>
               <div className="grid grid-cols-2 gap-4 mt-4">
                 <div className="text-center p-3 bg-background/50 rounded-lg">
-                  <div className="text-xs text-foreground-muted mb-1">
+                  <div className="text-xs text-muted mb-1">
                     Celkem prodáno
                   </div>
-                  <div className="text-lg font-bold text-foreground">1,885</div>
-                  <div className="text-xs text-foreground-muted">lístků</div>
+                  <div className="text-lg font-bold text-main">1,885</div>
+                  <div className="text-xs text-muted">lístků</div>
                 </div>
                 <div className="text-center p-3 bg-background/50 rounded-lg">
-                  <div className="text-xs text-foreground-muted mb-1">
+                  <div className="text-xs text-muted mb-1">
                     Celkem použito
                   </div>
-                  <div className="text-lg font-bold text-foreground">1,470</div>
-                  <div className="text-xs text-foreground-muted">lístků</div>
+                  <div className="text-lg font-bold text-main">1,470</div>
+                  <div className="text-xs text-muted">lístků</div>
                 </div>
               </div>
               <div className="text-center pt-2">
-                <div className="text-xs text-foreground-muted">
+                <div className="text-xs text-muted">
                   Použití: {Math.round((1470 / 1885) * 100)}% z prodaných
                 </div>
               </div>
@@ -535,31 +535,31 @@ function CreateEventForm({ onSuccess }: { onSuccess: () => void }) {
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <div>
-        <Label htmlFor="name" className="text-accent-300">
+        <Label htmlFor="name" className="text-main/80">
           Název události
         </Label>
         <Input
           id="name"
           name="name"
           required
-          className="bg-gray-800 border-accent-600/50 text-white"
+          className="bg-background-secondary border-border/40 text-main"
         />
       </div>
 
       <div>
-        <Label htmlFor="description" className="text-accent-300">
+        <Label htmlFor="description" className="text-main/80">
           Popis
         </Label>
         <Textarea
           id="description"
           name="description"
           required
-          className="bg-gray-800 border-accent-600/50 text-white"
+          className="bg-background-secondary border-border/40 text-main"
         />
       </div>
 
       <div>
-        <Label htmlFor="date" className="text-accent-300">
+        <Label htmlFor="date" className="text-main/80">
           Datum
         </Label>
         <Input
@@ -567,26 +567,26 @@ function CreateEventForm({ onSuccess }: { onSuccess: () => void }) {
           name="date"
           type="datetime-local"
           required
-          className="bg-gray-800 border-accent-600/50 text-white"
+          className="bg-background-secondary border-border/40 text-main"
         />
       </div>
 
       <div>
-        <Label htmlFor="location" className="text-accent-300">
+        <Label htmlFor="location" className="text-main/80">
           Místo
         </Label>
         <Input
           id="location"
           name="location"
           required
-          className="bg-gray-800 border-accent-600/50 text-white"
+          className="bg-background-secondary border-border/40 text-main"
         />
       </div>
 
       <Button
         type="submit"
         disabled={isLoading}
-        className="w-full bg-accent-600 hover:bg-accent-700 text-white"
+        className="w-full bg-primary hover:bg-primary-dark text-primary-foreground"
       >
         {isLoading ? "Vytvářím..." : "Vytvořit událost"}
       </Button>
@@ -636,19 +636,19 @@ function CreateTicketTypeForm({
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <div>
-        <Label htmlFor="name" className="text-accent-300">
+        <Label htmlFor="name" className="text-main/80">
           Název typu
         </Label>
         <Input
           id="name"
           name="name"
           required
-          className="bg-gray-800 border-accent-600/50 text-white"
+          className="bg-background-secondary border-border/40 text-main"
         />
       </div>
 
       <div>
-        <Label htmlFor="price" className="text-accent-300">
+        <Label htmlFor="price" className="text-main/80">
           Cena (Kč)
         </Label>
         <Input
@@ -657,12 +657,12 @@ function CreateTicketTypeForm({
           type="number"
           min="0"
           required
-          className="bg-gray-800 border-accent-600/50 text-white"
+          className="bg-background-secondary border-border/40 text-main"
         />
       </div>
 
       <div>
-        <Label htmlFor="stock" className="text-accent-300">
+        <Label htmlFor="stock" className="text-main/80">
           Počet dostupných
         </Label>
         <Input
@@ -671,17 +671,18 @@ function CreateTicketTypeForm({
           type="number"
           min="1"
           required
-          className="bg-gray-800 border-accent-600/50 text-white"
+          className="bg-background-secondary border-border/40 text-main"
         />
       </div>
 
       <Button
         type="submit"
         disabled={isLoading}
-        className="w-full bg-accent-600 hover:bg-accent-700 text-white"
+        className="w-full bg-primary hover:bg-primary-dark text-primary-foreground"
       >
         {isLoading ? "Vytvářím..." : "Vytvořit typ lístku"}
       </Button>
     </form>
   );
 }
+

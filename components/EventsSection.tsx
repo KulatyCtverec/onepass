@@ -1,6 +1,7 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 import HomepageEventsTable from "@/components/HomepageEventsTable";
+import { Loader2 } from "lucide-react";
 
 export default function EventsSection() {
   const [isActive, setIsActive] = useState(false);
@@ -25,19 +26,19 @@ export default function EventsSection() {
   return (
     <section
       id="events"
-      className={`py-16 px-6 scroll-mt-20 transition-all duration-500 ${
-        isActive
-          ? "ring-2 ring-primary/20 ring-offset-4 ring-offset-background"
-          : ""
-      }`}
+      className={`py-16 px-6 scroll-mt-20 transition-all duration-500`}
     >
       <div className="container mx-auto">
-        <div className="flex items-center justify-between mb-8">
-          <h2 className="text-3xl font-bold text-foreground">
-            Nejbližší události
-          </h2>
-        </div>
-        <HomepageEventsTable />
+        <Suspense
+          fallback={
+            <div className="flex flex-col items-center justify-center py-20 glass-effect border-border/30 rounded-lg">
+              <Loader2 className="w-8 h-8 text-primary animate-spin mb-4" />
+              <p className="text-muted">Načítám sekci událostí...</p>
+            </div>
+          }
+        >
+          <HomepageEventsTable />
+        </Suspense>
       </div>
     </section>
   );

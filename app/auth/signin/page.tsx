@@ -52,7 +52,7 @@ function SignInContent() {
               </CardTitle>
             </CardHeader>
             <CardContent className="text-center space-y-6">
-              <p className="text-foreground-muted">{errorInfo.message}</p>
+              <p className="text-muted">{errorInfo.message}</p>
 
               <div className="space-y-3">
                 <Button
@@ -87,3 +87,4 @@ export default function SignInPage() {
     </Suspense>
   );
 }
+

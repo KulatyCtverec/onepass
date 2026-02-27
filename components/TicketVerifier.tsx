@@ -115,7 +115,7 @@ export default function TicketVerifier() {
         <CardContent>
           <div className="space-y-4">
             <div className="text-center">
-              <p className="text-sm text-gray-600 mb-4">
+              <p className="text-sm text-muted mb-4">
                 Zadejte access code z vstupenky pro ověření
               </p>
             </div>
@@ -133,7 +133,7 @@ export default function TicketVerifier() {
               <Button
                 onClick={verifyTicket}
                 disabled={loading || !accessCode.trim()}
-                className="bg-primary-600 hover:bg-primary-700 text-white"
+                className="bg-primary hover:bg-primary-dark text-primary-foreground"
               >
                 {loading ? "Ověřuji..." : "Ověřit"}
               </Button>
@@ -162,30 +162,30 @@ export default function TicketVerifier() {
                       : "Chyba při ověřování"}
                   </h3>
 
-                  <p className="text-sm text-gray-600 mt-2">
+                  <p className="text-sm text-muted mt-2">
                     {verificationResult.message || verificationResult.error}
                   </p>
 
                   {verificationResult.ticket && (
-                    <div className="mt-4 p-3 bg-white rounded-lg border">
-                      <div className="grid grid-cols-2 gap-4 text-sm">
+                    <div className="mt-4 p-3 bg-card rounded-lg border border-border/40">
+                      <div className="grid grid-cols-2 gap-4 text-sm text-main">
                         <div className="flex items-center gap-2">
-                          <Calendar className="w-4 h-4 text-gray-500" />
+                          <Calendar className="w-4 h-4 text-subtle" />
                           <span className="font-medium">Událost:</span>
                           <span>{verificationResult.ticket.eventName}</span>
                         </div>
                         <div className="flex items-center gap-2">
-                          <User className="w-4 h-4 text-gray-500" />
+                          <User className="w-4 h-4 text-subtle" />
                           <span className="font-medium">Uživatel:</span>
                           <span>{verificationResult.ticket.userName}</span>
                         </div>
                         <div className="flex items-center gap-2">
-                          <CheckCircle className="w-4 h-4 text-gray-500" />
+                          <CheckCircle className="w-4 h-4 text-subtle" />
                           <span className="font-medium">Typ:</span>
                           <span>{verificationResult.ticket.ticketType}</span>
                         </div>
                         <div className="flex items-center gap-2">
-                          <Clock className="w-4 h-4 text-gray-500" />
+                          <Clock className="w-4 h-4 text-subtle" />
                           <span className="font-medium">Čas:</span>
                           <span>
                             {formatTime(verificationResult.ticket.verifiedAt)}
@@ -221,17 +221,17 @@ export default function TicketVerifier() {
                         <p className="font-medium">
                           {result.success ? "Ověřeno" : "Chyba"}
                         </p>
-                        <p className="text-sm text-gray-600">
+                        <p className="text-sm text-muted">
                           {result.message || result.error}
                         </p>
                         {result.ticket && (
-                          <p className="text-xs text-gray-500">
+                          <p className="text-xs text-subtle">
                             {result.ticket.eventName} - {result.ticket.userName}
                           </p>
                         )}
                       </div>
                     </div>
-                    <span className="text-xs text-gray-500">
+                    <span className="text-xs text-subtle">
                       {result.ticket
                         ? formatTime(result.ticket.verifiedAt)
                         : "Nyní"}
@@ -246,3 +246,4 @@ export default function TicketVerifier() {
     </div>
   );
 }
+

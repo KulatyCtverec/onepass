@@ -124,7 +124,7 @@ export default function EditEventPage() {
       <div className="container mx-auto px-6 py-12">
         <Card className="glass-effect border-border/30">
           <CardContent className="p-12 text-center">
-            <p className="text-foreground-muted text-lg mb-6">
+            <p className="text-muted text-lg mb-6">
               Událost nebyla nalezena
             </p>
             <Button asChild>
@@ -153,7 +153,7 @@ export default function EditEventPage() {
         <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-400 to-blue-600 bg-clip-text text-transparent">
           Upravit událost
         </h1>
-        <p className="text-foreground-muted text-lg">
+        <p className="text-muted text-lg">
           Upravte detaily události "{event.name}"
         </p>
       </div>

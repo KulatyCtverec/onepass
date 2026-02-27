@@ -30,3 +30,4 @@ export function generateEventSlug(name: string, date: Date): string {
   return `${normalizedName}-${year}-${month}-${day}`;
 }
 
+

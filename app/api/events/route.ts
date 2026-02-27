@@ -145,12 +145,79 @@ export async function GET(request: Request) {
     const { searchParams } = new URL(request.url);
     const take = parseInt(searchParams.get("take") || "10");
     const skip = parseInt(searchParams.get("skip") || "0");
+    const search = searchParams.get("q") || "";
+    const category = searchParams.get("category") || "";
+    const sort = searchParams.get("sort") || "";
 
-    // Načteme events s paginací a ticketTypes
+    const where: any = {
+      AND: [],
+    };
+
+    if (search) {
+      // Formátování dotazu pro PostgreSQL FTS
+      // 1. Sanitizace speciálních znaků, které by mohly rozbít tsquery syntaxi
+      const sanitizedSearch = search.replace(/[!&|():*]/g, " ").trim();
+
+      // 2. Formátování pro websearch-like chování (spojení slov AND a přidání prefixu pro našeptávání)
+      const formattedSearch = sanitizedSearch
+        .split(/\s+/)
+        .filter((word) => word.length > 0)
+        .map((word) => `${word}:*`) // Přidání :* pro prefixové vyhledávání (našeptávání)
+        .join(" & ");
+
+      if (formattedSearch) {
+        where.AND.push({
+          OR: [
+            { name: { search: formattedSearch } },
+            { description: { search: formattedSearch } },
+            { location: { search: formattedSearch } },
+          ],
+        });
+      }
+    }
+
+    if (category && category !== "all") {
+      where.AND.push({ category });
+    }
+
+    // Definice řazení
+    let orderBy: any = { date: "asc" };
+
+    if (search) {
+      orderBy = {
+        _relevance: {
+          fields: ["name", "description", "location"],
+          search: search.replace(/[!&|():*]/g, " ").trim().split(/\s+/).join(" & "),
+          sort: "desc",
+        },
+      };
+    } else if (sort) {
+      switch (sort) {
+        case "newest":
+          orderBy = { date: "desc" };
+          break;
+        case "oldest":
+          orderBy = { date: "asc" };
+          break;
+        case "price-low":
+          // Poznámka: Prisma nepodporuje řazení podle agregace (min price) v findMany přímo.
+          // Pro PoC řadíme podle datumu, v ostré verzi by zde byl raw SQL dotaz nebo minPrice pole.
+          orderBy = { date: "asc" };
+          break;
+        case "price-high":
+          orderBy = { date: "desc" };
+          break;
+        default:
+          orderBy = { date: "asc" };
+      }
+    }
+
+    // Načteme events s paginací, ticketTypes a případným vyhledáváním
     const events = await prisma.event.findMany({
-      take: Math.min(take, 50), // Maximálně 50 najednou
+      where: where.AND.length > 0 ? where : {},
+      take: Math.min(take, 50),
       skip: skip,
-      orderBy: { date: "asc" },
+      orderBy: orderBy,
       include: {
         ticketTypes: true,
       },
@@ -165,3 +232,4 @@ export async function GET(request: Request) {
     );
   }
 }
+

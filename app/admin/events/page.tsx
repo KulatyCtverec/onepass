@@ -37,13 +37,13 @@ export default async function AdminEventsPage() {
   });
 
   return (
-    <main className="min-h-screen text-white py-8">
+    <main className="min-h-screen text-main py-8">
       <div className="max-w-7xl mx-auto px-4">
         <div className="flex items-center justify-between mb-8">
           <h1 className="text-3xl font-bold">Administrace událostí</h1>
           <a
             href="/create-event"
-            className="bg-accent-600 hover:bg-accent-700 text-white px-4 py-2 rounded-lg transition-colors"
+            className="bg-primary hover:bg-primary-dark text-primary-foreground px-4 py-2 rounded-lg transition-colors"
           >
             Vytvořit novou událost
           </a>
@@ -54,3 +54,4 @@ export default async function AdminEventsPage() {
     </main>
   );
 }
+

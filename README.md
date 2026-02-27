@@ -1,6 +1,6 @@
 # OnePass - Event Ticket Management Platform
 
-OnePass je moderní platforma pro správu a prodej vstupenek na události, postavená na Next.js 14 s TypeScript a Prisma ORM. 
+OnePass je moderní platforma pro správu a prodej vstupenek na události, postavená na Next.js 15 s TypeScript a Prisma ORM. 
 
 ## Hlavní myšlenky OnePass
 
@@ -48,7 +48,7 @@ Cíl mého designu je, aby aplikace působila co nejjednodušeji a nejmoderněji
 
 ## 🛠️ Technologie
 
-- **Frontend**: Next.js 14, React 18, TypeScript
+- **Frontend**: Next.js 15, React 19, TypeScript
 - **Styling**: Tailwind CSS
 - **UI Komponenty**: shadcn/ui a velká část mých vlastních
 - **Backend**: Next.js API Routes
@@ -110,8 +110,8 @@ npm run dev
 
 ```
 onepass/
-├── app/                    # Next.js 14 app router
-│   ├── api/               # API endpoints
+├── app/                    # Next.js 15 app router
+├── api/               # API endpoints
 │   ├── admin/             # Admin rozhraní
 │   ├── events/            # Stránky událostí
 │   └── authenticator/     # Ověřování vstupenek

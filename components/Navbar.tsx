@@ -53,7 +53,7 @@ export default function Navbar() {
                   <NavigationMenuLink asChild>
                     <Link
                       href="/marketplace"
-                      className="px-4 py-2 rounded-lg transition-all duration-300 text-foreground-muted hover:text-primary hover:bg-white/5"
+                      className="px-4 py-2 rounded-lg transition-all duration-300 text-main hover:text-primary hover:bg-foreground/5"
                     >
                       Přeprodej lístků
                     </Link>
@@ -65,7 +65,7 @@ export default function Navbar() {
                     <NavigationMenuLink asChild>
                       <Link
                         href="/my-tickets"
-                        className="px-4 py-2 rounded-lg transition-all duration-300 text-foreground-muted hover:text-primary hover:bg-white/5"
+                        className="px-4 py-2 rounded-lg transition-all duration-300 text-main hover:text-primary hover:bg-foreground/5"
                       >
                         Moje lístky
                       </Link>
@@ -79,7 +79,7 @@ export default function Navbar() {
                       <NavigationMenuLink asChild>
                         <Link
                           href="/my-events"
-                          className="px-4 py-2 rounded-lg transition-all duration-300 text-foreground-muted hover:text-primary hover:bg-white/5"
+                          className="px-4 py-2 rounded-lg transition-all duration-300 text-main hover:text-primary hover:bg-foreground/5"
                         >
                           Mé události
                         </Link>
@@ -89,7 +89,7 @@ export default function Navbar() {
                       <NavigationMenuLink asChild>
                         <Link
                           href="/create-event"
-                          className="px-4 py-2 rounded-lg transition-all duration-300 text-foreground-muted hover:text-primary hover:bg-white/5"
+                          className="px-4 py-2 rounded-lg transition-all duration-300 text-main hover:text-primary hover:bg-foreground/5"
                         >
                           Vytvořit událost
                         </Link>
@@ -99,7 +99,7 @@ export default function Navbar() {
                       <NavigationMenuLink asChild>
                         <Link
                           href="/admin"
-                          className="px-4 py-2 rounded-lg transition-all duration-300 text-foreground-muted hover:text-primary hover:bg-white/5"
+                          className="px-4 py-2 rounded-lg transition-all duration-300 text-main hover:text-primary hover:bg-foreground/5"
                         >
                           Administrace
                         </Link>
@@ -113,7 +113,7 @@ export default function Navbar() {
                     <NavigationMenuLink asChild>
                       <Link
                         href="/authenticator"
-                        className="px-4 py-2 rounded-lg transition-all duration-300 text-foreground-muted hover:text-primary hover:bg-white/5"
+                        className="px-4 py-2 rounded-lg transition-all duration-300 text-main hover:text-primary hover:bg-foreground/5"
                       >
                         Ověřit vstupenky
                       </Link>
@@ -134,3 +134,4 @@ export default function Navbar() {
     </nav>
   );
 }
+

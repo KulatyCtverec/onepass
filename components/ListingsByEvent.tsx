@@ -79,16 +79,16 @@ export default function ListingsByEvent(props: { sortedListings: Listing[] }) {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-xl font-semibold text-foreground">
+          <h2 className="text-xl font-semibold text-main">
             Dostupné nabídky
           </h2>
-          <p className="text-sm text-foreground-muted opacity-70">
+          <p className="text-sm text-muted opacity-70">
             Skupiny podle události — klikněte pro zobrazení nabídek
           </p>
         </div>
         <Link
           href="/marketplace/sell"
-          className="px-6 py-3 rounded-xl text-base font-medium bg-gradient-primary text-white hover:-translate-y-1 transition-all duration-300 neon-glow"
+          className="px-6 py-3 rounded-xl text-base font-medium bg-gradient-primary text-primary-foreground hover:-translate-y-1 transition-all duration-300 neon-glow"
         >
           <Plus className="h-4 w-4 mr-2 inline" />
           Prodej mých lístků
@@ -121,17 +121,17 @@ export default function ListingsByEvent(props: { sortedListings: Listing[] }) {
                       height={250}
                     />
                     <div className="absolute top-2 left-2">
-                      <div className="px-2 py-1 bg-primary/20 backdrop-blur-sm rounded text-xs text-white border border-primary/30">
+                      <div className="px-2 py-1 bg-primary/20 backdrop-blur-sm rounded text-xs text-primary-foreground border border-primary/30">
                         {getCategoryLabel(group.category ?? "")}
                       </div>
                     </div>
                   </div>
                   <CardContent className="flex-1 p-4 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
                     <div>
-                      <h3 className="font-semibold text-foreground text-lg">
+                      <h3 className="font-semibold text-main text-lg">
                         {group.eventTitle}
                       </h3>
-                      <div className="flex flex-wrap gap-4 mt-2 text-sm text-foreground-muted">
+                      <div className="flex flex-wrap gap-4 mt-2 text-sm text-muted">
                         {group.date && (
                           <span className="flex items-center">
                             <Calendar className="h-4 w-4 mr-1.5 text-primary" />
@@ -155,7 +155,7 @@ export default function ListingsByEvent(props: { sortedListings: Listing[] }) {
                       </div>
                     </div>
                     <div className="flex items-center gap-4">
-                      <span className="text-sm text-foreground-muted">
+                      <span className="text-sm text-muted">
                         {group.listings.length}{" "}
                         {group.listings.length === 1 ? "nabídka" : "nabídek"}
                       </span>
@@ -176,27 +176,27 @@ export default function ListingsByEvent(props: { sortedListings: Listing[] }) {
                 style={{ gridTemplateRows: isExpanded ? "1fr" : "0fr" }}
               >
                 <div className="min-h-0 overflow-hidden">
-                  <div className="pt-4 px-4 pb-4 space-y-6 bg-primary/20 border-t border-neutral-500/70">
+                  <div className="pt-4 px-4 pb-4 space-y-6 bg-card/20 border-t border-border/40">
                     {byType.map(({ ticketType, listings: typeListings }) => (
                       <div
                         key={ticketType}
                         className="p-4 space-y-3 bg-card/30"
                       >
-                        <h4 className="text-xl font-semibold text-foreground pb-2 border-b border-neutral-600/80">
+                        <h4 className="text-xl font-semibold text-main pb-2 border-b border-neutral-600/80">
                           {ticketType}
                         </h4>
                         <div className="space-y-0 overflow-hidden rounded-xl">
                           <div className="grid grid-cols-[1fr_120px_70px_100px] gap-0 border-b border-neutral-600/50">
-                            <div className="pl-4 pr-3 py-2 text-sm text-foreground-muted text-left border-r border-neutral-600/40">
+                            <div className="pl-4 pr-3 py-2 text-sm text-muted text-left border-r border-neutral-600/40">
                               Prodejce
                             </div>
-                            <div className="px-3 py-2 text-sm text-foreground-muted text-center border-r border-neutral-600/40">
+                            <div className="px-3 py-2 text-sm text-muted text-center border-r border-neutral-600/40">
                               Cena za lístek
                             </div>
-                            <div className="px-3 py-2 text-sm text-foreground-muted text-center border-r border-neutral-600/40">
+                            <div className="px-3 py-2 text-sm text-muted text-center border-r border-neutral-600/40">
                               Počet
                             </div>
-                            <div className="px-3 py-2 text-sm text-foreground-muted text-center">
+                            <div className="px-3 py-2 text-sm text-muted text-center">
                               Koupit
                             </div>
                           </div>
@@ -206,21 +206,21 @@ export default function ListingsByEvent(props: { sortedListings: Listing[] }) {
                               href={`/marketplace/listings/${listing.id}`}
                               className={`grid grid-cols-[1fr_120px_70px_100px] gap-0 items-center py-3.5 transition-colors no-underline ${
                                 index % 2 === 0
-                                  ? "bg-white/[0.04] hover:bg-white/[0.07]"
-                                  : "bg-white/[0.08] hover:bg-white/[0.11]"
+                                  ? "bg-white/4 hover:bg-white/7"
+                                  : "bg-white/8 hover:bg-white/11"
                               }`}
                             >
-                              <div className="pl-4 pr-3 text-left text-foreground font-medium truncate" title={listing.seller?.name ?? "—"}>
+                              <div className="pl-4 pr-3 text-left text-main font-medium truncate" title={listing.seller?.name ?? "—"}>
                                 {listing.seller?.name ?? "—"}
                               </div>
-                              <div className="px-3 text-center font-semibold text-primary">
+                              <div className="px-3 text-center font-semibold text-main">
                                 {listing.resalePrice} Kč
                               </div>
-                              <div className="px-3 text-center text-foreground-muted text-sm">
+                              <div className="px-3 text-center text-muted text-sm">
                                 {listing.quantity ?? 1}×
                               </div>
                               <div className="px-3 flex justify-center">
-                                <span className="inline-flex items-center justify-center rounded-lg bg-primary/20 text-primary px-3 py-1.5 text-sm font-medium">
+                                <span className="inline-flex items-center justify-center rounded-lg bg-primary/20 text-main px-3 py-1.5 text-sm font-medium">
                                   <Ticket className="h-4 w-4 mr-1.5" />
                                   Koupit
                                 </span>
@@ -240,11 +240,11 @@ export default function ListingsByEvent(props: { sortedListings: Listing[] }) {
 
       {groups.length === 0 && (
         <div className="text-center py-12">
-          <Ticket className="h-16 w-16 text-foreground-muted mx-auto mb-4" />
-          <h3 className="text-lg font-semibold text-foreground mb-2">
+          <Ticket className="h-16 w-16 text-muted mx-auto mb-4" />
+          <h3 className="text-lg font-semibold text-main mb-2">
             Žádné lístky nenalezeny
           </h3>
-          <p className="text-foreground-muted">
+          <p className="text-muted">
             Zkuste změnit filtry nebo hledaný výraz
           </p>
         </div>
@@ -252,3 +252,4 @@ export default function ListingsByEvent(props: { sortedListings: Listing[] }) {
     </div>
   );
 }
+

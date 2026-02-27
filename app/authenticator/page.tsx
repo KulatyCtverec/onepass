@@ -10,17 +10,17 @@ export default function AuthenticatorPage() {
   return (
     <div className="container mx-auto py-8">
       <div className="text-center mb-8">
-        <h1 className="text-3xl font-bold text-white mb-2">
+        <h1 className="text-3xl font-bold text-main mb-2">
           Ověřování vstupenek
         </h1>
-        <p className="text-white">
+        <p className="text-muted">
           Použijte kameru svého zařízení pro skenování QR kódů vstupenek
         </p>
       </div>
 
       <QRCodeScanner />
 
-      <div className="mt-8 text-center text-sm text-white">
+      <div className="mt-8 text-center text-sm text-subtle">
         <p>
           Ujistěte se, že máte povolený přístup ke kameře ve vašem prohlížeči
         </p>
@@ -28,3 +28,4 @@ export default function AuthenticatorPage() {
     </div>
   );
 }
+

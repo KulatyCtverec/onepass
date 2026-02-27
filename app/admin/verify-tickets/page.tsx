@@ -8,14 +8,14 @@ export const metadata: Metadata = {
 
 export default function VerifyTicketsPage() {
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
+    <div className="min-h-screen py-8">
       <div className="max-w-7xl mx-auto px-4">
         {/* Header */}
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">
+          <h1 className="text-3xl font-bold text-main mb-2">
             Ověření vstupenek
           </h1>
-          <p className="text-lg text-gray-600">
+          <p className="text-lg text-muted">
             Ověřte vstupenky pomocí QR kódů nebo access codes
           </p>
         </div>
@@ -25,11 +25,11 @@ export default function VerifyTicketsPage() {
 
         {/* Instrukce */}
         <div className="mt-12 max-w-2xl mx-auto">
-          <div className="bg-blue-50 border border-blue-200 rounded-lg p-6">
-            <h3 className="text-lg font-semibold text-blue-900 mb-3">
+          <div className="bg-primary/10 border border-primary/20 rounded-lg p-6">
+            <h3 className="text-lg font-semibold text-primary mb-3">
               Jak ověřovat vstupenky?
             </h3>
-            <ol className="list-decimal list-inside space-y-2 text-blue-800">
+            <ol className="list-decimal list-inside space-y-2 text-dim">
               <li>Uživatel vám ukáže QR kód nebo access code z vstupenky</li>
               <li>
                 Zadejte access code do pole výše a klikněte &quot;Ověřit&quot;
@@ -44,3 +44,4 @@ export default function VerifyTicketsPage() {
     </div>
   );
 }
+

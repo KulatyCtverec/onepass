@@ -35,7 +35,7 @@ export default function EventDetail({
             <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-muted/20 flex items-center justify-center">
               <Ticket className="w-8 h-8 text-muted-foreground" />
             </div>
-            <p className="text-foreground-muted text-lg">
+            <p className="text-muted text-lg">
               ⏳ Načítám událost...
             </p>
           </div>
@@ -86,7 +86,7 @@ export default function EventDetail({
                 </div>
               ) : (
                 <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="text-center text-white/70">
+                  <div className="text-center text-muted">
                     <Ticket className="w-16 h-16 mx-auto mb-4 opacity-50" />
                     <p className="text-lg font-medium">
                       Chybí obrázek události
@@ -101,10 +101,10 @@ export default function EventDetail({
               <CardHeader className="px-6 py-4">
                 <div className="flex justify-between items-start">
                   <div className="space-y-4">
-                    <CardTitle className="text-3xl md:text-4xl bg-gradient-to-r from-white to-blue-200 bg-clip-text text-transparent">
+                    <CardTitle className="text-3xl md:text-4xl bg-gradient-to-r from-main via-dim to-dim bg-clip-text text-transparent">
                       {record.name}
                     </CardTitle>
-                    <p className="text-foreground-muted text-lg">
+                    <p className="text-muted text-lg">
                       Organizováno společností OnePass
                     </p>
                   </div>
@@ -133,10 +133,10 @@ export default function EventDetail({
                   <div className="glass-effect rounded-xl p-6 border border-border/20">
                     <div className="flex items-center space-x-4">
                       <div className="p-3 rounded-lg bg-gradient-primary">
-                        <Calendar className="h-6 w-6 text-white" />
+                        <Calendar className="h-6 w-6 text-primary-foreground" />
                       </div>
                       <div>
-                        <p className="font-medium text-lg text-foreground">
+                        <p className="font-medium text-lg text-main">
                           {new Date(record.date).toLocaleDateString("cs-CZ", {
                             weekday: "long",
                             year: "numeric",
@@ -144,7 +144,7 @@ export default function EventDetail({
                             day: "numeric",
                           })}
                         </p>
-                        <p className="text-foreground-muted">
+                        <p className="text-muted">
                           {new Date(record.date).toLocaleTimeString("cs-CZ", {
                             hour: "2-digit",
                             minute: "2-digit",
@@ -157,13 +157,13 @@ export default function EventDetail({
                   <div className="glass-effect rounded-xl p-6 border border-border/20">
                     <div className="flex items-center space-x-4">
                       <div className="p-3 rounded-lg bg-gradient-primary">
-                        <MapPin className="h-6 w-6 text-white" />
+                        <MapPin className="h-6 w-6 text-primary-foreground" />
                       </div>
                       <div>
-                        <p className="font-medium text-lg text-foreground">
+                        <p className="font-medium text-lg text-main">
                           {record.location}
                         </p>
-                        <p className="text-foreground-muted">Místo konání</p>
+                        <p className="text-muted">Místo konání</p>
                       </div>
                     </div>
                   </div>
@@ -173,17 +173,17 @@ export default function EventDetail({
 
                 {/* Description */}
                 <div>
-                  <h3 className="text-xl font-medium mb-4 text-foreground">
+                  <h3 className="text-xl font-medium mb-4 text-main">
                     O této události
                   </h3>
-                  <p className="text-foreground-muted leading-relaxed text-lg">
+                  <p className="text-muted leading-relaxed text-lg">
                     {record.description}
                   </p>
                 </div>
 
                 {/* Seat Map 
                 <div>
-                  <h3 className="text-xl font-medium mb-6 text-foreground">
+                  <h3 className="text-xl font-medium mb-6 text-main">
                     Mapa sedadel
                   </h3>
                   <SeatMap />
@@ -209,3 +209,4 @@ export default function EventDetail({
     </div>
   );
 }
+

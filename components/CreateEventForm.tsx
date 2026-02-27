@@ -183,10 +183,10 @@ export default function CreateEventForm() {
       <div className="container mx-auto px-6 py-8">
         {/* Header */}
         <div className="text-center mb-12">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-white to-blue-200 bg-clip-text text-transparent">
+          <h1 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-main via-dim to-dim bg-clip-text text-transparent">
             Vytvoření události
           </h1>
-          <p className="text-foreground-muted text-lg max-w-2xl mx-auto opacity-60">
+          <p className="text-muted text-lg max-w-2xl mx-auto opacity-60">
             Vyplňte detaily pro vytvoření vaší úžasné události a začněte
             prodávat vstupenky
           </p>
@@ -197,16 +197,16 @@ export default function CreateEventForm() {
             {/* Basic Information */}
             <Card className="bg-gradient-card border-border/20 p-8">
               <CardHeader>
-                <CardTitle className="flex items-center text-xl">
+                <CardTitle className="flex items-center text-xl text-main">
                   <div className="p-2 rounded-lg bg-gradient-primary mr-3">
-                    <Info className="h-5 w-5 text-white" />
+                    <Info className="h-5 w-5 text-primary-foreground" />
                   </div>
                   Základní informace
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-6">
                 <div>
-                  <Label className="text-foreground">Obrázek události</Label>
+                  <Label className="text-main">Obrázek události</Label>
                   <div className="mt-3">
                     {imagePreview || blob?.url ? (
                       <div className="relative">
@@ -220,7 +220,7 @@ export default function CreateEventForm() {
                         <Button
                           type="button"
                           onClick={removeImage}
-                          className="absolute top-2 right-2 p-2 bg-red-500 hover:bg-red-600 text-white rounded-full"
+                          className="absolute top-2 right-2 p-2 bg-red-500 hover:bg-red-600 text-primary-foreground rounded-full"
                         >
                           <X className="h-4 w-4" />
                         </Button>
@@ -231,12 +231,12 @@ export default function CreateEventForm() {
                         onClick={() => fileInputRef.current?.click()}
                       >
                         <div className="p-4 rounded-full bg-gradient-primary mx-auto w-fit mb-4 group-hover:scale-110 transition-transform duration-300">
-                          <Upload className="h-8 w-8 text-white" />
+                          <Upload className="h-8 w-8 text-primary-foreground" />
                         </div>
-                        <p className="text-foreground mb-2">
+                        <p className="text-main mb-2">
                           Klikněte pro nahrání obrázku události
                         </p>
-                        <p className="text-xs text-foreground-muted">
+                        <p className="text-xs text-muted">
                           PNG, JPG až 4,4MB
                         </p>
                       </div>
@@ -252,7 +252,7 @@ export default function CreateEventForm() {
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
-                    <Label htmlFor="name" className="text-foreground">
+                    <Label htmlFor="name" className="text-main">
                       Název události
                     </Label>
                     <Input
@@ -266,7 +266,7 @@ export default function CreateEventForm() {
                     />
                   </div>
                   <div>
-                    <Label htmlFor="category" className="text-foreground">
+                    <Label htmlFor="category" className="text-main">
                       Kategorie
                     </Label>
                     <Select
@@ -280,14 +280,14 @@ export default function CreateEventForm() {
                       </SelectTrigger>
                       <SelectContent className="border border-border/30 bg-gradient-card backdrop-blur-xl shadow-2xl">
                         <SelectGroup>
-                          <SelectLabel className="text-foreground-muted font-semibold text-xs uppercase tracking-wider px-2 py-2">
+                          <SelectLabel className="text-muted font-semibold text-xs uppercase tracking-wider px-2 py-2">
                             Kategorie události
                           </SelectLabel>
                           {categories.map((category) => (
                             <SelectItem
                               key={category.value}
                               value={category.value}
-                              className="cursor-pointer transition-all duration-200 hover:bg-blue-500/10 focus:bg-blue-500/20 focus:text-foreground rounded-md my-0.5 text-foreground"
+                              className="cursor-pointer transition-all duration-200 hover:bg-foreground/10 focus:bg-foreground/20 focus:text-main rounded-md my-0.5 text-main"
                             >
                               <span className="flex items-center gap-2">
                                 <span className="text-lg">{category.icon}</span>
@@ -302,7 +302,7 @@ export default function CreateEventForm() {
                 </div>
 
                 <div>
-                  <Label htmlFor="description" className="text-foreground">
+                  <Label htmlFor="description" className="text-main">
                     Popis události
                   </Label>
                   <Textarea
@@ -321,9 +321,9 @@ export default function CreateEventForm() {
             {/* Date & Location */}
             <Card className="bg-gradient-card border-border/20 p-8">
               <CardHeader>
-                <CardTitle className="flex items-center text-xl">
+                <CardTitle className="flex items-center text-xl text-main">
                   <div className="p-2 rounded-lg bg-gradient-primary mr-3">
-                    <MapPin className="h-5 w-5 text-white" />
+                    <MapPin className="h-5 w-5 text-primary-foreground" />
                   </div>
                   Datum a místo
                 </CardTitle>
@@ -331,7 +331,7 @@ export default function CreateEventForm() {
               <CardContent className="space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                   <div>
-                    <Label className="text-foreground border-border/30">
+                    <Label className="text-main border-border/30">
                       Datum události
                     </Label>
                     <OnepassCalendar
@@ -343,7 +343,7 @@ export default function CreateEventForm() {
                     />
                   </div>
                   <div>
-                    <Label htmlFor="startTime" className="text-foreground">
+                    <Label htmlFor="startTime" className="text-main">
                       Čas začátku
                     </Label>
                     <Input
@@ -357,7 +357,7 @@ export default function CreateEventForm() {
                     />
                   </div>
                   <div>
-                    <Label htmlFor="endTime" className="text-foreground">
+                    <Label htmlFor="endTime" className="text-main">
                       Čas konce
                     </Label>
                     <Input
@@ -374,7 +374,7 @@ export default function CreateEventForm() {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
-                    <Label htmlFor="venue" className="text-foreground">
+                    <Label htmlFor="venue" className="text-main">
                       Název místa
                     </Label>
                     <Input
@@ -388,7 +388,7 @@ export default function CreateEventForm() {
                     />
                   </div>
                   <div>
-                    <Label htmlFor="capacity" className="text-foreground">
+                    <Label htmlFor="capacity" className="text-main">
                       Kapacita místa
                     </Label>
                     <Input
@@ -405,7 +405,7 @@ export default function CreateEventForm() {
                 </div>
 
                 <div>
-                  <Label htmlFor="address" className="text-foreground">
+                  <Label htmlFor="address" className="text-main">
                     Plná adresa
                   </Label>
                   <Input
@@ -424,17 +424,17 @@ export default function CreateEventForm() {
             {/* Ticket Types */}
             <Card className="bg-gradient-card border-border/20 p-8">
               <CardHeader>
-                <CardTitle className="flex items-center justify-between">
+                <CardTitle className="flex items-center justify-between text-main">
                   <div className="flex items-center text-xl">
                     <div className="p-2 rounded-lg bg-gradient-primary mr-3">
-                      <Users className="h-5 w-5 text-white" />
+                      <Users className="h-5 w-5 text-primary-foreground" />
                     </div>
                     Typy vstupenek a ceny
                   </div>
                   <Button
                     type="button"
                     onClick={addTicketType}
-                    className="glass-button hover:bg-blue-500/20 hover:border-blue-400/50"
+                    className="glass-button hover:bg-foreground/5 hover:border-primary/50"
                   >
                     <Plus className="h-4 w-4 mr-2" />
                     Přidat typ vstupenky
@@ -448,7 +448,7 @@ export default function CreateEventForm() {
                     className="glass-effect border border-border/30 rounded-xl p-6 space-y-4 hover:border-blue-400/30 transition-colors"
                   >
                     <div className="flex justify-between items-center">
-                      <h4 className="font-medium text-foreground">
+                      <h4 className="font-medium text-main">
                         Typ vstupenky {index + 1}
                       </h4>
                       {ticketTypes.length > 1 && (
@@ -468,7 +468,7 @@ export default function CreateEventForm() {
                       <div>
                         <Label
                           htmlFor={`ticket-name-${ticket.id}`}
-                          className="text-foreground"
+                          className="text-main"
                         >
                           Název vstupenky
                         </Label>
@@ -486,7 +486,7 @@ export default function CreateEventForm() {
                       <div>
                         <Label
                           htmlFor={`ticket-price-${ticket.id}`}
-                          className="text-foreground"
+                          className="text-main"
                         >
                           Cena (Kč)
                         </Label>
@@ -506,7 +506,7 @@ export default function CreateEventForm() {
                       <div>
                         <Label
                           htmlFor={`ticket-quantity-${ticket.id}`}
-                          className="text-foreground"
+                          className="text-main"
                         >
                           Dostupné množství
                         </Label>
@@ -535,9 +535,9 @@ export default function CreateEventForm() {
             {/* Additional Settings */}
             <Card className="bg-gradient-card border-border/20 p-8  ">
               <CardHeader>
-                <CardTitle className="flex items-center text-xl">
+                <CardTitle className="flex items-center text-xl text-main">
                   <div className="p-2 rounded-lg bg-gradient-primary mr-3">
-                    <Star className="h-5 w-5 text-white" />
+                    <Star className="h-5 w-5 text-primary-foreground" />
                   </div>
                   Další nastavení
                 </CardTitle>
@@ -545,7 +545,7 @@ export default function CreateEventForm() {
               <CardContent className="space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
-                    <Label htmlFor="salesStart" className="text-foreground">
+                    <Label htmlFor="salesStart" className="text-main">
                       Začátek prodeje vstupenek
                     </Label>
                     <OnepassCalendar
@@ -557,7 +557,7 @@ export default function CreateEventForm() {
                     />
                   </div>
                   <div>
-                    <Label htmlFor="salesEnd" className="text-foreground">
+                    <Label htmlFor="salesEnd" className="text-main">
                       Konec prodeje vstupenek
                     </Label>
                     <OnepassCalendar
@@ -571,7 +571,7 @@ export default function CreateEventForm() {
                 </div>
 
                 <div className="space-y-4">
-                  <Label className="text-foreground">Možnosti události</Label>
+                  <Label className="text-main">Možnosti události</Label>
                   <div className="space-y-3">
                     <label className="flex items-center space-x-3 cursor-pointer group">
                       <input
@@ -581,7 +581,7 @@ export default function CreateEventForm() {
                         onChange={handleChange}
                         className="w-4 h-4 rounded border-border/30 bg-transparent focus:ring-blue-400/25"
                       />
-                      <span className="text-foreground-muted group-hover:text-foreground transition-colors">
+                      <span className="text-muted group-hover:text-main transition-colors">
                         Povolit přeprodej vstupenek
                       </span>
                     </label>
@@ -593,7 +593,7 @@ export default function CreateEventForm() {
                         onChange={handleChange}
                         className="w-4 h-4 rounded border-border/30 bg-transparent focus:ring-blue-400/25"
                       />
-                      <span className="text-foreground-muted group-hover:text-foreground transition-colors">
+                      <span className="text-muted group-hover:text-main transition-colors">
                         Vyžadovat schválení účastníků
                       </span>
                     </label>
@@ -605,7 +605,7 @@ export default function CreateEventForm() {
                         onChange={handleChange}
                         className="w-4 h-4 rounded border-border/30 bg-transparent focus:ring-blue-400/25"
                       />
-                      <span className="text-foreground-muted group-hover:text-foreground transition-colors">
+                      <span className="text-muted group-hover:text-main transition-colors">
                         Posílat potvrzovací emaily
                       </span>
                     </label>
@@ -629,7 +629,7 @@ export default function CreateEventForm() {
               <Button
                 type="submit"
                 disabled={loading}
-                className="bg-gradient-primary hover:scale-105 transition-all duration-300 neon-glow px-8 py-3 text-lg"
+                className="bg-gradient-primary text-primary-foreground hover:scale-105 transition-all duration-300 neon-glow px-8 py-3 text-lg"
               >
                 {loading
                   ? loadingPhase === "image"
@@ -644,3 +644,4 @@ export default function CreateEventForm() {
     </div>
   );
 }
+

@@ -104,7 +104,7 @@ export default function TicketCard({
     return (
       <Card className="h-full glass-effect border-border/30">
         <CardContent className="p-4">
-          <p className="text-foreground-muted">Načítání...</p>
+          <p className="text-muted">Načítání...</p>
         </CardContent>
       </Card>
     );
@@ -114,7 +114,7 @@ export default function TicketCard({
     <Card className="h-full glass-effect border-border/30 hover:border-primary/50 transition-all duration-300 hover:shadow-xl flex flex-col">
       <CardHeader className="p-4">
         <div className="flex items-center justify-between">
-          <CardTitle className="text-lg font-semibold text-foreground line-clamp-1">
+          <CardTitle className="text-lg font-semibold text-main line-clamp-1">
             {ticket.event.name}
           </CardTitle>
           <div
@@ -132,24 +132,24 @@ export default function TicketCard({
       <CardContent className="space-y-4 flex-1 flex flex-col">
         {/* Informace o události */}
         <div className="space-y-2.5">
-          <div className="flex items-center gap-3 text-sm text-foreground-muted">
+          <div className="flex items-center gap-3 text-sm text-muted">
             <Calendar className="w-4 h-4 shrink-0" />
             <span className="truncate">{formatDate(ticket.event.date)}</span>
           </div>
 
-          <div className="flex items-center gap-3 text-sm text-foreground-muted">
+          <div className="flex items-center gap-3 text-sm text-muted">
             <MapPin className="w-4 h-4 shrink-0" />
             <span className="truncate">{ticket.event.location}</span>
           </div>
 
-          <div className="flex items-center gap-3 text-sm text-foreground-muted">
+          <div className="flex items-center gap-3 text-sm text-muted">
             <User className="w-4 h-4 shrink-0" />
             <span className="truncate">
               {(ticket.owner?.name || ticket.owner?.email) ?? "—"}
             </span>
           </div>
 
-          <div className="flex items-center gap-3 text-sm text-foreground-muted">
+          <div className="flex items-center gap-3 text-sm text-muted">
             <TicketIcon className="w-4 h-4 shrink-0" />
             <span className="truncate">{ticket.tickettype.name}</span>
           </div>
@@ -168,7 +168,7 @@ export default function TicketCard({
             <div className="text-center mb-3">
               <div className="flex items-center justify-center gap-2 mb-3">
                 <QrCode className="w-4 h-4 text-primary" />
-                <h4 className="text-sm font-semibold text-foreground">
+                <h4 className="text-sm font-semibold text-main">
                   QR Kód pro vstup
                 </h4>
               </div>
@@ -187,8 +187,8 @@ export default function TicketCard({
                   />
                 </div>
               ) : (
-                <div className="bg-gray-100 p-8 rounded-lg border-2 border-dashed border-gray-300 inline-block">
-                  <p className="text-gray-500 text-sm">QR kód se generuje...</p>
+                <div className="bg-background-secondary p-8 rounded-lg border-2 border-dashed border-border/40 inline-block">
+                  <p className="text-subtle text-sm">QR kód se generuje...</p>
                 </div>
               )}
             </div>
@@ -223,3 +223,4 @@ export default function TicketCard({
     </Card>
   );
 }
+

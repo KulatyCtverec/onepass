@@ -1,0 +1,283 @@
+Get-Content : A parameter cannot be found that matches parameter name 'Raw'.
+At line:1 char:106
++ ... ts,*.css | ForEach-Object { $c = Get-Content $_.FullName -Raw; $c = $ ...
++                                                              ~~~~
+    + CategoryInfo          : InvalidArgument: (:) [Get-Content], ParameterBin
+   dingException
+    + FullyQualifiedErrorId : NamedParameterNotFound,Microsoft.PowerShell.Comm
+   ands.GetContentCommand
+
+Set-Content : An object at the specified path C:\Users\matej\Desktop\Projekty\o
+nepass\.next\dev\static\chunks\[next]_internal_font_google_geist_a71539c9_modul
+e_css_bad6b30c._.single.css does not exist, or has been filtered by the -Includ
+e or -Exclude parameter.
+At line:1 char:340
++ ... t-foreground(?![a-zA-Z-])', 'text-main'; Set-Content $_.FullName $c }
++                                              ~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (System.String[]:String[]) [Set-
+   Content], Exception
+    + FullyQualifiedErrorId : ItemNotFound,Microsoft.PowerShell.Commands.SetCo
+   ntentCommand
+
+Get-Content : A parameter cannot be found that matches parameter name 'Raw'.
+At line:1 char:106
++ ... ts,*.css | ForEach-Object { $c = Get-Content $_.FullName -Raw; $c = $ ...
++                                                              ~~~~
+    + CategoryInfo          : InvalidArgument: (:) [Get-Content], ParameterBin
+   dingException
+    + FullyQualifiedErrorId : NamedParameterNotFound,Microsoft.PowerShell.Comm
+   ands.GetContentCommand
+
+Set-Content : An object at the specified path C:\Users\matej\Desktop\Projekty\o
+nepass\.next\dev\static\chunks\[next]_internal_font_google_geist_mono_8d43a2aa_
+module_css_bad6b30c._.single.css does not exist, or has been filtered by the -I
+nclude or -Exclude parameter.
+At line:1 char:340
++ ... t-foreground(?![a-zA-Z-])', 'text-main'; Set-Content $_.FullName $c }
++                                              ~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (System.String[]:String[]) [Set-
+   Content], Exception
+    + FullyQualifiedErrorId : ItemNotFound,Microsoft.PowerShell.Commands.SetCo
+   ntentCommand
+
+Get-Content : A parameter cannot be found that matches parameter name 'Raw'.
+At line:1 char:106
++ ... ts,*.css | ForEach-Object { $c = Get-Content $_.FullName -Raw; $c = $ ...
++                                                              ~~~~
+    + CategoryInfo          : InvalidArgument: (:) [Get-Content], ParameterBin
+   dingException
+    + FullyQualifiedErrorId : NamedParameterNotFound,Microsoft.PowerShell.Comm
+   ands.GetContentCommand
+
+Set-Content : An object at the specified path C:\Users\matej\Desktop\Projekty\o
+nepass\.next\dev\static\chunks\[root-of-the-server]__28bc9c2a._.css does not ex
+ist, or has been filtered by the -Include or -Exclude parameter.
+At line:1 char:340
++ ... t-foreground(?![a-zA-Z-])', 'text-main'; Set-Content $_.FullName $c }
++                                              ~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (System.String[]:String[]) [Set-
+   Content], Exception
+    + FullyQualifiedErrorId : ItemNotFound,Microsoft.PowerShell.Commands.SetCo
+   ntentCommand
+
+Get-Content : A parameter cannot be found that matches parameter name 'Raw'.
+At line:1 char:106
++ ... ts,*.css | ForEach-Object { $c = Get-Content $_.FullName -Raw; $c = $ ...
++                                                              ~~~~
+    + CategoryInfo          : InvalidArgument: (:) [Get-Content], ParameterBin
+   dingException
+    + FullyQualifiedErrorId : NamedParameterNotFound,Microsoft.PowerShell.Comm
+   ands.GetContentCommand
+
+Set-Content : An object at the specified path C:\Users\matej\Desktop\Projekty\o
+nepass\.next\static\chunks\[next]_internal_font_google_geist_a71539c9_module_cs
+s_bad6b30c._.single.css does not exist, or has been filtered by the -Include or
+ -Exclude parameter.
+At line:1 char:340
++ ... t-foreground(?![a-zA-Z-])', 'text-main'; Set-Content $_.FullName $c }
++                                              ~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (System.String[]:String[]) [Set-
+   Content], Exception
+    + FullyQualifiedErrorId : ItemNotFound,Microsoft.PowerShell.Commands.SetCo
+   ntentCommand
+
+Get-Content : A parameter cannot be found that matches parameter name 'Raw'.
+At line:1 char:106
++ ... ts,*.css | ForEach-Object { $c = Get-Content $_.FullName -Raw; $c = $ ...
++                                                              ~~~~
+    + CategoryInfo          : InvalidArgument: (:) [Get-Content], ParameterBin
+   dingException
+    + FullyQualifiedErrorId : NamedParameterNotFound,Microsoft.PowerShell.Comm
+   ands.GetContentCommand
+
+Set-Content : An object at the specified path C:\Users\matej\Desktop\Projekty\o
+nepass\.next\static\chunks\[next]_internal_font_google_geist_mono_8d43a2aa_modu
+le_css_bad6b30c._.single.css does not exist, or has been filtered by the -Inclu
+de or -Exclude parameter.
+At line:1 char:340
++ ... t-foreground(?![a-zA-Z-])', 'text-main'; Set-Content $_.FullName $c }
++                                              ~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (System.String[]:String[]) [Set-
+   Content], Exception
+    + FullyQualifiedErrorId : ItemNotFound,Microsoft.PowerShell.Commands.SetCo
+   ntentCommand
+
+Get-Content : A parameter cannot be found that matches parameter name 'Raw'.
+At line:1 char:106
++ ... ts,*.css | ForEach-Object { $c = Get-Content $_.FullName -Raw; $c = $ ...
++                                                              ~~~~
+    + CategoryInfo          : InvalidArgument: (:) [Get-Content], ParameterBin
+   dingException
+    + FullyQualifiedErrorId : NamedParameterNotFound,Microsoft.PowerShell.Comm
+   ands.GetContentCommand
+
+Set-Content : An object at the specified path C:\Users\matej\Desktop\Projekty\o
+nepass\.next\static\chunks\[root-of-the-server]__28bc9c2a._.css does not exist,
+ or has been filtered by the -Include or -Exclude parameter.
+At line:1 char:340
++ ... t-foreground(?![a-zA-Z-])', 'text-main'; Set-Content $_.FullName $c }
++                                              ~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (System.String[]:String[]) [Set-
+   Content], Exception
+    + FullyQualifiedErrorId : ItemNotFound,Microsoft.PowerShell.Commands.SetCo
+   ntentCommand
+
+Get-Content : A parameter cannot be found that matches parameter name 'Raw'.
+At line:1 char:106
++ ... ts,*.css | ForEach-Object { $c = Get-Content $_.FullName -Raw; $c = $ ...
++                                                              ~~~~
+    + CategoryInfo          : InvalidArgument: (:) [Get-Content], ParameterBin
+   dingException
+    + FullyQualifiedErrorId : NamedParameterNotFound,Microsoft.PowerShell.Comm
+   ands.GetContentCommand
+
+Set-Content : An object at the specified path C:\Users\matej\Desktop\Projekty\o
+nepass\app\api\admin\events\[slug]\route.ts does not exist, or has been filtere
+d by the -Include or -Exclude parameter.
+At line:1 char:340
++ ... t-foreground(?![a-zA-Z-])', 'text-main'; Set-Content $_.FullName $c }
++                                              ~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (System.String[]:String[]) [Set-
+   Content], Exception
+    + FullyQualifiedErrorId : ItemNotFound,Microsoft.PowerShell.Commands.SetCo
+   ntentCommand
+
+Get-Content : A parameter cannot be found that matches parameter name 'Raw'.
+At line:1 char:106
++ ... ts,*.css | ForEach-Object { $c = Get-Content $_.FullName -Raw; $c = $ ...
++                                                              ~~~~
+    + CategoryInfo          : InvalidArgument: (:) [Get-Content], ParameterBin
+   dingException
+    + FullyQualifiedErrorId : NamedParameterNotFound,Microsoft.PowerShell.Comm
+   ands.GetContentCommand
+
+Set-Content : An object at the specified path C:\Users\matej\Desktop\Projekty\o
+nepass\app\api\auth\[...nextauth]\route.ts does not exist, or has been filtered
+ by the -Include or -Exclude parameter.
+At line:1 char:340
++ ... t-foreground(?![a-zA-Z-])', 'text-main'; Set-Content $_.FullName $c }
++                                              ~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (System.String[]:String[]) [Set-
+   Content], Exception
+    + FullyQualifiedErrorId : ItemNotFound,Microsoft.PowerShell.Commands.SetCo
+   ntentCommand
+
+Get-Content : A parameter cannot be found that matches parameter name 'Raw'.
+At line:1 char:106
++ ... ts,*.css | ForEach-Object { $c = Get-Content $_.FullName -Raw; $c = $ ...
++                                                              ~~~~
+    + CategoryInfo          : InvalidArgument: (:) [Get-Content], ParameterBin
+   dingException
+    + FullyQualifiedErrorId : NamedParameterNotFound,Microsoft.PowerShell.Comm
+   ands.GetContentCommand
+
+Set-Content : An object at the specified path C:\Users\matej\Desktop\Projekty\o
+nepass\app\api\events\[slug]\route.ts does not exist, or has been filtered by t
+he -Include or -Exclude parameter.
+At line:1 char:340
++ ... t-foreground(?![a-zA-Z-])', 'text-main'; Set-Content $_.FullName $c }
++                                              ~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (System.String[]:String[]) [Set-
+   Content], Exception
+    + FullyQualifiedErrorId : ItemNotFound,Microsoft.PowerShell.Commands.SetCo
+   ntentCommand
+
+Get-Content : A parameter cannot be found that matches parameter name 'Raw'.
+At line:1 char:106
++ ... ts,*.css | ForEach-Object { $c = Get-Content $_.FullName -Raw; $c = $ ...
++                                                              ~~~~
+    + CategoryInfo          : InvalidArgument: (:) [Get-Content], ParameterBin
+   dingException
+    + FullyQualifiedErrorId : NamedParameterNotFound,Microsoft.PowerShell.Comm
+   ands.GetContentCommand
+
+Set-Content : An object at the specified path C:\Users\matej\Desktop\Projekty\o
+nepass\app\api\listings\[id]\route.ts does not exist, or has been filtered by t
+he -Include or -Exclude parameter.
+At line:1 char:340
++ ... t-foreground(?![a-zA-Z-])', 'text-main'; Set-Content $_.FullName $c }
++                                              ~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (System.String[]:String[]) [Set-
+   Content], Exception
+    + FullyQualifiedErrorId : ItemNotFound,Microsoft.PowerShell.Commands.SetCo
+   ntentCommand
+
+Get-Content : A parameter cannot be found that matches parameter name 'Raw'.
+At line:1 char:106
++ ... ts,*.css | ForEach-Object { $c = Get-Content $_.FullName -Raw; $c = $ ...
++                                                              ~~~~
+    + CategoryInfo          : InvalidArgument: (:) [Get-Content], ParameterBin
+   dingException
+    + FullyQualifiedErrorId : NamedParameterNotFound,Microsoft.PowerShell.Comm
+   ands.GetContentCommand
+
+Set-Content : An object at the specified path C:\Users\matej\Desktop\Projekty\o
+nepass\app\checkout\[id]\page.tsx does not exist, or has been filtered by the -
+Include or -Exclude parameter.
+At line:1 char:340
++ ... t-foreground(?![a-zA-Z-])', 'text-main'; Set-Content $_.FullName $c }
++                                              ~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (System.String[]:String[]) [Set-
+   Content], Exception
+    + FullyQualifiedErrorId : ItemNotFound,Microsoft.PowerShell.Commands.SetCo
+   ntentCommand
+
+Get-Content : A parameter cannot be found that matches parameter name 'Raw'.
+At line:1 char:106
++ ... ts,*.css | ForEach-Object { $c = Get-Content $_.FullName -Raw; $c = $ ...
++                                                              ~~~~
+    + CategoryInfo          : InvalidArgument: (:) [Get-Content], ParameterBin
+   dingException
+    + FullyQualifiedErrorId : NamedParameterNotFound,Microsoft.PowerShell.Comm
+   ands.GetContentCommand
+
+Set-Content : An object at the specified path C:\Users\matej\Desktop\Projekty\o
+nepass\app\edit-event\[slug]\page.tsx does not exist, or has been filtered by t
+he -Include or -Exclude parameter.
+At line:1 char:340
++ ... t-foreground(?![a-zA-Z-])', 'text-main'; Set-Content $_.FullName $c }
++                                              ~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (System.String[]:String[]) [Set-
+   Content], Exception
+    + FullyQualifiedErrorId : ItemNotFound,Microsoft.PowerShell.Commands.SetCo
+   ntentCommand
+
+Get-Content : A parameter cannot be found that matches parameter name 'Raw'.
+At line:1 char:106
++ ... ts,*.css | ForEach-Object { $c = Get-Content $_.FullName -Raw; $c = $ ...
++                                                              ~~~~
+    + CategoryInfo          : InvalidArgument: (:) [Get-Content], ParameterBin
+   dingException
+    + FullyQualifiedErrorId : NamedParameterNotFound,Microsoft.PowerShell.Comm
+   ands.GetContentCommand
+
+Set-Content : An object at the specified path C:\Users\matej\Desktop\Projekty\o
+nepass\app\events\[slug]\page.tsx does not exist, or has been filtered by the -
+Include or -Exclude parameter.
+At line:1 char:340
++ ... t-foreground(?![a-zA-Z-])', 'text-main'; Set-Content $_.FullName $c }
++                                              ~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (System.String[]:String[]) [Set-
+   Content], Exception
+    + FullyQualifiedErrorId : ItemNotFound,Microsoft.PowerShell.Commands.SetCo
+   ntentCommand
+
+Get-Content : A parameter cannot be found that matches parameter name 'Raw'.
+At line:1 char:106
++ ... ts,*.css | ForEach-Object { $c = Get-Content $_.FullName -Raw; $c = $ ...
++                                                              ~~~~
+    + CategoryInfo          : InvalidArgument: (:) [Get-Content], ParameterBin
+   dingException
+    + FullyQualifiedErrorId : NamedParameterNotFound,Microsoft.PowerShell.Comm
+   ands.GetContentCommand
+
+Set-Content : An object at the specified path C:\Users\matej\Desktop\Projekty\o
+nepass\app\marketplace\listings\[id]\page.tsx does not exist, or has been filte
+red by the -Include or -Exclude parameter.
+At line:1 char:340
++ ... t-foreground(?![a-zA-Z-])', 'text-main'; Set-Content $_.FullName $c }
++                                              ~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (System.String[]:String[]) [Set-
+   Content], Exception
+    + FullyQualifiedErrorId : ItemNotFound,Microsoft.PowerShell.Commands.SetCo
+   ntentCommand

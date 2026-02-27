@@ -56,7 +56,7 @@ export default function RootLayout({
     <SessionProvider>
       <html lang="cs" className="dark">
         <body
-          className={`${geistSans.variable} ${geistMono.variable} antialiased bg-background text-foreground`}
+          className={`${geistSans.variable} ${geistMono.variable} antialiased bg-background text-main`}
         >
           <Navbar />
           {children}
@@ -66,3 +66,4 @@ export default function RootLayout({
     </SessionProvider>
   );
 }
+

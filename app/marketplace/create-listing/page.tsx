@@ -89,8 +89,8 @@ function CreateListingForm() {
     return (
       <div className="container mx-auto px-6 py-8">
         <div className="text-center py-12">
-          <Ticket className="w-12 h-12 text-foreground-muted mx-auto mb-4 animate-pulse" />
-          <p className="text-foreground-muted">Načítám...</p>
+          <Ticket className="w-12 h-12 text-muted mx-auto mb-4 animate-pulse" />
+          <p className="text-muted">Načítám...</p>
         </div>
       </div>
     );
@@ -106,7 +106,7 @@ function CreateListingForm() {
           </Button>
         </Link>
         <div className="text-center py-12">
-          <p className="text-foreground-muted">
+          <p className="text-muted">
             Žádné lístky k prodeji. Vyberte lístky na stránce Prodávat lístky.
           </p>
           <Link href="/marketplace/sell">
@@ -127,10 +127,10 @@ function CreateListingForm() {
       </Link>
 
       <div className="max-w-xl mx-auto">
-        <h1 className="text-2xl font-bold text-foreground mb-2">
+        <h1 className="text-2xl font-bold text-main mb-2">
           Vytvořit nabídku
         </h1>
-        <p className="text-foreground-muted mb-8 text-base">
+        <p className="text-muted mb-8 text-base">
           {eventName} • {ticketTypeName} • {tickets.length}{" "}
           {tickets.length === 1 ? "lístek" : "lístků"}
         </p>
@@ -153,7 +153,7 @@ function CreateListingForm() {
                   className="text-base h-12"
                 />
                 {originalPrice != null && (
-                  <p className="text-base text-foreground-muted">
+                  <p className="text-base text-muted">
                     Původní cena: {originalPrice} Kč
                   </p>
                 )}
@@ -164,7 +164,7 @@ function CreateListingForm() {
               <Button
                 type="submit"
                 disabled={submitting}
-                className="px-10 py-5 text-lg font-medium bg-gradient-primary text-white neon-glow hover:scale-[1.02] hover:-translate-y-0.5 transition-all duration-200"
+                className="px-10 py-5 text-lg font-medium bg-gradient-primary text-primary-foreground neon-glow hover:scale-[1.02] hover:-translate-y-0.5 transition-all duration-200"
               >
                 {submitting ? "Vytvářím..." : "Vytvořit nabídku"}
               </Button>
@@ -181,8 +181,8 @@ export default function CreateListingPage() {
     <Suspense
       fallback={
         <div className="container mx-auto px-6 py-8 text-center">
-          <Ticket className="w-12 h-12 text-foreground-muted mx-auto mb-4 animate-pulse" />
-          <p className="text-foreground-muted">Načítám...</p>
+          <Ticket className="w-12 h-12 text-muted mx-auto mb-4 animate-pulse" />
+          <p className="text-muted">Načítám...</p>
         </div>
       }
     >
@@ -190,3 +190,4 @@ export default function CreateListingPage() {
     </Suspense>
   );
 }
+

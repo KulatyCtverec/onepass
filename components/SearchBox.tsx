@@ -1,6 +1,4 @@
 import React, { useState, useRef } from "react";
-import { Input } from "@/components/ui/input";
-import { Search } from "lucide-react";
 import categories from "@/config/constants/categories.json";
 import sorts from "@/config/constants/sorts.json";
 import {
@@ -13,16 +11,12 @@ import {
   SelectLabel,
 } from "@/components/ui/select";
 interface SearchBoxProps {
-  searchQuery: string;
-  setSearchQuery: (value: string) => void;
   selectedCategory: string;
   setSelectedCategory: (value: string) => void;
   sortBy: string;
   setSortBy: (value: string) => void;
 }
 function SearchBox({
-  searchQuery,
-  setSearchQuery,
   selectedCategory,
   setSelectedCategory,
   sortBy,
@@ -34,17 +28,7 @@ function SearchBox({
 
   return (
     <div className="mb-8 space-y-4">
-      <div className="flex flex-col md:flex-row gap-4">
-        <div className="flex-1 relative">
-          <Input
-            placeholder="Hledat události nebo lokace..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="pl-12 pr-4 py-3 glass-effect border-border/30 focus:border-primary/50"
-          />
-          <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-foreground-muted" />
-        </div>
-
+      <div className="flex flex-col md:flex-row gap-4 justify-start">
         <Select
           key={`category-${selectKey}`}
           value={selectedCategory === "" ? undefined : selectedCategory}
@@ -79,7 +63,7 @@ function SearchBox({
           </SelectTrigger>
           <SelectContent className="border border-border/30 bg-gradient-card backdrop-blur-xl shadow-2xl">
             <SelectGroup>
-              <SelectLabel className="text-foreground-muted font-semibold text-xs uppercase tracking-wider px-2 py-2">
+              <SelectLabel className="text-muted font-semibold text-xs uppercase tracking-wider px-2 py-2">
                 Kategorie události
               </SelectLabel>
               {categories.map((category) => {
@@ -96,7 +80,7 @@ function SearchBox({
                         shouldClearRef.current = true;
                       }
                     }}
-                    className="cursor-pointer transition-all duration-200 hover:bg-blue-500/10 focus:bg-blue-500/20 focus:text-foreground rounded-md my-0.5 text-foreground"
+                    className="cursor-pointer transition-all duration-200 hover:bg-foreground/10 focus:bg-foreground/20 focus:text-main rounded-md my-0.5 text-main"
                   >
                     <span className="mr-2">{category.icon}</span>
                     {category.label}
@@ -107,7 +91,7 @@ function SearchBox({
           </SelectContent>
         </Select>
 
-        <Select value={sortBy} onValueChange={setSortBy}>
+        <Select value={sortBy === "" ? undefined : sortBy} onValueChange={setSortBy}>
           <SelectTrigger className="w-full md:w-48 glass-effect border-border/30">
             <SelectValue placeholder="Řadit podle" />
           </SelectTrigger>
@@ -116,7 +100,7 @@ function SearchBox({
               <SelectItem
                 key={sort.value}
                 value={sort.value as string}
-                className="cursor-pointer transition-all duration-200 hover:bg-blue-500/10 focus:bg-blue-500/20 focus:text-foreground rounded-md my-0.5 text-foreground"
+                className="cursor-pointer transition-all duration-200 hover:bg-foreground/10 focus:bg-foreground/20 focus:text-main rounded-md my-0.5 text-main"
               >
                 {sort.label as string}
               </SelectItem>
@@ -129,3 +113,4 @@ function SearchBox({
 }
 
 export default SearchBox;
+

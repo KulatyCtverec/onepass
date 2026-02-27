@@ -98,10 +98,10 @@ export default function LoginForm({
           <div className="p-8 md:p-12">
             {/* Header */}
             <div className="text-center mb-8">
-              <h1 className="text-3xl font-bold text-foreground mb-2">
+              <h1 className="text-3xl font-bold text-main mb-2">
                 {isLogin ? "Vítejte zpět" : "Vytvořte účet"}
               </h1>
-              <p className="text-foreground-muted text-balance">
+              <p className="text-muted text-balance">
                 {isLogin
                   ? "Přihlaste se do svého OnePass účtu"
                   : "Zaregistrujte se pro přístup k OnePass"}
@@ -112,11 +112,11 @@ export default function LoginForm({
             <form onSubmit={handleSubmit} className="space-y-6">
               {!isLogin && (
                 <div className="space-y-2">
-                  <Label htmlFor="name" className="text-foreground font-medium">
+                  <Label htmlFor="name" className="text-main font-medium">
                     Jméno
                   </Label>
                   <div className="relative">
-                    <User className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-foreground-muted" />
+                    <User className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted" />
                     <Input
                       id="name"
                       name="name"
@@ -130,11 +130,11 @@ export default function LoginForm({
               )}
 
               <div className="space-y-2">
-                <Label htmlFor="email" className="text-foreground font-medium">
+                <Label htmlFor="email" className="text-main font-medium">
                   Email
                 </Label>
                 <div className="relative">
-                  <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-foreground-muted" />
+                  <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted" />
                   <Input
                     id="email"
                     name="email"
@@ -149,12 +149,12 @@ export default function LoginForm({
               <div className="space-y-2">
                 <Label
                   htmlFor="password"
-                  className="text-foreground font-medium"
+                  className="text-main font-medium"
                 >
                   Heslo
                 </Label>
                 <div className="relative">
-                  <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-foreground-muted" />
+                  <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted" />
                   <Input
                     id="password"
                     name="password"
@@ -166,7 +166,7 @@ export default function LoginForm({
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-foreground-muted hover:text-foreground transition-colors"
+                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-muted hover:text-main transition-colors"
                   >
                     {showPassword ? (
                       <EyeOff className="h-4 w-4" />
@@ -203,7 +203,7 @@ export default function LoginForm({
 
             <div className="relative my-8">
               <div className="relative flex justify-center text-sm">
-                <span className="px-4 bg-background text-foreground-muted">
+                <span className="px-4 bg-background text-muted">
                   nebo
                 </span>
               </div>
@@ -213,7 +213,7 @@ export default function LoginForm({
             <Button
               onClick={handleGoogleSignIn}
               variant="outline"
-              className="w-full glass-effect border-border/30 hover:border-primary/50 text-foreground hover:text-primary transition-all duration-300 py-3"
+              className="w-full glass-effect border-border/30 hover:border-primary/50 text-main hover:text-primary transition-all duration-300 py-3"
             >
               <img src="/google.png" alt="Google" className="h-5 w-5 mr-3" />
               Pokračovat s Google
@@ -224,7 +224,7 @@ export default function LoginForm({
               <button
                 type="button"
                 onClick={() => setIsLogin(!isLogin)}
-                className="text-foreground-muted hover:text-primary transition-colors text-sm"
+                className="text-muted hover:text-primary transition-colors text-sm"
               >
                 {isLogin
                   ? "Nemáte účet? Zaregistrujte se"
@@ -237,3 +237,4 @@ export default function LoginForm({
     </div>
   );
 }
+

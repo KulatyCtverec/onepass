@@ -32,3 +32,4 @@ export async function checkEventNameExists(
   });
   return !!existingEvent;
 }
+

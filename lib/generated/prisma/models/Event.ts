@@ -2425,3 +2425,4 @@ export type EventDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalAr
    */
   include?: Prisma.EventInclude<ExtArgs> | null
 }
+

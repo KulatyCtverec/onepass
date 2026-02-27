@@ -74,11 +74,11 @@ function Calendar({
           defaultClassNames.dropdown_root
         ),
         dropdown: cn(
-          "absolute bg-transparent inset-0 opacity-0 text-foreground",
+          "absolute bg-transparent inset-0 opacity-0 text-main",
           defaultClassNames.dropdown
         ),
         caption_label: cn(
-          "select-none font-medium text-foreground",
+          "select-none font-medium text-main",
           captionLayout === "label"
             ? "text-sm"
             : "rounded-md pl-2 pr-1 flex items-center gap-1 text-sm h-8 [&>svg]:text-muted-foreground [&>svg]:size-3.5",
@@ -201,7 +201,7 @@ function CalendarDayButton({
       data-range-end={modifiers.range_end}
       data-range-middle={modifiers.range_middle}
       className={cn(
-        "data-[selected-single=true]:bg-gradient-primary data-[selected-single=true]:text-white data-[selected-single=true]:hover:bg-gradient-primary data-[range-middle=true]:bg-blue-500/10 data-[range-middle=true]:text-foreground data-[range-start=true]:bg-gradient-primary data-[range-start=true]:text-white data-[range-start=true]:hover:bg-gradient-primary data-[range-end=true]:bg-gradient-primary data-[range-end=true]:text-white data-[range-end=true]:hover:bg-gradient-primary group-data-[focused=true]/day:border-blue-400 group-data-[focused=true]/day:ring-blue-400/20 hover:!bg-blue-500/20 hover:!text-foreground transition-all duration-200 flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 leading-none font-normal group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:ring-[3px] data-[range-end=true]:rounded-md data-[range-end=true]:rounded-r-md data-[range-middle=true]:rounded-none data-[range-start=true]:rounded-md data-[range-start=true]:rounded-l-md [&>span]:text-xs [&>span]:opacity-70",
+        "data-[selected-single=true]:bg-gradient-primary data-[selected-single=true]:text-white data-[selected-single=true]:hover:bg-gradient-primary data-[range-middle=true]:bg-blue-500/10 data-[range-middle=true]:text-main data-[range-start=true]:bg-gradient-primary data-[range-start=true]:text-white data-[range-start=true]:hover:bg-gradient-primary data-[range-end=true]:bg-gradient-primary data-[range-end=true]:text-white data-[range-end=true]:hover:bg-gradient-primary group-data-[focused=true]/day:border-blue-400 group-data-[focused=true]/day:ring-blue-400/20 hover:!bg-blue-500/20 hover:!text-main transition-all duration-200 flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 leading-none font-normal group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:ring-[3px] data-[range-end=true]:rounded-md data-[range-end=true]:rounded-r-md data-[range-middle=true]:rounded-none data-[range-start=true]:rounded-md data-[range-start=true]:rounded-l-md [&>span]:text-xs [&>span]:opacity-70",
         defaultClassNames.day,
         className
       )}
@@ -211,3 +211,4 @@ function CalendarDayButton({
 }
 
 export { Calendar, CalendarDayButton };
+

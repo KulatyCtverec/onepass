@@ -5,10 +5,10 @@ export default function Footer() {
         <div className="flex flex-col items-center space-y-4">
           <div className="flex items-center space-x-2">
             <div className="w-2 h-2 bg-primary rounded-full"></div>
-            <span className="text-foreground-muted">OnePass</span>
+            <span className="text-muted">OnePass</span>
             <div className="w-2 h-2 bg-primary rounded-full"></div>
           </div>
-          <p className="text-foreground-muted">
+          <p className="text-muted">
             &copy; 2024 OnePass. Všechna práva vyhrazena.
           </p>
         </div>
@@ -16,3 +16,4 @@ export default function Footer() {
     </footer>
   );
 }
+

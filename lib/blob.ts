@@ -9,3 +9,4 @@ import { del } from "@vercel/blob";
 export async function deleteBlobFromStorage(imageUrl: string): Promise<void> {
   await del(imageUrl);
 }
+

@@ -8,3 +8,4 @@ export async function logInWithGoogle() {
 export async function logOut() {
   await signOut();
 }
+

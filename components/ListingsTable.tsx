@@ -19,14 +19,14 @@ export default function ListingsTable(props: {
   return (
     <>
       <div className="space-y-6">
-        <h2 className="text-xl font-semibold text-foreground">
+        <h2 className="text-xl font-semibold text-main">
           Dostupné nabídky
         </h2>
         <div className="flex items-center gap-2 justify-between">
-          <p className="text-sm text-foreground-muted mb-4 opacity-70">
+          <p className="text-sm text-muted mb-4 opacity-70">
             Přeprodávané lístky od ověřených uživatelů
           </p>
-          <p className="text-sm text-foreground-muted mb-4 opacity-70">
+          <p className="text-sm text-muted mb-4 opacity-70">
             {props.sortedListings.length} nabídek • přeprodávané lístky od
             ověřených uživatelů
           </p>
@@ -70,11 +70,11 @@ export default function ListingsTable(props: {
 
                 <CardContent className="p-4 space-y-4">
                   <div>
-                    <h3 className="font-semibold text-foreground line-clamp-2 mb-2 group-hover:text-primary transition-colors">
+                    <h3 className="font-semibold text-main line-clamp-2 mb-2 transition-colors">
                       {listing.eventTitle}
                     </h3>
 
-                    <div className="space-y-2 text-sm text-foreground-muted">
+                    <div className="space-y-2 text-sm text-muted">
                       <div className="flex items-center">
                         <Calendar className="h-4 w-4 mr-2 text-primary" />
                         {new Date(listing.date).toLocaleDateString("cs-CZ")}
@@ -98,18 +98,18 @@ export default function ListingsTable(props: {
 
                   <div className="flex justify-between items-center pt-4 border-t border-border/30">
                     <div>
-                      <div className="text-xs text-foreground-muted">
+                      <div className="text-xs text-muted">
                         Původní cena
                       </div>
-                      <div className="text-lg font-bold text-foreground">
+                      <div className="text-lg font-bold text-main">
                         {listing.originalPrice} Kč
                       </div>
                     </div>
                     <div className="text-right">
-                      <div className="text-xs text-foreground-muted">
+                      <div className="text-xs text-muted">
                         Prodejní cena
                       </div>
-                      <div className="text-2xl font-bold text-primary">
+                      <div className="text-2xl font-bold text-main">
                         {listing.resalePrice} Kč
                       </div>
                     </div>
@@ -119,13 +119,13 @@ export default function ListingsTable(props: {
                     <div className="flex items-center space-x-2">
                       <div className="flex items-center">
                         <Star className="h-4 w-4 text-yellow-500 fill-current" />
-                        <span className="text-sm text-foreground-muted ml-1">
+                        <span className="text-sm text-muted ml-1">
                           {listing.seller?.rating ?? "—"}
                         </span>
                       </div>
-                      <span className="text-xs text-foreground-muted">•</span>
+                      <span className="text-xs text-muted">•</span>
                       {listing.quantity && (
-                        <div className="text-sm text-foreground-muted">
+                        <div className="text-sm text-muted">
                           {listing.quantity === 1
                             ? "1 lístek k dispozici"
                             : listing.quantity > 1 && listing.quantity < 5
@@ -154,11 +154,11 @@ export default function ListingsTable(props: {
 
         {props.sortedListings.length === 0 && (
           <div className="text-center py-12">
-            <Ticket className="h-16 w-16 text-foreground-muted mx-auto mb-4" />
-            <h3 className="text-lg font-semibold text-foreground mb-2">
+            <Ticket className="h-16 w-16 text-muted mx-auto mb-4" />
+            <h3 className="text-lg font-semibold text-main mb-2">
               Žádné lístky nenalezeny
             </h3>
-            <p className="text-foreground-muted">
+            <p className="text-muted">
               Zkuste změnit filtry nebo hledaný výraz
             </p>
           </div>
@@ -167,3 +167,4 @@ export default function ListingsTable(props: {
     </>
   );
 }
+

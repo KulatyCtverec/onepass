@@ -1092,3 +1092,4 @@ export type VerificationTokenDefaultArgs<ExtArgs extends runtime.Types.Extension
    */
   omit?: Prisma.VerificationTokenOmit<ExtArgs> | null
 }
+

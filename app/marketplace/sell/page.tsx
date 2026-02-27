@@ -157,10 +157,10 @@ export default function MarketplaceSellPage() {
     <div className="min-h-screen bg-background">
       <div className="container mx-auto px-6 py-8">
         <div className="text-center mb-12">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-primary to-secondary bg-clip-text text-foreground">
+          <h1 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
             Prodávat lístky
           </h1>
-          <p className="text-foreground-muted text-lg max-w-2xl mx-auto">
+          <p className="text-muted text-lg max-w-2xl mx-auto">
             Prodejte své lístky na události v bezpečném a důvěryhodném prostředí
           </p>
         </div>
@@ -168,7 +168,7 @@ export default function MarketplaceSellPage() {
         <div className="space-y-6">
           <div className="flex items-start ">
             <ChartBar className="h-5 w-5 mr-2 text-primary" />
-            <div className="text-xl font-semibold text-foreground">
+            <div className="text-xl font-semibold text-main">
               Moje statistiky
             </div>
           </div>
@@ -177,20 +177,20 @@ export default function MarketplaceSellPage() {
               <CardContent className="space-y-4">
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                   <div className="text-center p-4 glass-effect border-border/30 rounded-lg">
-                    <div className="text-2xl font-bold text-primary">
+                    <div className="text-2xl font-bold text-main">
                       {stats?.ticketsInSale ?? "—"}
                     </div>
-                    <div className="text-sm text-foreground-muted">
+                    <div className="text-sm text-muted">
                       Lístků v prodeji
                     </div>
                   </div>
                   <div className="text-center p-4 glass-effect border-border/30 rounded-lg">
-                    <div className="text-2xl font-bold text-primary">
+                    <div className="text-2xl font-bold text-main">
                       {stats?.moneyToReceive != null
                         ? `${stats.moneyToReceive} Kč`
                         : "—"}
                     </div>
-                    <div className="text-sm text-foreground-muted">
+                    <div className="text-sm text-muted">
                       Získáte při prodeji
                     </div>
                   </div>
@@ -198,7 +198,7 @@ export default function MarketplaceSellPage() {
                     <div className="text-2xl font-bold text-green-500">
                       {stats?.moneySold != null ? `${stats.moneySold} Kč` : "—"}
                     </div>
-                    <div className="text-sm text-foreground-muted">
+                    <div className="text-sm text-muted">
                       Peníze prodané (po eventu)
                     </div>
                   </div>
@@ -210,15 +210,15 @@ export default function MarketplaceSellPage() {
           <div>
             <div className="flex items-center justify-between mb-4">
               <div>
-                <h3 className="text-xl font-semibold text-foreground">
+                <h3 className="text-xl font-semibold text-main">
                   Moje prodávané lístky
                 </h3>
-                <p className="text-sm text-foreground-muted mb-4 opacity-70 py-2">
+                <p className="text-sm text-muted mb-4 opacity-70 py-2">
                   Přehled všech aktivních nabídek na marketplace.
                 </p>
               </div>
               <Button
-                className="py-6 rounded-xl text-xl font-medium bg-gradient-primary text-white hover:-translate-y-0.5 hover:scale-[1.02] transition-all duration-300 neon-glow"
+                className="py-6 rounded-xl text-xl font-medium bg-gradient-primary text-primary-foreground hover:-translate-y-0.5 hover:scale-[1.02] transition-all duration-300 neon-glow"
                 onClick={openDialog}
               >
                 <Ticket className="h-6 w-6 mr-2" />
@@ -245,10 +245,10 @@ export default function MarketplaceSellPage() {
                       <div className="absolute inset-0 bg-linear-to-t from-black/60 via-transparent to-transparent" />
                     </div>
                     <CardContent className="p-4">
-                      <h4 className="font-semibold text-foreground mb-2">
+                      <h4 className="font-semibold text-main mb-2">
                         {item.title}
                       </h4>
-                      <div className="space-y-1 text-sm text-foreground-muted mb-4">
+                      <div className="space-y-1 text-sm text-muted mb-4">
                         <div className="flex items-center">
                           <Calendar className="h-4 w-4 mr-2 text-primary" />
                           {item.date
@@ -262,19 +262,19 @@ export default function MarketplaceSellPage() {
                       </div>
                       <div className="flex justify-between items-center gap-2 flex-wrap">
                         <div>
-                          <div className="text-xs text-foreground-muted">
+                          <div className="text-xs text-muted">
                             V prodeji
                           </div>
-                          <div className="text-lg font-bold text-primary">
+                          <div className="text-lg font-bold text-main">
                             {item.ticketsOwned}{" "}
                             {item.ticketsOwned === 1 ? "lístek" : "lístků"}
                           </div>
                         </div>
                         <div>
-                          <div className="text-xs text-foreground-muted">
+                          <div className="text-xs text-muted">
                             Vaše cena
                           </div>
-                          <div className="text-lg font-bold text-foreground">
+                          <div className="text-lg font-bold text-main">
                             {item.resalePrice} Kč
                           </div>
                         </div>
@@ -287,11 +287,11 @@ export default function MarketplaceSellPage() {
 
             {myListings.length === 0 && (
               <div className="text-center py-12">
-                <Ticket className="h-16 w-16 text-foreground-muted mx-auto mb-4" />
-                <h3 className="text-lg font-semibold text-foreground mb-2">
+                <Ticket className="h-16 w-16 text-muted mx-auto mb-4" />
+                <h3 className="text-lg font-semibold text-main mb-2">
                   Žádné aktivní nabídky
                 </h3>
-                <p className="text-foreground-muted">
+                <p className="text-muted">
                   Klikněte na „Přidat lístek k prodeji“ a vyberte lístky.
                 </p>
               </div>
@@ -301,10 +301,10 @@ export default function MarketplaceSellPage() {
       </div>
 
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent className="dialog-solid-bg max-w-lg max-h-[85vh] overflow-y-auto border border-neutral-600/80 shadow-xl">
+        <DialogContent className="dialog-solid-bg max-w-lg max-h-[85vh] overflow-y-auto border border-border/40 shadow-xl bg-card text-main">
           <DialogHeader>
-            <DialogTitle>Vyberte lístky k prodeji</DialogTitle>
-            <DialogDescription>
+            <DialogTitle className="text-main">Vyberte lístky k prodeji</DialogTitle>
+            <DialogDescription className="text-muted">
               Klikněte na skupinu pro výběr. Vyberte právě jednu skupinu a počet
               lístků. Při kliknutí na + se skupina rovnou vybere.
             </DialogDescription>
@@ -316,7 +316,7 @@ export default function MarketplaceSellPage() {
               </p>
             )}
             {ticketsForSale.length === 0 && (
-              <p className="text-sm text-foreground-muted">
+              <p className="text-sm text-muted">
                 Nemáte žádné lístky k dispozici k prodeji (všechny mohou být již
                 v nabídce).
               </p>
@@ -368,15 +368,15 @@ export default function MarketplaceSellPage() {
                       : "border-neutral-600/70 bg-white/[0.06] hover:border-primary/30"
                   }`}
                 >
-                  <div className="font-medium text-foreground">
+                  <div className="font-medium text-main">
                     {g.eventName}
                   </div>
-                  <div className="text-sm text-foreground-muted mb-2">
+                  <div className="text-sm text-muted mb-2">
                     {g.ticketTypeName} • {g.tickets.length}{" "}
                     {g.tickets.length === 1 ? "lístek" : "lístků"}
                   </div>
                   <div className="flex items-center gap-2">
-                    <span className="text-sm text-foreground-muted">
+                    <span className="text-sm text-muted">
                       Přeprodat:
                     </span>
                     <Button
@@ -414,13 +414,13 @@ export default function MarketplaceSellPage() {
             })}
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setDialogOpen(false)} className="!border-neutral-600/80">
+            <Button variant="outline" onClick={() => setDialogOpen(false)} className="!border-border/30 text-main">
               Zrušit
             </Button>
             <Button
               onClick={goToCreateListing}
               disabled={totalSelected === 0}
-              className="bg-gradient-primary text-white neon-glow"
+              className="bg-gradient-primary text-primary-foreground neon-glow"
             >
               Prodat
             </Button>
@@ -430,3 +430,4 @@ export default function MarketplaceSellPage() {
     </div>
   );
 }
+

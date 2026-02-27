@@ -39,7 +39,7 @@ export default function SignIn() {
             size="sm"
             className="w-10 h-10 rounded-full glass-effect border-border/30 hover:border-primary/50 transition-all duration-300"
           >
-            <span className="text-sm font-medium text-primary">
+            <span className="text-sm font-medium text-main">
               {session.user?.name?.[0]?.toUpperCase() ||
                 session.user?.email?.[0]?.toUpperCase() ||
                 "U"}
@@ -107,14 +107,14 @@ export default function SignIn() {
       <DialogTrigger asChild>
         <Button
           size="sm"
-          className="glass-button hover:glass-button text-white transition-all duration-300"
+          className="glass-button hover:glass-button text-main transition-all duration-300"
         >
           Přihlásit se
         </Button>
       </DialogTrigger>
-      <DialogContent className="shadow-2xl max-w-md p-0 bg-[#151419]">
+      <DialogContent className="shadow-2xl max-w-md p-0 bg-background-secondary border-border/40">
         <DialogHeader className=" pb-4 px-8 pt-8">
-          <DialogTitle className="text-foreground text-xl font-bold text-center"></DialogTitle>
+          <DialogTitle className="text-main text-xl font-bold text-center"></DialogTitle>
         </DialogHeader>
         <div className="px-8 pb-8">
           <LoginForm />
@@ -123,3 +123,4 @@ export default function SignIn() {
     </Dialog>
   );
 }
+

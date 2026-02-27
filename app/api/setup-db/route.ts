@@ -27,3 +27,4 @@ export async function GET() {
     message: "Database setup endpoint - use POST to trigger setup",
   });
 }
+

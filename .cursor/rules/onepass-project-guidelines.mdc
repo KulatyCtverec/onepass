@@ -1,0 +1,83 @@
+# OnePass Project Guidelines
+
+## 1. Core Mission & Principles
+
+OnePass is a secure, user-friendly event management and ticketing platform.
+
+- **Security First**: Absolute safety during buying and reselling by using database-backed ticket ownership.
+- **Organizer Incentive**: Motivate organizers via resale provisions.
+- **Consumer Protection**: Refund logic if events don't conclude as expected.
+
+## 2. Technical Stack
+
+- **Framework**: Next.js 15.5 (App Router)
+- **Language**: TypeScript
+- **Database**: PostgreSQL (Cloud-based) with Prisma ORM
+- **Styling**: Tailwind CSS, shadcn/ui
+- **Authentication**: Auth.js (Local, Google)
+- **Payment**: Stripe (Target)
+- **Communication**: SSE (Server-Sent Events) for real-time updates
+- **Deployment**: Vercel (via GitHub integration)
+
+## 3. UI/UX & Design Guidelines
+
+- **Consistency**: All styling must use Tailwind variables.
+- **Color Palette**: Minimal set of primary colors with various shades.
+- **Modern Look**:
+  - Glass effects (backdrop-filter blur).
+  - Gradient backgrounds (animated).
+  - Neon glows.
+- **Responsiveness**: Must be efficient and responsive across all screen sizes.
+- **Typography**: Single font family throughout the app to avoid clutter.
+
+## 4. Development Standards
+
+- **Folder Structure**:
+  - `app/`: Next.js 15.5 App Router, API routes.
+  - `components/`: UI components (shadcn/ui + custom).
+  - `lib/`: Utility functions and shared logic.
+  - `prisma/`: Database schema and migrations.
+  - `types/`: Shared TypeScript types.
+- **Components**: Styled consistently via Tailwind variables and shadcn.
+- **SSE**: Standardize via a custom hook for all real-time notifications.
+- **Scanning**: Tickets are scanned by staff via an integrated mobile-friendly scanner.
+- **Search**: Implement full-text search across various modules.
+
+## 5. Security & Testing (Target State)
+
+- **Input Validation**: Rigorous validation on all API endpoints.
+- **Testing**:
+  - Unit tests for core logic (ticket generation, resale math).
+  - Integration tests for payment flows.
+  - E2E tests for critical paths (purchase, scan).
+- **Audit Logs**: Collect data for administrative dashboard monitoring.
+
+---
+
+# Global Project Plan
+
+## Phase 1: Foundation & Security (Must-Haves)
+
+1. **Stripe Integration**: Implement payment flows for ticket purchases and handle payouts/provisions.
+2. **Security & Testing**:
+   - Set up Jest/Cypress for automated testing.
+   - Implement proxy-based checks for roles (ADMIN, ORGANIZER, AUTHENTICATOR) via `proxy.ts`.
+3. **SEO Strategy**: Initial implementation of meta tags, sitemaps, and structured data.
+
+## Phase 2: Enhanced Functionality
+
+1. **Full-Text Search**: Integrate a search engine (e.g., PostgreSQL FTS or Algolia/Meilisearch) for events and tickets.
+2. **Ticket Scanner**: Create a dedicated functional scanner interface for event staff (Authenticator role).
+3. **SSE Standardization**: Refine and deploy the custom SSE hook across the app for notifications.
+
+## Phase 3: Organizer & Admin Tools
+
+1. **Admin Dashboard**: Data collection and visualization for system-wide monitoring.
+2. **Seat Map Editor**: Custom tool for organizers to design venue layouts.
+3. **Advanced SEO & Analytics**: Finalize SEO and integrate performance monitoring.
+
+## Phase 4: Expansion & Optimization
+
+1. **Mobile Application**: Begin React Native development using the existing backend API.
+2. **Performance Monitoring**: Optimize Vercel deployment, edge functions, and database queries.
+3. **Final Security Audit**: Review all financial and ticket-transfer logic.

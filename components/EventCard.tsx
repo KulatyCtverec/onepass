@@ -35,21 +35,21 @@ export default function EventCard({ event }: EventCardProps) {
         <div className="flex-1">
           <div className="flex items-center justify-between mb-4">
             <div className="w-3 h-3 bg-primary rounded-full"></div>
-            <span className="text-xs text-foreground-muted bg-muted/20 px-2 py-1 rounded-full">
+            <span className="text-xs text-muted bg-muted/20 px-2 py-1 rounded-full">
               Událost
             </span>
           </div>
 
-          <h2 className="text-2xl font-semibold group-hover:text-primary transition-colors mb-4 text-foreground">
+          <h2 className="text-2xl font-semibold group-hover:text-primary transition-colors mb-4 text-main">
             {event.name}
           </h2>
 
           <div className="space-y-2">
-            <div className="flex items-center space-x-2 text-foreground-muted">
+            <div className="flex items-center space-x-2 text-muted">
               <MapPin className="w-4 h-4" />
               <span>{event.location}</span>
             </div>
-            <div className="flex items-center space-x-2 text-foreground-muted">
+            <div className="flex items-center space-x-2 text-muted">
               <Calendar className="w-4 h-4" />
               <span>{new Date(event.date).toLocaleDateString("cs-CZ")}</span>
             </div>
@@ -77,3 +77,4 @@ export default function EventCard({ event }: EventCardProps) {
     </Link>
   );
 }
+

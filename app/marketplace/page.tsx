@@ -53,10 +53,10 @@ export default function MarketplacePage() {
       <div className="container mx-auto px-6 py-8">
         <div className="flex items-center justify-between mb-8">
           <div className="text-left">
-            <h1 className="text-3xl md:text-4xl font-bold bg-linear-to-r from-primary to-secondary bg-clip-text text-foreground">
+            <h1 className="text-3xl md:text-4xl font-bold bg-linear-to-r from-primary to-secondary bg-clip-text text-main">
               Přeprodej lístků
             </h1>
-            <p className="text-foreground-muted text-sm md:text-base mt-2 max-w-xl">
+            <p className="text-muted text-sm md:text-base mt-2 max-w-xl">
               Nakupujte přeprodávané lístky v bezpečném a důvěryhodném
               prostředí.
             </p>
@@ -74,8 +74,8 @@ export default function MarketplacePage() {
 
         {listings === null ? (
           <div className="text-center py-12">
-            <Ticket className="h-16 w-16 text-foreground-muted mx-auto mb-4 animate-pulse" />
-            <p className="text-foreground-muted">Načítám nabídky...</p>
+            <Ticket className="h-16 w-16 text-muted mx-auto mb-4 animate-pulse" />
+            <p className="text-muted">Načítám nabídky...</p>
           </div>
         ) : (
           <ListingsByEvent sortedListings={sortedListings} />
@@ -87,10 +87,10 @@ export default function MarketplacePage() {
               <div className="w-16 h-16 mx-auto bg-primary/20 rounded-full flex items-center justify-center">
                 <Shield className="h-8 w-8 text-primary" />
               </div>
-              <h3 className="text-lg font-semibold text-foreground">
+              <h3 className="text-lg font-semibold text-main">
                 100% Bezpečné
               </h3>
-              <p className="text-foreground-muted text-sm">
+              <p className="text-muted text-sm">
                 Všechny transakce jsou chráněny a ověřeny
               </p>
             </div>
@@ -98,10 +98,10 @@ export default function MarketplacePage() {
               <div className="w-16 h-16 mx-auto bg-primary/20 rounded-full flex items-center justify-center">
                 <Star className="h-8 w-8 text-primary" />
               </div>
-              <h3 className="text-lg font-semibold text-foreground">
+              <h3 className="text-lg font-semibold text-main">
                 Ověření prodejců
               </h3>
-              <p className="text-foreground-muted text-sm">
+              <p className="text-muted text-sm">
                 Každý prodejce je pečlivě ověřen
               </p>
             </div>
@@ -109,10 +109,10 @@ export default function MarketplacePage() {
               <div className="w-16 h-16 mx-auto bg-primary/20 rounded-full flex items-center justify-center">
                 <DollarSign className="h-8 w-8 text-primary" />
               </div>
-              <h3 className="text-lg font-semibold text-foreground">
+              <h3 className="text-lg font-semibold text-main">
                 Garance vrácení
               </h3>
-              <p className="text-foreground-muted text-sm">
+              <p className="text-muted text-sm">
                 Peníze zpět, pokud se něco pokazí
               </p>
             </div>
@@ -122,3 +122,4 @@ export default function MarketplacePage() {
     </div>
   );
 }
+

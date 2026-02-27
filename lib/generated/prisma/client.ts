@@ -79,3 +79,4 @@ export type TicketType = Prisma.TicketTypeModel
  * 
  */
 export type Listing = Prisma.ListingModel
+

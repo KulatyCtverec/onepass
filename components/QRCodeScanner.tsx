@@ -289,12 +289,12 @@ export default function QRCodeScanner() {
         <CardContent className="space-y-4">
           {!isSupported ? (
             <div className="text-center py-8">
-              <Camera className="w-16 h-16 mx-auto text-gray-400 mb-4" />
-              <p className="text-gray-600">
+              <Camera className="w-16 h-16 mx-auto text-subtle mb-4" />
+              <p className="text-muted">
                 Tento prohlížeč nepodporuje přístup ke kameře.
               </p>
               {isMobile && (
-                <p className="text-sm text-gray-500 mt-2">
+                <p className="text-sm text-subtle mt-2">
                   Detekováno mobilní zařízení. Zkuste kliknout na &quot;Spustit
                   kameru&quot; pro fallback kontrolu.
                 </p>
@@ -306,8 +306,8 @@ export default function QRCodeScanner() {
             </div>
           ) : !isScanning ? (
             <div className="text-center py-8">
-              <Camera className="w-16 h-16 mx-auto text-gray-400 mb-4" />
-              <p className="text-gray-600 mb-4">
+              <Camera className="w-16 h-16 mx-auto text-subtle mb-4" />
+              <p className="text-muted mb-4">
                 Kliknutím níže spustíš kameru.
               </p>
               <Button onClick={startCamera} size="lg">
@@ -324,13 +324,13 @@ export default function QRCodeScanner() {
                 style={{ aspectRatio: "3 / 2", overflow: "hidden" }}
               >
                 {!isVideoReady && (
-                  <div className="absolute inset-0 flex items-center justify-center text-white/80">
+                  <div className="absolute inset-0 flex items-center justify-center text-dim">
                     Načítání kamery…
                   </div>
                 )}
                 {/* Overlay zaměřovač */}
                 <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
-                  <div className="border-2 border-white/70 border-dashed w-64 h-64 rounded-lg" />
+                  <div className="border-2 border-foreground/50 border-dashed w-64 h-64 rounded-lg" />
                 </div>
               </div>
 
@@ -352,3 +352,4 @@ export default function QRCodeScanner() {
     </div>
   );
 }
+

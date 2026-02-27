@@ -70,14 +70,14 @@ export default function AdminEventsList({ events }: AdminEventsListProps) {
   return (
     <div className="space-y-6">
       {events.length === 0 ? (
-        <Card className="bg-black border-secondary-700">
+        <Card className="bg-card border-border/40">
           <CardContent className="p-8 text-center">
-            <p className="text-secondary-400 text-lg">
+            <p className="text-muted text-lg">
               Zatím nemáte žádné události
             </p>
             <a
               href="/create-event"
-              className="inline-block mt-4 bg-accent-600 hover:bg-accent-700 text-white px-6 py-2 rounded-lg transition-colors"
+              className="inline-block mt-4 bg-primary hover:bg-primary-dark text-primary-foreground px-6 py-2 rounded-lg transition-colors"
             >
               Vytvořit první událost
             </a>
@@ -86,31 +86,31 @@ export default function AdminEventsList({ events }: AdminEventsListProps) {
       ) : (
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {events.map((event) => (
-            <Card key={event.id} className="bg-black border-secondary-700">
+            <Card key={event.id} className="bg-card border-border/40">
               <CardHeader>
-                <CardTitle className="text-white">{event.name}</CardTitle>
-                <p className="text-secondary-400">{event.location}</p>
-                <p className="text-secondary-400">
+                <CardTitle className="text-main">{event.name}</CardTitle>
+                <p className="text-muted">{event.location}</p>
+                <p className="text-muted">
                   {new Date(event.date).toLocaleDateString("cs-CZ")}
                 </p>
               </CardHeader>
               <CardContent>
                 <div className="space-y-3 mb-4">
                   <div className="flex justify-between">
-                    <span className="text-secondary-400">Typy lístků:</span>
-                    <span className="font-semibold">
+                    <span className="text-muted">Typy lístků:</span>
+                    <span className="font-semibold text-main">
                       {event.ticketTypes.length}
                     </span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-secondary-400">Prodané lístky:</span>
-                    <span className="font-semibold">
+                    <span className="text-muted">Prodané lístky:</span>
+                    <span className="font-semibold text-main">
                       {event.tickets.length}
                     </span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-secondary-400">Celkový výnos:</span>
-                    <span className="font-semibold">
+                    <span className="text-muted">Celkový výnos:</span>
+                    <span className="font-semibold text-main">
                       {event.tickets.reduce(
                         (sum, ticket) => sum + (ticket.tickettype?.price || 0),
                         0
@@ -160,16 +160,16 @@ export default function AdminEventsList({ events }: AdminEventsListProps) {
 
       {/* Edit Dialog */}
       <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
-        <DialogContent className="bg-black border-accent-600 text-white">
+        <DialogContent className="bg-card border-primary/50 text-main">
           <DialogHeader>
-            <DialogTitle className="text-accent-400">
+            <DialogTitle className="text-primary">
               Upravit událost
             </DialogTitle>
           </DialogHeader>
           {editingEvent && (
             <form onSubmit={handleEditEvent} className="space-y-4">
               <div>
-                <Label htmlFor="name" className="text-accent-300">
+                <Label htmlFor="name" className="text-main/80">
                   Název události
                 </Label>
                 <Input
@@ -177,12 +177,12 @@ export default function AdminEventsList({ events }: AdminEventsListProps) {
                   name="name"
                   defaultValue={editingEvent.name}
                   required
-                  className="bg-gray-800 border-accent-600/50 text-white"
+                  className="bg-background-secondary border-border/40 text-main"
                 />
               </div>
 
               <div>
-                <Label htmlFor="description" className="text-accent-300">
+                <Label htmlFor="description" className="text-main/80">
                   Popis
                 </Label>
                 <Textarea
@@ -190,12 +190,12 @@ export default function AdminEventsList({ events }: AdminEventsListProps) {
                   name="description"
                   defaultValue={editingEvent.description}
                   required
-                  className="bg-gray-800 border-accent-600/50 text-white"
+                  className="bg-background-secondary border-border/40 text-main"
                 />
               </div>
 
               <div>
-                <Label htmlFor="date" className="text-accent-300">
+                <Label htmlFor="date" className="text-main/80">
                   Datum
                 </Label>
                 <Input
@@ -206,12 +206,12 @@ export default function AdminEventsList({ events }: AdminEventsListProps) {
                     .toISOString()
                     .slice(0, 16)}
                   required
-                  className="bg-gray-800 border-accent-600/50 text-white"
+                  className="bg-background-secondary border-border/40 text-main"
                 />
               </div>
 
               <div>
-                <Label htmlFor="location" className="text-accent-300">
+                <Label htmlFor="location" className="text-main/80">
                   Místo
                 </Label>
                 <Input
@@ -219,14 +219,14 @@ export default function AdminEventsList({ events }: AdminEventsListProps) {
                   name="location"
                   defaultValue={editingEvent.location}
                   required
-                  className="bg-gray-800 border-accent-600/50 text-white"
+                  className="bg-background-secondary border-border/40 text-main"
                 />
               </div>
 
               <div className="flex gap-2">
                 <Button
                   type="submit"
-                  className="bg-accent-600 hover:bg-accent-700 text-white"
+                  className="bg-primary hover:bg-primary-dark text-primary-foreground"
                 >
                   Uložit změny
                 </Button>
@@ -245,3 +245,4 @@ export default function AdminEventsList({ events }: AdminEventsListProps) {
     </div>
   );
 }
+

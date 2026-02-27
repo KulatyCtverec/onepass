@@ -1607,3 +1607,4 @@ export type ListingDefaultArgs<ExtArgs extends runtime.Types.Extensions.Internal
    */
   include?: Prisma.ListingInclude<ExtArgs> | null
 }
+

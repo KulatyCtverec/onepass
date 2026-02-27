@@ -11,3 +11,4 @@ export interface SSEMessage<T> {
   type: "create" | "update" | "delete";
   data: T;
 }
+

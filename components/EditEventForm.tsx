@@ -257,7 +257,7 @@ export default function EditEventForm({ event }: EditEventFormProps) {
                 onChange={(e) =>
                   setFormData({ ...formData, category: e.target.value })
                 }
-                className="w-full px-3 py-2 bg-white/5 border border-border/30 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-primary/50"
+                className="w-full px-3 py-2 bg-foreground/5 border border-border/30 rounded-lg text-main focus:outline-none focus:ring-2 focus:ring-primary/50"
               >
                 <option value="">Vyberte kategorii</option>
                 {categories.map((category) => (
@@ -441,9 +441,9 @@ export default function EditEventForm({ event }: EditEventFormProps) {
                 onChange={(e) =>
                   setFormData({ ...formData, allowResale: e.target.checked })
                 }
-                className="w-4 h-4 text-primary bg-white/5 border-border/30 rounded focus:ring-primary/50"
+                className="w-4 h-4 text-primary bg-foreground/5 border-border/30 rounded focus:ring-primary/50"
               />
-              <span className="text-sm">Povolit přeprodej vstupenek</span>
+              <span className="text-sm text-muted">Povolit přeprodej vstupenek</span>
             </label>
 
             <label className="flex items-center space-x-2 cursor-pointer">
@@ -456,9 +456,9 @@ export default function EditEventForm({ event }: EditEventFormProps) {
                     requireApproval: e.target.checked,
                   })
                 }
-                className="w-4 h-4 text-primary bg-white/5 border-border/30 rounded focus:ring-primary/50"
+                className="w-4 h-4 text-primary bg-foreground/5 border-border/30 rounded focus:ring-primary/50"
               />
-              <span className="text-sm">Vyžadovat schválení</span>
+              <span className="text-sm text-muted">Vyžadovat schválení</span>
             </label>
 
             <label className="flex items-center space-x-2 cursor-pointer">
@@ -468,9 +468,9 @@ export default function EditEventForm({ event }: EditEventFormProps) {
                 onChange={(e) =>
                   setFormData({ ...formData, sendEmails: e.target.checked })
                 }
-                className="w-4 h-4 text-primary bg-white/5 border-border/30 rounded focus:ring-primary/50"
+                className="w-4 h-4 text-primary bg-foreground/5 border-border/30 rounded focus:ring-primary/50"
               />
-              <span className="text-sm">Posílat emaily</span>
+              <span className="text-sm text-muted">Posílat emaily</span>
             </label>
           </div>
         </CardContent>
@@ -585,7 +585,7 @@ export default function EditEventForm({ event }: EditEventFormProps) {
               onChange={handleImageUpload}
               className="glass-effect border-border/30"
             />
-            <p className="text-xs text-foreground-muted">
+            <p className="text-xs text-muted">
               Maximální velikost: 4.4MB. Podporované formáty: JPG, PNG, GIF
             </p>
           </div>
@@ -601,7 +601,7 @@ export default function EditEventForm({ event }: EditEventFormProps) {
               />
               {uploadingImage && (
                 <div className="absolute inset-0 bg-black/50 rounded-lg flex items-center justify-center">
-                  <div className="text-white font-medium">Nahrávání...</div>
+                  <div className="text-primary-foreground font-medium">Nahrávání...</div>
                 </div>
               )}
               {!uploadingImage && (
@@ -647,3 +647,4 @@ export default function EditEventForm({ event }: EditEventFormProps) {
     </form>
   );
 }
+

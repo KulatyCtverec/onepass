@@ -18,7 +18,7 @@ export default function TicketTypes({
       <Card className="glass-effect border-border/30">
         <CardContent className="p-6 text-center">
           <Ticket className="w-12 h-12 mx-auto mb-4 text-muted-foreground" />
-          <p className="text-foreground-muted">
+          <p className="text-muted">
             Žádné typy vstupenek nejsou k dispozici
           </p>
         </CardContent>
@@ -29,13 +29,13 @@ export default function TicketTypes({
   return (
     <div className="space-y-6">
       <div className="text-center mb-8">
-        <h2 className="text-2xl font-bold text-foreground mb-2">
+        <h2 className="text-2xl font-bold text-main mb-2">
           Typy vstupenek
         </h2>
         {eventName && (
-          <p className="text-foreground-muted">
+          <p className="text-muted">
             Pro událost:{" "}
-            <span className="font-medium text-primary">{eventName}</span>
+            <span className="font-medium text-main">{eventName}</span>
           </p>
         )}
       </div>
@@ -53,13 +53,13 @@ export default function TicketTypes({
                   <div className="p-1 rounded-full bg-primary/20">
                     <Ticket className="w-3 h-3 text-primary" />
                   </div>
-                  <CardTitle className="text-base text-foreground">
+                  <CardTitle className="text-base text-main">
                     {ticketType.name}
                   </CardTitle>
                 </div>
 
                 <div className="text-right">
-                  <div className="text-xl font-bold text-primary">
+                  <div className="text-xl font-bold text-main">
                     {ticketType.price / 100} Kč
                   </div>
                 </div>
@@ -68,8 +68,8 @@ export default function TicketTypes({
               {/* Dostupnost a progress bar */}
               <div className="space-y-2 mb-3">
                 <div className="flex items-center justify-between text-sm">
-                  <span className="text-foreground-muted">Dostupné:</span>
-                  <span className="font-medium text-foreground">
+                  <span className="text-muted">Dostupné:</span>
+                  <span className="font-medium text-main">
                     {ticketType.stock} z {ticketType.total}
                   </span>
                 </div>
@@ -129,28 +129,28 @@ export default function TicketTypes({
         <CardContent className="p-6">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
             <div>
-              <div className="text-2xl font-bold text-primary">
+              <div className="text-2xl font-bold text-main">
                 {ticketTypes.length}
               </div>
-              <div className="text-sm text-foreground-muted">
+              <div className="text-sm text-muted">
                 Typů vstupenek
               </div>
             </div>
 
             <div>
-              <div className="text-2xl font-bold text-primary">
+              <div className="text-2xl font-bold text-main">
                 {ticketTypes.reduce((sum, tt) => sum + tt.total, 0)}
               </div>
-              <div className="text-sm text-foreground-muted">
+              <div className="text-sm text-muted">
                 Celkem vstupenek
               </div>
             </div>
 
             <div>
-              <div className="text-2xl font-bold text-primary">
+              <div className="text-2xl font-bold text-main">
                 {ticketTypes.reduce((sum, tt) => sum + tt.stock, 0)}
               </div>
-              <div className="text-sm text-foreground-muted">Dostupné</div>
+              <div className="text-sm text-muted">Dostupné</div>
             </div>
           </div>
         </CardContent>
@@ -158,3 +158,4 @@ export default function TicketTypes({
     </div>
   );
 }
+

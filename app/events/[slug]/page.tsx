@@ -6,7 +6,7 @@ export default function EventDetailPage({
   params: Promise<{ slug: string }>;
 }) {
   return (
-    <main className="min-h-screen text-white py-8">
+    <main className="min-h-screen text-main py-8">
       <EventDetail params={params} />
     </main>
   );

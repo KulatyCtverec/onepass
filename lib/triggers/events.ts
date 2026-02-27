@@ -93,3 +93,4 @@ export async function setupEventInsertTrigger() {
   `);
   console.log("✅ Trigger 'event_delete_trigger' byl úspěšně nastaven.");
 }
+

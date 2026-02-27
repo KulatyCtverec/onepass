@@ -83,29 +83,29 @@ export default function QRCodeDisplay({
       </CardHeader>
       <CardContent className="text-center">
         <div className="mb-6 space-y-2">
-          <p className="text-sm text-gray-600">
-            Událost: <span className="font-semibold">{eventName}</span>
+          <p className="text-sm text-muted">
+            Událost: <span className="font-semibold text-main">{eventName}</span>
           </p>
-          <p className="text-sm text-gray-600">
-            Uživatel: <span className="font-semibold">{userName}</span>
+          <p className="text-sm text-muted">
+            Uživatel: <span className="font-semibold text-main">{userName}</span>
           </p>
-          <p className="text-sm text-gray-600">
-            Typ: <span className="font-semibold">{ticketType}</span>
+          <p className="text-sm text-muted">
+            Typ: <span className="font-semibold text-main">{ticketType}</span>
           </p>
-          <p className="text-sm text-gray-600">
+          <p className="text-sm text-muted">
             Datum:{" "}
-            <span className="font-semibold">{formatDate(eventDate)}</span>
+            <span className="font-semibold text-main">{formatDate(eventDate)}</span>
           </p>
         </div>
 
         {qrData ? (
           <div className="mb-6">
-            <div className="bg-gray-100 p-4 rounded-lg border-2 border-dashed border-gray-300">
-              <code className="text-xs break-all font-mono text-gray-800">
+            <div className="bg-background-secondary p-4 rounded-lg border-2 border-dashed border-border/40">
+              <code className="text-xs break-all font-mono text-main/80">
                 {qrData}
               </code>
             </div>
-            <p className="text-xs text-gray-500 mt-2 mb-4">
+            <p className="text-xs text-subtle mt-2 mb-4">
               Tento kód můžete skenovat nebo zadat ručně při vstupu
             </p>
 
@@ -132,15 +132,15 @@ export default function QRCodeDisplay({
             </div>
           </div>
         ) : (
-          <div className="mb-6 p-8 bg-gray-100 rounded-lg border-2 border-dashed border-gray-300">
-            <p className="text-gray-500">QR kód nebyl vygenerován</p>
+          <div className="mb-6 p-8 bg-background-secondary rounded-lg border-2 border-dashed border-border/40">
+            <p className="text-subtle">QR kód nebyl vygenerován</p>
           </div>
         )}
 
         <Button
           onClick={generateQR}
           disabled={loading}
-          className="w-full bg-primary-600 hover:bg-primary-700 text-white"
+          className="w-full bg-primary hover:bg-primary-dark text-primary-foreground"
         >
           {loading ? "Generuji..." : "Vygenerovat QR kód"}
         </Button>
@@ -148,3 +148,4 @@ export default function QRCodeDisplay({
     </Card>
   );
 }
+

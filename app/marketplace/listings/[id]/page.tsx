@@ -65,11 +65,11 @@ export default function ListingDetailPage({
 
   if (!loaded) {
     return (
-      <main className="min-h-screen text-foreground py-8">
+      <main className="min-h-screen text-main py-8">
         <div className="container mx-auto px-6">
           <div className="text-center py-12">
-            <Ticket className="w-12 h-12 text-foreground-muted mx-auto mb-4 animate-pulse" />
-            <p className="text-foreground-muted">Načítám nabídku...</p>
+            <Ticket className="w-12 h-12 text-muted mx-auto mb-4 animate-pulse" />
+            <p className="text-muted">Načítám nabídku...</p>
           </div>
         </div>
       </main>
@@ -78,7 +78,7 @@ export default function ListingDetailPage({
 
   if (!listing?.id) {
     return (
-      <main className="min-h-screen text-foreground py-8">
+      <main className="min-h-screen text-main py-8">
         <div className="container mx-auto px-6">
           <Link href="/marketplace">
             <Button variant="ghost" className="glass-button border-border/30">
@@ -87,7 +87,7 @@ export default function ListingDetailPage({
             </Button>
           </Link>
           <div className="text-center py-12">
-            <p className="text-foreground-muted">
+            <p className="text-muted">
               Nabídka nebyla nalezena nebo již není k dispozici.
             </p>
           </div>
@@ -107,7 +107,7 @@ export default function ListingDetailPage({
   const isOwner = !!session?.user?.id && listing.ownerId === session.user.id;
 
   return (
-    <main className="min-h-screen text-foreground py-8">
+    <main className="min-h-screen text-main py-8">
       <div className="container mx-auto px-6">
         <div className="mb-6">
           <Link href="/marketplace">
@@ -121,7 +121,7 @@ export default function ListingDetailPage({
           </Link>
         </div>
 
-        <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-6">
+        <h1 className="text-3xl md:text-4xl font-bold text-main mb-6">
           {listing.eventName}
         </h1>
 
@@ -154,13 +154,13 @@ export default function ListingDetailPage({
               <CardHeader className="px-6 py-4">
                 Typ lístku:
                 {listing.ticketTypeName && (
-                  <p className="text-xl font-bold text-foreground">
+                  <p className="text-xl font-bold text-main">
                     {listing.ticketTypeName}
                   </p>
                 )}
               </CardHeader>
               <CardContent className="space-y-6 px-6 pb-6">
-                <div className="space-y-3 text-sm text-foreground-muted">
+                <div className="space-y-3 text-sm text-muted">
                   <div className="flex items-center">
                     <Calendar className="h-4 w-4 mr-2 text-primary shrink-0" />
                     {listing.date
@@ -189,7 +189,7 @@ export default function ListingDetailPage({
                 </div>
 
                 <div className="flex items-center gap-2 pt-4  border-border/30">
-                  <span className="text-sm text-foreground-muted">
+                  <span className="text-sm text-muted">
                     Prodejce: {listing.seller?.name ?? "—"}
                   </span>
                 </div>
@@ -202,34 +202,34 @@ export default function ListingDetailPage({
               <CardContent className="p-6 space-y-6">
                 <div className="space-y-4">
                   <div className="flex justify-between items-baseline">
-                    <span className="text-lg text-foreground-muted">
+                    <span className="text-lg text-muted">
                       Původní cena
                     </span>
-                    <span className="text-lg font-semibold text-foreground">
+                    <span className="text-lg font-semibold text-main">
                       {listing.originalPrice != null
                         ? `${listing.originalPrice} Kč`
                         : "—"}
                     </span>
                   </div>
                   <div className="flex justify-between items-baseline">
-                    <span className="text-lg text-foreground-muted">
+                    <span className="text-lg text-muted">
                       Prodejní cena
                     </span>
-                    <span className="text-lg font-semibold text-primary">
+                    <span className="text-lg font-semibold text-main">
                       {listing.price != null ? `${listing.price} Kč` : "—"}
                     </span>
                   </div>
                   <div className="flex justify-between items-baseline">
-                    <span className="text-lg text-foreground-muted">
+                    <span className="text-lg text-muted">
                       Celkem:
                     </span>
-                    <span className="text-2xl font-bold text-foreground">
+                    <span className="text-2xl font-bold text-main">
                       {(listing.price ?? 0) * effectiveQty} Kč
                     </span>
                   </div>
                   {quantity > 1 && (
                     <div className="flex justify-between items-baselin gap-2 py-2">
-                      <label className="text-lg font-medium text-foreground">
+                      <label className="text-lg font-medium text-main">
                         Počet lístků:
                       </label>
                       <div className="flex items-center gap-2">
@@ -245,7 +245,7 @@ export default function ListingDetailPage({
                         >
                           −
                         </Button>
-                        <span className="w-10 text-center font-medium text-xl pb-1">
+                        <span className="w-10 text-center font-medium text-xl pb-1 text-main">
                           {effectiveQty}
                         </span>
                         <Button
@@ -285,7 +285,7 @@ export default function ListingDetailPage({
                     className="block w-full"
                   >
                     <Button
-                      className="w-full px-8 py-4 rounded-xl text-lg font-medium bg-gradient-primary text-white hover:scale-[1.02] transition-all duration-300 neon-glow"
+                      className="w-full px-8 py-4 rounded-xl text-lg font-medium bg-gradient-primary text-primary-foreground hover:scale-[1.02] transition-all duration-300 neon-glow"
                       size="lg"
                     >
                       <Ticket className="h-5 w-5 mr-2" />
@@ -294,7 +294,7 @@ export default function ListingDetailPage({
                   </Link>
                 )}
 
-                <p className="text-xs text-foreground-muted text-center">
+                <p className="text-xs text-muted text-center">
                   Bezpečná transakce přes OnePass. Peníze zpět při problémech.
                 </p>
               </CardContent>

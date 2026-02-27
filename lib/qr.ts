@@ -32,3 +32,4 @@ export const QR = {
     return hash.substring(0, 16) === accessCode;
   },
 };
+

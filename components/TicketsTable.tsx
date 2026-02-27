@@ -50,14 +50,14 @@ export default function TicketsTable(props: { caption: string }) {
   if (tickets.length === 0) {
     return (
       <div className="text-center py-12">
-        <p className="text-secondary-400">Nemáte žádné zakoupené lístky.</p>
+        <p className="text-muted">Nemáte žádné zakoupené lístky.</p>
       </div>
     );
   }
 
   return (
     <div>
-      <h1 className="text-2xl font-bold mb-8">{props.caption}</h1>
+      <h1 className="text-2xl font-bold mb-8 text-main">{props.caption}</h1>
       <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
         {tickets.map((ticket) => (
           <TicketCard key={ticket.id} ticket={ticket} />
@@ -66,3 +66,4 @@ export default function TicketsTable(props: { caption: string }) {
     </div>
   );
 }
+

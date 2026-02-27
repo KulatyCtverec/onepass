@@ -42,3 +42,4 @@ export const ListingType = {
 } as const
 
 export type ListingType = (typeof ListingType)[keyof typeof ListingType]
+

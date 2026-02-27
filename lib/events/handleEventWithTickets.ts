@@ -166,3 +166,4 @@ export async function syncTicketPoolForEvent(eventId: string): Promise<void> {
     }
   }
 }
+

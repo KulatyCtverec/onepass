@@ -92,3 +92,4 @@ export function useSSE<E extends { id: string }>(
 
   return { items, error };
 }
+

@@ -121,7 +121,7 @@ export default function MyEventsPage() {
         <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-400 to-blue-600 bg-clip-text text-transparent mb-4">
           Mé události
         </h1>
-        <p className="text-foreground-muted text-lg">
+        <p className="text-muted text-lg">
           Spravujte své vytvořené události
         </p>
       </div>
@@ -156,15 +156,15 @@ export default function MyEventsPage() {
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
             </div>
 
-            <CardHeader className="pb-3">
-              <CardTitle className="text-xl line-clamp-2 text-white">
+            <CardHeader className="pb-3 text-main">
+              <CardTitle className="text-xl line-clamp-2">
                 {event.name}
               </CardTitle>
             </CardHeader>
 
             <CardContent className="space-y-4">
               {/* Event Details */}
-              <div className="space-y-2 text-sm text-white/80">
+              <div className="space-y-2 text-sm text-dim">
                 <div className="flex items-center space-x-2">
                   <MapPin className="w-4 h-4" />
                   <span className="line-clamp-1">{event.location}</span>
@@ -184,13 +184,13 @@ export default function MyEventsPage() {
               </div>
 
               {/* Ticket Types Summary */}
-              <div className="pt-2 border-t border-white/20">
-                <p className="text-xs text-white/60 mb-2">Typy vstupenek:</p>
+              <div className="pt-2 border-t border-border/20">
+                <p className="text-xs text-subtle mb-2">Typy vstupenek:</p>
                 <div className="space-y-1">
                   {event.ticketTypes?.map((ticketType) => (
                     <div
                       key={ticketType.id}
-                      className="flex justify-between text-sm text-white/80"
+                      className="flex justify-between text-sm text-muted"
                     >
                       <span>{ticketType.name}</span>
                       <span className="text-primary font-medium">
@@ -241,7 +241,7 @@ export default function MyEventsPage() {
             <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-muted/20 flex items-center justify-center">
               <Calendar className="w-8 h-8 text-muted-foreground" />
             </div>
-            <p className="text-foreground-muted text-lg mb-6">
+            <p className="text-muted text-lg mb-6">
               Zatím jste nevytvořili žádné události
             </p>
             <Button asChild className="glass-button">
@@ -253,3 +253,4 @@ export default function MyEventsPage() {
     </div>
   );
 }
+

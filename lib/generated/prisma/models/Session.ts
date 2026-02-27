@@ -1303,3 +1303,4 @@ export type SessionDefaultArgs<ExtArgs extends runtime.Types.Extensions.Internal
    */
   include?: Prisma.SessionInclude<ExtArgs> | null
 }
+

@@ -2106,3 +2106,4 @@ export type TicketDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalA
    */
   include?: Prisma.TicketInclude<ExtArgs> | null
 }
+

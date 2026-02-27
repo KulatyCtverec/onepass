@@ -11,10 +11,12 @@ import {
 import { Button } from "./ui/button";
 import { Event, TicketType } from "@prisma/client";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { Calendar, MapPin, Ticket, Clock, Loader2 } from "lucide-react";
 import { useSSE } from "@/lib/hooks/useSSE";
 import categories from "@/config/constants/categories.json";
 import SearchBox from "./SearchBox";
+import { useDebounce } from "@/lib/hooks/useDebounce";
 const EVENTS_PER_PAGE = 12;
 
 export default function HomepageEventsTable() {
@@ -26,20 +28,45 @@ export default function HomepageEventsTable() {
   const [loadingMore, setLoadingMore] = useState(false);
   const [hasMore, setHasMore] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [sortBy, setSortBy] = useState("");
   const [initialLoading, setInitialLoading] = useState(true);
 
-  // Načítání počátečních událostí
+  const searchParams = useSearchParams();
+  const qParam = searchParams.get("q") || "";
+
+  // Synchronizace stavu vyhledávání s URL parametrem 'q'
   useEffect(() => {
-    const fetchInitialEvents = async () => {
+    if (qParam !== searchQuery) {
+      setSearchQuery(qParam);
+    }
+  }, [qParam]);
+
+  const debouncedSearchQuery = useDebounce(searchQuery, 500);
+
+  // Načítání událostí (včetně vyhledávání a kategorií)
+  useEffect(() => {
+    const fetchEvents = async () => {
       try {
         setInitialLoading(true);
-        const response = await fetch(
-          `/api/events?take=${EVENTS_PER_PAGE}&skip=0`
-        );
+        const params = new URLSearchParams({
+          take: EVENTS_PER_PAGE.toString(),
+          skip: "0",
+        });
+
+        if (debouncedSearchQuery) params.append("q", debouncedSearchQuery);
+        if (selectedCategory) params.append("category", selectedCategory);
+        if (sortBy) params.append("sort", sortBy);
+
+        const response = await fetch(`/api/events?${params.toString()}`);
         if (!response.ok) throw new Error("Chyba při načítání událostí");
         const newEvents = await response.json();
         setEvents(newEvents);
         setHasMore(newEvents.length === EVENTS_PER_PAGE);
+        // Pokud vyhledáváme, automaticky chceme vidět výsledky (showAll)
+        if (debouncedSearchQuery || selectedCategory) {
+          setShowAll(true);
+        }
       } catch (err) {
         setError(err instanceof Error ? err.message : "Nastala chyba");
       } finally {
@@ -47,8 +74,8 @@ export default function HomepageEventsTable() {
       }
     };
 
-    fetchInitialEvents();
-  }, []);
+    fetchEvents();
+  }, [debouncedSearchQuery, selectedCategory, sortBy]);
 
   // Real-time updates pomocí SSE
   useSSE<Event & { ticketTypes: TicketType[] }>(
@@ -63,9 +90,16 @@ export default function HomepageEventsTable() {
 
     setLoadingMore(true);
     try {
-      const response = await fetch(
-        `/api/events?take=${EVENTS_PER_PAGE}&skip=${events.length}`
-      );
+      const params = new URLSearchParams({
+        take: EVENTS_PER_PAGE.toString(),
+        skip: events.length.toString(),
+      });
+
+      if (debouncedSearchQuery) params.append("q", debouncedSearchQuery);
+      if (selectedCategory) params.append("category", selectedCategory);
+      if (sortBy) params.append("sort", sortBy);
+
+      const response = await fetch(`/api/events?${params.toString()}`);
       if (!response.ok) throw new Error("Chyba při načítání událostí");
       const newEvents = await response.json();
 
@@ -81,14 +115,9 @@ export default function HomepageEventsTable() {
     } finally {
       setLoadingMore(false);
     }
-  }, [events.length, loadingMore, hasMore]);
+  }, [events.length, loadingMore, hasMore, debouncedSearchQuery, selectedCategory, sortBy]);
 
-  const filteredEvents = useMemo(() => {
-    if (!selectedCategory || selectedCategory === "") {
-      return events;
-    }
-    return events?.filter((event) => event.category === selectedCategory) || [];
-  }, [events, selectedCategory]);
+  const filteredEvents = events;
 
   // Počty událostí v kategoriích - memoizováno pro optimalizaci
   const categoryCounts = useMemo(() => {
@@ -113,35 +142,80 @@ export default function HomepageEventsTable() {
     );
   }
 
-  // Loading stav když se events načítají
   if (initialLoading) {
     return (
-      <div className="glass-effect border-border/30 rounded-lg p-12 text-center">
-        <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-muted/20 flex items-center justify-center">
-          <Loader2 className="w-8 h-8 text-muted-foreground animate-spin" />
+      <div>
+        <section className="mb-12">
+          <div className="text-center mb-8">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-main float-left">
+              Procházet podle kategorie
+            </h2>
+          </div>
+          <SearchBox
+            selectedCategory={selectedCategory}
+            setSelectedCategory={setSelectedCategory}
+            sortBy={sortBy}
+            setSortBy={setSortBy}
+          />
+        </section>
+        <div className="glass-effect border-border/30 rounded-lg p-12 text-center">
+          <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-muted/20 flex items-center justify-center">
+            <Loader2 className="w-8 h-8 text-muted-foreground animate-spin" />
+          </div>
+          <p className="text-muted text-lg mb-6">
+            Načítám události...
+          </p>
         </div>
-        <p className="text-foreground-muted text-lg mb-6">
-          Načítám události...
-        </p>
       </div>
     );
   }
 
   if (!events || events.length === 0) {
     return (
-      <div className="glass-effect border-border/30 rounded-lg p-12 text-center">
-        <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-muted/20 flex items-center justify-center">
-          <Ticket className="w-8 h-8 text-muted-foreground" />
+      <div>
+        <section className="mb-12">
+          <div className="text-center mb-8">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-main">
+              Procházet podle kategorie
+            </h2>
+
+          </div>
+          <SearchBox
+            selectedCategory={selectedCategory}
+            setSelectedCategory={setSelectedCategory}
+            sortBy={sortBy}
+            setSortBy={setSortBy}
+          />
+        </section>
+        <div className="glass-effect border-border/30 rounded-lg p-12 text-center">
+          <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-muted/20 flex items-center justify-center">
+            <Ticket className="w-8 h-8 text-muted-foreground" />
+          </div>
+          <p className="text-muted text-lg mb-6">
+            {debouncedSearchQuery || selectedCategory
+              ? "Pro zadané filtry nebyly nalezeny žádné události"
+              : "Zatím nejsou k dispozici žádné události"}
+          </p>
+          {debouncedSearchQuery || selectedCategory ? (
+            <Button
+              onClick={() => {
+                setSearchQuery("");
+                setSelectedCategory("");
+              }}
+              variant="outline"
+              className="glass-button px-6 py-3 rounded-xl"
+            >
+              Vymazat filtry
+            </Button>
+          ) : (
+            <Link
+              href="/create-event"
+              className="inline-block glass-button px-6 py-3 rounded-xl text-main hover:scale-105 transition-all duration-300"
+            >
+              Vytvořit první událost
+            </Link>
+          )}
         </div>
-        <p className="text-foreground-muted text-lg mb-6">
-          Zatím nejsou k dispozici žádné události
-        </p>
-        <Link
-          href="/create-event"
-          className="inline-block glass-button px-6 py-3 rounded-xl text-white hover:scale-105 transition-all duration-300"
-        >
-          Vytvořit první událost
-        </Link>
       </div>
     );
   }
@@ -151,45 +225,32 @@ export default function HomepageEventsTable() {
     ? filteredEvents
     : filteredEvents.slice(0, EVENTS_PER_PAGE);
 
+  // Tlačítka pro zobrazení více
+  const hasAppliedFilters = debouncedSearchQuery || (selectedCategory && selectedCategory !== "all");
+
   return (
     <div>
       {/* Kategorie pro filtrování */}
       <section className="mb-12">
-        <div className="text-center mb-8">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4 text-foreground">
+        <div className="text-left mb-8">
+          <p className="text-3xl md:text-4xl font-bold mb-4 text-main">
             Procházet podle kategorie
-          </h2>
-          <p className="text-foreground-muted text-lg">
-            Najděte události, které vás zajímají
           </p>
         </div>
+
         {/* Dynamicky nastavíme počet sloupců podle počtu kategorií */}
+
         <SearchBox
-          searchQuery={""}
-          setSearchQuery={() => {}}
           selectedCategory={selectedCategory}
           setSelectedCategory={setSelectedCategory}
-          sortBy={""}
-          setSortBy={() => {}}
+          sortBy={sortBy}
+          setSortBy={setSortBy}
         />
       </section>
 
       {/* Filtrované události */}
       <section>
-        <div className="flex justify-between items-center mb-12">
-          <div>
-            <h2 className="text-3xl md:text-4xl font-bold mb-2 text-foreground">
-              {!selectedCategory || selectedCategory === ""
-                ? "Všechny události"
-                : `${
-                    categories.find((c) => c.value === selectedCategory)?.label
-                  } události`}
-            </h2>
-            <p className="text-foreground-muted">
-              Nenechte si ujít tyto skvělé nadcházející události
-            </p>
-          </div>
-        </div>
+
 
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
           {displayedEvents.map((event) => (
@@ -226,17 +287,14 @@ export default function HomepageEventsTable() {
                 {/* Background strip for better text readability */}
                 <div className="glass-effect p-3 rounded-b-lg">
                   {/* Basic info always visible - only name and price */}
-                  <div className="flex items-center justify-between mb-1">
-                    <div className="w-2 h-2 bg-primary rounded-full"></div>
-                  </div>
-                  <h3 className="text-white text-lg line-clamp-2 group-hover:text-primary transition-colors mb-1 font-semibold">
+                  <h3 className="text-main text-lg line-clamp-2 transition-colors mb-1 font-semibold">
                     {event.name}
                   </h3>
 
                   {/* Price info always visible */}
-                  <div className="flex justify-between items-center pt-1 border-t border-white/20">
-                    <span className="text-xs text-white/70">Od</span>
-                    <span className="text-primary font-semibold ">
+                  <div className="flex justify-between items-center pt-1 border-t border-border/20">
+                    <span className="text-xs text-muted">Od</span>
+                    <span className="text-main font-semibold ">
                       {event.ticketTypes && event.ticketTypes.length > 0
                         ? Math.min(...event.ticketTypes.map((t) => t.price)) /
                           100
@@ -249,21 +307,21 @@ export default function HomepageEventsTable() {
                   <div className="max-h-0 overflow-hidden transition-all duration-300 group-hover:max-h-40 space-y-2">
                     {/* Location and date info */}
                     <div className="space-y-1">
-                      <div className="flex items-center space-x-2 text-white/80">
+                      <div className="flex items-center space-x-2 text-dim">
                         <MapPin className="w-4 h-4" />
                         <span className="text-sm line-clamp-1">
                           {event.location}
                         </span>
                       </div>
                       <div className="flex items-center justify-between">
-                        <div className="flex items-center space-x-2 text-white/80">
+                        <div className="flex items-center space-x-2 text-dim">
                           <Calendar className="w-4 h-4" />
                           <span className="text-sm">
                             {new Date(event.date).toLocaleDateString("cs-CZ")}
                           </span>
                         </div>
                         {event.category && (
-                          <div className="flex items-center space-x-2 text-white/70">
+                          <div className="flex items-center space-x-2 text-muted">
                             <span className="text-xs uppercase tracking-wide">
                               {event.category === "music" && "🎵"}
                               {event.category === "sports" && "⚽"}
@@ -285,7 +343,7 @@ export default function HomepageEventsTable() {
                           </div>
                         )}
                       </div>
-                      <div className="flex items-center space-x-2 text-white/80">
+                      <div className="flex items-center space-x-2 text-dim">
                         <Clock className="w-4 h-4" />
                         <span className="text-sm">
                           {new Date(event.date).toLocaleTimeString("cs-CZ", {
@@ -310,7 +368,7 @@ export default function HomepageEventsTable() {
             <Button
               onClick={() => setShowAll(true)}
               variant="outline"
-              className="glass-button border-primary/30 text-primary hover:border-primary/50 hover:scale-105 transition-all duration-300"
+              className="glass-button border-primary/30 text-main hover:border-primary/50 hover:scale-105 transition-all duration-300"
             >
               Zobrazit všech {filteredEvents.length} událostí
             </Button>
@@ -323,7 +381,7 @@ export default function HomepageEventsTable() {
                   {loadingMore && (
                     <div className="flex items-center justify-center">
                       <Loader2 className="w-6 h-6 animate-spin text-primary" />
-                      <span className="ml-2 text-foreground-muted">
+                      <span className="ml-2 text-muted">
                         Načítám další události...
                       </span>
                     </div>
@@ -332,7 +390,7 @@ export default function HomepageEventsTable() {
                     <Button
                       onClick={loadMoreEvents}
                       variant="outline"
-                      className="glass-button border-primary/30 text-primary hover:border-primary/50 hover:scale-105 transition-all duration-300"
+                      className="glass-button border-primary/30 text-main hover:border-primary/50 hover:scale-105 transition-all duration-300"
                     >
                       Načíst dalších {EVENTS_PER_PAGE}
                     </Button>
@@ -340,7 +398,7 @@ export default function HomepageEventsTable() {
                 </>
               )}
               {!hasMore && events.length > 4 && (
-                <p className="text-foreground-muted">
+                <p className="text-muted">
                   Zobrazeny všechny dostupné události
                 </p>
               )}
@@ -351,3 +409,4 @@ export default function HomepageEventsTable() {
     </div>
   );
 }
+

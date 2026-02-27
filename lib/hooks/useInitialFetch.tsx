@@ -39,3 +39,4 @@ export function useInitialFetch<T>(
   }, []);
   return data;
 }
+

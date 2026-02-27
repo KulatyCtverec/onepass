@@ -260,3 +260,4 @@ export interface PrismaClient<
 export function getPrismaClientClass(): PrismaClientConstructor {
   return runtime.getPrismaClient(config) as unknown as PrismaClientConstructor
 }
+

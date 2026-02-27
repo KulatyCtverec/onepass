@@ -112,7 +112,7 @@ export default function EventsTable(props: { caption: string }) {
       <div className="text-center py-12">
         <div className="glass-effect border-border/30 rounded-lg p-8">
           <Loader2 className="w-8 h-8 animate-spin text-primary mx-auto mb-4" />
-          <p className="text-foreground-muted text-lg">Načítám události...</p>
+          <p className="text-muted text-lg">Načítám události...</p>
         </div>
       </div>
     );
@@ -122,7 +122,7 @@ export default function EventsTable(props: { caption: string }) {
     return (
       <div className="text-center py-12">
         <div className="glass-effect border-border/30 rounded-lg p-8">
-          <p className="text-foreground-muted text-lg">
+          <p className="text-muted text-lg">
             Žádné události nebyly nalezeny.
           </p>
         </div>
@@ -132,7 +132,7 @@ export default function EventsTable(props: { caption: string }) {
 
   return (
     <div>
-      <h1 className="text-3xl font-bold mb-8 text-foreground">{caption}</h1>
+      <h1 className="text-3xl font-bold mb-8 text-main">{caption}</h1>
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {events.map((event) => (
           <div key={event.id} className="aspect-[4/3]">
@@ -149,7 +149,7 @@ export default function EventsTable(props: { caption: string }) {
             {loadingMore && (
               <div className="flex items-center justify-center">
                 <Loader2 className="w-6 h-6 animate-spin text-primary" />
-                <span className="ml-2 text-foreground-muted">
+                <span className="ml-2 text-muted">
                   Načítám další události...
                 </span>
               </div>
@@ -166,7 +166,7 @@ export default function EventsTable(props: { caption: string }) {
           </>
         )}
         {!hasMore && events.length >= EVENTS_PER_PAGE && (
-          <p className="text-foreground-muted">
+          <p className="text-muted">
             Zobrazeny všechny dostupné události
           </p>
         )}
@@ -174,3 +174,4 @@ export default function EventsTable(props: { caption: string }) {
     </div>
   );
 }
+

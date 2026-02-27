@@ -1633,3 +1633,4 @@ export type AccountDefaultArgs<ExtArgs extends runtime.Types.Extensions.Internal
    */
   include?: Prisma.AccountInclude<ExtArgs> | null
 }
+
